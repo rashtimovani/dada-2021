@@ -13,6 +13,10 @@
                 <e p="Background.cs" t="Include" />
                 <e p="Scaler.cs" t="Include" />
                 <e p="Simulator.cs" t="Include" />
+                <e p="Stimuli" t="Include">
+                  <e p="StimuliType.cs" t="Include" />
+                  <e p="Stimulus.cs" t="Include" />
+                </e>
               </e>
             </e>
           </e>
