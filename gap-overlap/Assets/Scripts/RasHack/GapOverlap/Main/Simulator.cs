@@ -13,6 +13,7 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topRight;
 
         [SerializeField] private bool showPointer;
+        [SerializeField] private GameObject stimulusPrefab;
 
         private Scaler scaler;
         private Camera mainCamera;

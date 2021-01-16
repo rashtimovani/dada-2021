@@ -20,8 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="435b3173-9c3e-4837-93f1-808ba49f5732" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,9 +40,9 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Background.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Scaler.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimulus.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/StimuliType.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/Stimulus.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" />
       </list>
     </option>
   </component>
@@ -93,7 +92,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1610803500037</updated>
-      <workItem from="1610803504508" duration="5996000" />
+      <workItem from="1610803504508" duration="6067000" />
     </task>
     <servers />
   </component>

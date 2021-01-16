@@ -215,8 +215,9 @@ MonoBehaviour:
   bottomRight: {fileID: 5230554403686800800}
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
-  mainCamera: {fileID: 0}
   showPointer: 1
+  stimulusPrefab: {fileID: 2794739829063479718, guid: 6af6b7a6ead1a724c9bd3a6681aa21f0,
+    type: 3}
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0
