@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -13,14 +12,19 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topRight;
 
         [SerializeField] private bool showPointer;
-        [SerializeField] private GameObject stimulusPrefab;
+
+        private Gap gap;
 
         private Scaler scaler;
         private Camera mainCamera;
 
+        public Scaler Scaler => scaler;
+
         private void Start()
         {
             mainCamera = Camera.main;
+            gap = GetComponent<Gap>();
+
             scaler = new Scaler(mainCamera, -1);
 
             topLeft.transform.position = transform.InverseTransformPoint(scaler.TopLeft);

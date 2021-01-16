@@ -20,6 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="435b3173-9c3e-4837-93f1-808ba49f5732" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Simulator.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Simulator.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -31,6 +34,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/StimuliType.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Scaler.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -43,6 +47,7 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/StimuliType.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/Stimulus.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" />
       </list>
     </option>
   </component>
@@ -53,6 +58,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34988713" />
+    <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.30022573" />
     <property name="Discover.Launch.Via.Unity" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -74,10 +81,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="828">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="828" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -92,7 +99,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1610803500037</updated>
-      <workItem from="1610803504508" duration="6067000" />
+      <workItem from="1610803504508" duration="6862000" />
     </task>
     <servers />
   </component>
@@ -114,5 +121,94 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="451" y="194" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610811912253">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state x="451" y="194" key="#com.intellij.execution.impl.EditConfigurationsDialog/74.0.1846.1080@74.0.1846.1080" timestamp="1610811912253" />
+    <state width="1803" height="391" key="GridCell.Tab.0.bottom" timestamp="1610811927951">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.0.bottom/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927951" />
+    <state width="1803" height="391" key="GridCell.Tab.0.center" timestamp="1610811927951">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.0.center/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927951" />
+    <state width="1803" height="391" key="GridCell.Tab.0.left" timestamp="1610811927951">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.0.left/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927951" />
+    <state width="1803" height="391" key="GridCell.Tab.0.right" timestamp="1610811927951">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.0.right/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927951" />
+    <state width="1803" height="391" key="GridCell.Tab.1.bottom" timestamp="1610811942095">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.1.bottom/74.0.1846.1080@74.0.1846.1080" timestamp="1610811942095" />
+    <state width="1803" height="391" key="GridCell.Tab.1.center" timestamp="1610811942095">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.1.center/74.0.1846.1080@74.0.1846.1080" timestamp="1610811942095" />
+    <state width="1803" height="391" key="GridCell.Tab.1.left" timestamp="1610811942095">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.1.left/74.0.1846.1080@74.0.1846.1080" timestamp="1610811942095" />
+    <state width="1803" height="391" key="GridCell.Tab.1.right" timestamp="1610811942095">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.1.right/74.0.1846.1080@74.0.1846.1080" timestamp="1610811942095" />
+    <state width="1803" height="391" key="GridCell.Tab.2.bottom" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.2.bottom/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.2.center" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.2.center/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.2.left" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.2.left/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.2.right" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.2.right/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.3.bottom" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.3.bottom/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.3.center" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.3.center/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.3.left" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.3.left/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+    <state width="1803" height="391" key="GridCell.Tab.3.right" timestamp="1610811927952">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state width="1803" height="391" key="GridCell.Tab.3.right/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs</url>
+          <line>26</line>
+          <properties documentPath="W:\git-repo\personal\dada-2021\gap-overlap\Assets\Scripts\RasHack\GapOverlap\Main\Task\Gap.cs" initialLine="26">
+            <startOffsets>
+              <option value="671" />
+            </startOffsets>
+            <endOffsets>
+              <option value="715" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
