@@ -11,6 +11,7 @@
             <e p="GapOverlap" t="Include">
               <e p="Main" t="Include">
                 <e p="Background.cs" t="Include" />
+                <e p="Simulator.cs" t="Include" />
               </e>
             </e>
           </e>
