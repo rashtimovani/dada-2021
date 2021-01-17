@@ -81,3 +81,6 @@ crashlytics-build.properties
 
 # Gradle cache directory
 /gap-overlap/.gradle/
+
+# Rider files
+/gap-overlap/.idea/
