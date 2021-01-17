@@ -42,9 +42,9 @@ namespace RasHack.GapOverlap.Main.Task
             switch (next)
             {
                 case TaskType.Overlap:
-                    var newOverlap = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
+                    var newOverlap = Instantiate(overlapPrefab, Vector3.zero, Quaternion.identity);
                     newOverlap.name = "Overlap_" + currentIndex;
-                    return newOverlap.GetComponent<Gap>();
+                    return newOverlap.GetComponent<Overlap>();
                 default:
                     var newGap = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
                     newGap.name = "Gap_" + currentIndex;
