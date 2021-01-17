@@ -20,9 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="435b3173-9c3e-4837-93f1-808ba49f5732" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/CentralStimulus.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/CentralStimulus.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.gap-overlap/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Background.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Background.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Simulator.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Simulator.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Scaler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Scaler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,11 +47,12 @@
       <list>
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimulus.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/StimuliType.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/Stimulus.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Background.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Simulator.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Stimuli/CentralStimulus.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Scaler.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs" />
       </list>
     </option>
   </component>
@@ -98,7 +104,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1610803500037</updated>
-      <workItem from="1610803504508" duration="9874000" />
+      <workItem from="1610803504508" duration="11182000" />
     </task>
     <servers />
   </component>
@@ -190,24 +196,9 @@
       <screen x="74" y="0" width="1846" height="1080" />
     </state>
     <state width="1803" height="391" key="GridCell.Tab.3.right/74.0.1846.1080@74.0.1846.1080" timestamp="1610811927952" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/RasHack/GapOverlap/Main/Task/Gap.cs</url>
-          <line>63</line>
-          <properties documentPath="W:\git-repo\personal\dada-2021\gap-overlap\Assets\Scripts\RasHack\GapOverlap\Main\Task\Gap.cs" initialLine="26">
-            <startOffsets>
-              <option value="1453" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1489" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="660" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1610860776368">
+      <screen x="74" y="0" width="1846" height="1080" />
+    </state>
+    <state x="660" y="235" width="672" height="678" key="search.everywhere.popup/74.0.1846.1080@74.0.1846.1080" timestamp="1610860776368" />
   </component>
 </project>

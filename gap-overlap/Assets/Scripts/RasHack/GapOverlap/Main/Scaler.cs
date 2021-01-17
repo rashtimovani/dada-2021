@@ -34,6 +34,7 @@ namespace RasHack.GapOverlap.Main
         public Vector3 TopRight => inDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(Screen.width, Screen.height)));
 
+        public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
 
         public Vector3 point(Vector3 inputPosition)
         {

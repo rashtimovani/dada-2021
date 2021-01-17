@@ -217,7 +217,6 @@ MonoBehaviour:
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
   showPointer: 1
-  gap: {fileID: 8735271504269578113}
 --- !u!114 &8735271504269578113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,8 +229,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe76c0e7860034948bda4b417e4612e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  centralStimulusPrefab: {fileID: 8411830356387070457, guid: 0b7804ee59226584aa2a8aa49eb8c2be,
+    type: 3}
   stimulusPrefab: {fileID: 2794739829063479718, guid: 6af6b7a6ead1a724c9bd3a6681aa21f0,
     type: 3}
+  times:
+    CentralTime: 1
+    PauseTime: 0.5
+    StimulusTime: 2
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0

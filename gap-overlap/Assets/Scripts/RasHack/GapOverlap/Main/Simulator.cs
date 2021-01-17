@@ -39,7 +39,12 @@ namespace RasHack.GapOverlap.Main
         {
             if (gap.enabled) gap.ReportStimulusDied(active);
         }
-        
+
+        public void ReportCentralStimulusDied(CentralStimulus central)
+        {
+            if (gap.enabled) gap.ReportCentralStimulusDied(central);
+        }
+
         #endregion
 
         #region Mono methods

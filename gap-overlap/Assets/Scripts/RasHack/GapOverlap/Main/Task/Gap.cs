@@ -16,6 +16,8 @@ namespace RasHack.GapOverlap.Main.Task
     {
         #region Serialized fields
 
+        [SerializeField] private GameObject centralStimulusPrefab;
+
         [SerializeField] private GameObject stimulusPrefab;
 
         [SerializeField] private GapTimes times = new GapTimes {CentralTime = 1f, PauseTime = 0.5f, StimulusTime = 2f};
@@ -25,14 +27,17 @@ namespace RasHack.GapOverlap.Main.Task
         #region Fields
 
         private Simulator simulator;
-        private float spawnLifetime;
+        private float? waitingTime;
 
+        private CentralStimulus centralStimulus;
         private Stimulus activeStimulus;
-        private StimuliType nextStimulusType;
+        private StimuliType stimulusType;
 
         #endregion
 
         #region API
+
+        public Scaler Scaler => simulator.Scaler;
 
         public void ReportStimulusDied(Stimulus active)
         {
@@ -42,8 +47,19 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
-            active = null;
-            spawnLifetime = 0f;
+            activeStimulus = null;
+        }
+
+        public void ReportCentralStimulusDied(CentralStimulus central)
+        {
+            if (central != centralStimulus)
+            {
+                Debug.LogError($"{central} stimulus is not the central one, don't care if it died!");
+                return;
+            }
+
+            centralStimulus = null;
+            waitingTime = times.PauseTime;
         }
 
         #endregion
@@ -53,31 +69,35 @@ namespace RasHack.GapOverlap.Main.Task
         private void Start()
         {
             simulator = GetComponent<Simulator>();
+            StartWithCentralStimulus();
         }
 
-        // Update is called once per frame
         private void Update()
         {
-            if (activeStimulus != null) return;
-
-            spawnLifetime += Time.deltaTime;
-            if (spawnLifetime > times.PauseTime)
-            {
-                activeStimulus = newStimulus();
-                activeStimulus.StartSimulating(nextStimulusType, simulator, times.StimulusTime);
-                nextStimulusType = nextStimulusType.next();
-            }
+            if (!waitingTime.HasValue) return;
+            waitingTime -= Time.deltaTime;
+            if (waitingTime > 0f) return;
+            waitingTime = null;
+            StartWithStimulus();
         }
 
         #endregion
 
         #region Helpers
 
-        private Stimulus newStimulus()
+        private void StartWithCentralStimulus()
+        {
+            var newOne = Instantiate(centralStimulus, Scaler.Center, Quaternion.identity);
+            centralStimulus = newOne.GetComponent<CentralStimulus>();
+            centralStimulus.StartSimulating(simulator, times.CentralTime);
+        }
+
+        private void StartWithStimulus()
         {
             var where = Vector3.Lerp(simulator.Scaler.TopLeft, simulator.Scaler.BottomRight, 0.33f);
             var newOne = Instantiate(stimulusPrefab, where, Quaternion.identity);
-            return newOne.GetComponent<Stimulus>();
+            activeStimulus = newOne.GetComponent<Stimulus>();
+            activeStimulus.StartSimulating(stimulusType, simulator, times.StimulusTime);
         }
 
         #endregion
