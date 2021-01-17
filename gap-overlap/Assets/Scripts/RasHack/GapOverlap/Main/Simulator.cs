@@ -60,6 +60,7 @@ namespace RasHack.GapOverlap.Main
 
         private void Start()
         {
+            Application.targetFrameRate = 120;
             mainCamera = Camera.main;
 
             scaler = new Scaler(mainCamera, -1);
