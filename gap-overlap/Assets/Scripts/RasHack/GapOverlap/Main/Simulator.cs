@@ -26,11 +26,13 @@ namespace RasHack.GapOverlap.Main
         private Scaler scaler;
         private Scaler debugScaler;
         private Camera mainCamera;
-        
+        private TestResults results;
+
         private TaskOrder tasks;
         private StimuliArea area;
         private StimuliType nextStimulus;
 
+        private int testId;
         private float? waitingTime;
         private Task.Task currentTask;
 
@@ -39,12 +41,12 @@ namespace RasHack.GapOverlap.Main
         #region API
 
         public bool IsActive { get; private set; }
-        
+
         public Scaler Scaler => scaler;
         public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
 
-        public void ReportTaskFinished(Task.Task task)
+        public void ReportTaskFinished(Task.Task task, float? measurement)
         {
             if (task != currentTask)
             {
@@ -52,6 +54,7 @@ namespace RasHack.GapOverlap.Main
                 return;
             }
 
+            results.AttachMeasurement(task.name, measurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
             waitingTime = pauseBetweenTasks;
@@ -63,7 +66,18 @@ namespace RasHack.GapOverlap.Main
             area.Reset();
             nextStimulus = StimuliType.Bee;
             IsActive = true;
+            results.StartTest(testId++.ToString());
             newTask();
+        }
+
+        public void AttachResults(string testName, float responseTime)
+        {
+            results.AttachMeasurement(testName, responseTime);
+        }
+
+        public void FlushToDisk()
+        {
+            results.FlushToDisk();
         }
 
         #endregion
@@ -77,6 +91,7 @@ namespace RasHack.GapOverlap.Main
 
             scaler = new Scaler(mainCamera, -1);
             debugScaler = new Scaler(mainCamera, -2);
+            results = new TestResults();
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();

@@ -84,3 +84,7 @@ crashlytics-build.properties
 
 # Rider files
 /gap-overlap/.idea/
+
+# Result files
+/gap-overlap/*.csv
+

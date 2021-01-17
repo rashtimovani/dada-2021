@@ -23,6 +23,7 @@ namespace RasHack.GapOverlap.Main.Task
         #region Fields
 
         private float? waitingTime;
+        private float? measurement;
         private CentralStimulus centralStimulus;
         private Stimulus activeStimulus;
 
@@ -38,6 +39,7 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
+            measurement = after;
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
 
@@ -52,7 +54,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{activeStimulus} has finished");
             Destroy(activeStimulus.gameObject);
             activeStimulus = null;
-            owner.ReportTaskFinished(this);
+            owner.ReportTaskFinished(this, measurement);
             Destroy(gameObject);
         }
 
