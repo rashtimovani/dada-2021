@@ -17,7 +17,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region Internal fields
 
-        private SpriteRenderer renderer;
+        private SpriteRenderer sprite;
         private float spentLifetime;
 
         #endregion
@@ -37,7 +37,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.type = type;
             this.owner = owner;
             this.lifetime = lifetime;
-            if (renderer != null) SetUpSprite();
+            if (sprite != null) SetUpSprite();
         }
 
         #endregion
@@ -46,7 +46,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Start()
         {
-            renderer = GetComponent<SpriteRenderer>();
+            sprite = GetComponent<SpriteRenderer>();
             SetUpSprite();
         }
 
@@ -68,22 +68,22 @@ namespace RasHack.GapOverlap.Main.Stimuli
             switch (type)
             {
                 case StimuliType.Octopus:
-                    renderer.sprite = octopus;
+                    sprite.sprite = octopus;
                     break;
                 case StimuliType.Rainbow:
-                    renderer.sprite = rainbow;
+                    sprite.sprite = rainbow;
                     break;
                 case StimuliType.RainCloud:
-                    renderer.sprite = rainCloud;
+                    sprite.sprite = rainCloud;
                     break;
                 case StimuliType.Umbrella:
-                    renderer.sprite = umbrella;
+                    sprite.sprite = umbrella;
                     break;
                 case StimuliType.YellowBird:
-                    renderer.sprite = yellowBird;
+                    sprite.sprite = yellowBird;
                     break;
                 default:
-                    renderer.sprite = bee;
+                    sprite.sprite = bee;
                     break;
             }
         }

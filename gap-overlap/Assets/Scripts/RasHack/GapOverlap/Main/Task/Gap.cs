@@ -1,8 +1,10 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
+﻿using System;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Task
 {
+    [Serializable]
     public struct GapTimes
     {
         public float CentralTime;
@@ -16,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         [SerializeField] private GameObject stimulusPrefab;
 
-        private GapTimes times = new GapTimes {CentralTime = 1f, PauseTime = 0.5f, StimulusTime = 2f};
+        [SerializeField] private GapTimes times = new GapTimes {CentralTime = 1f, PauseTime = 0.5f, StimulusTime = 2f};
 
         #endregion
 
