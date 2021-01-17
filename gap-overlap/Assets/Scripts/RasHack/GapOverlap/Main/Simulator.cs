@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
+﻿using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ namespace RasHack.GapOverlap.Main
     {
         #region Serialized fields
 
-        [SerializeField] private SpriteRenderer pointer;
+        [SerializeField] private Pointer pointer;
+
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
         [SerializeField] private SpriteRenderer topLeft;
@@ -37,6 +39,7 @@ namespace RasHack.GapOverlap.Main
         #region API
 
         public Scaler Scaler => scaler;
+        public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
 
         public void ReportTaskFinished(Task.Task task)
@@ -60,8 +63,8 @@ namespace RasHack.GapOverlap.Main
         {
             mainCamera = Camera.main;
 
-            scaler = new Scaler(mainCamera, -2);
-            debugScaler = new Scaler(mainCamera, -1);
+            scaler = new Scaler(mainCamera, -1);
+            debugScaler = new Scaler(mainCamera, -2);
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
@@ -74,8 +77,6 @@ namespace RasHack.GapOverlap.Main
             UpdateBounds();
             UpdateDebugVisibility();
             UpdatePause();
-
-            pointer.transform.position = scaler.point(Input.mousePosition);
         }
 
         #endregion
@@ -92,7 +93,7 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdateDebugVisibility()
         {
-            pointer.enabled = showPointer;
+            pointer.ShowPointer(showPointer);
 
             bottomLeft.enabled = showPointer;
             bottomRight.enabled = showPointer;
