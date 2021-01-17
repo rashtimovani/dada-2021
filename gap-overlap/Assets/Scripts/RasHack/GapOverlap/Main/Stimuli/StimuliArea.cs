@@ -27,6 +27,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public Vector3 NextInWorld => count++ % 2 == 0 ? LeftInWorld : RightInWorld;
 
+        public void Reset()
+        {
+            count = 0;
+        }
+
         #endregion
 
         #region Mono methods

@@ -32,6 +32,11 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        public void Reset()
+        {
+            currentIndex = 0;
+        }
+
         public Task CreateNext()
         {
             if (currentIndex >= tasks.Count) return null;

@@ -26,17 +26,20 @@ namespace RasHack.GapOverlap.Main
         private Scaler scaler;
         private Scaler debugScaler;
         private Camera mainCamera;
+        
         private TaskOrder tasks;
         private StimuliArea area;
+        private StimuliType nextStimulus;
 
         private float? waitingTime;
         private Task.Task currentTask;
-        private StimuliType nextStimulus;
 
         #endregion
 
         #region API
 
+        public bool IsActive { get; private set; }
+        
         public Scaler Scaler => scaler;
         public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
@@ -54,6 +57,15 @@ namespace RasHack.GapOverlap.Main
             waitingTime = pauseBetweenTasks;
         }
 
+        public void StartTests()
+        {
+            tasks.Reset();
+            area.Reset();
+            nextStimulus = StimuliType.Bee;
+            IsActive = true;
+            newTask();
+        }
+
         #endregion
 
         #region Mono methods
@@ -68,8 +80,6 @@ namespace RasHack.GapOverlap.Main
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
-
-            newTask();
         }
 
         private void Update()
@@ -116,6 +126,7 @@ namespace RasHack.GapOverlap.Main
             if (currentTask == null)
             {
                 Debug.Log("All tasks finished!");
+                IsActive = false;
                 return;
             }
 
