@@ -65,7 +65,7 @@ namespace RasHack.GapOverlap.Main
 
         public void StartTests(string name)
         {
-            if (!(lastEnteredName?.Equals(name) ?? false))
+            if (lastEnteredName != name)
             {
                 lastEnteredName = name;
                 testId = 1;
@@ -77,8 +77,16 @@ namespace RasHack.GapOverlap.Main
             IsActive = true;
 
             string runName;
-            if (string.IsNullOrWhiteSpace(name)) runName = testId++.ToString();
-            else if (testId > 1) runName = $"{name} - run {testId++}";
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                runName = $"Run {testId}";
+                testId++;
+            }
+            else if (testId > 1)
+            {
+                runName = $"{name} - run {testId}";
+                testId++;
+            }
             else runName = name;
 
             results.StartTest(runName);
