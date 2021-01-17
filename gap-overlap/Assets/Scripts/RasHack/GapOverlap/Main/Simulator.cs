@@ -8,9 +8,6 @@ namespace RasHack.GapOverlap.Main
     {
         #region Serialized fields
 
-        [SerializeField] private GameObject gapPrefab;
-        [SerializeField] private GameObject overlapPrefab;
-
         [SerializeField] private SpriteRenderer pointer;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -27,6 +24,7 @@ namespace RasHack.GapOverlap.Main
         private Scaler scaler;
         private Scaler debugScaler;
         private Camera mainCamera;
+        private TaskOrder tasks;
 
         private int taskId = 1;
         private float? waitingTime;
@@ -62,7 +60,9 @@ namespace RasHack.GapOverlap.Main
 
             scaler = new Scaler(mainCamera, -2);
             debugScaler = new Scaler(mainCamera, -1);
-            
+
+            tasks = GetComponent<TaskOrder>();
+
             newTask();
         }
 
@@ -108,11 +108,13 @@ namespace RasHack.GapOverlap.Main
 
         private void newTask()
         {
-            var newOne = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
-            newOne.name = "Gap_" + taskId;
-            taskId++;
-            currentTask = newOne.GetComponent<Gap>();
-            
+            currentTask = tasks.CreateNext();
+            if (currentTask == null)
+            {
+                Debug.Log("All tasks finished!");
+                return;
+            }
+
             currentTask.StartTask(this, nextStimulus);
             nextStimulus = nextStimulus.next();
         }

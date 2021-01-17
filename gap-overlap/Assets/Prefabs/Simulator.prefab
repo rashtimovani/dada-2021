@@ -172,6 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6232430714456115891}
   - component: {fileID: 6232430714456115892}
+  - component: {fileID: 8111807920774638880}
   m_Layer: 0
   m_Name: Simulator
   m_TagString: Untagged
@@ -210,10 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21c57fee101dcab4eac5313df80b63ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gapPrefab: {fileID: 6232811990994141330, guid: 81131edd16a32564da2ccd1cbd3fcbae,
-    type: 3}
-  overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
-    type: 3}
   pointer: {fileID: 5394390877371616969}
   bottomLeft: {fileID: 3710660885855788370}
   bottomRight: {fileID: 5230554403686800800}
@@ -221,6 +218,23 @@ MonoBehaviour:
   topRight: {fileID: 4147746231073308669}
   showPointer: 1
   pauseBetweenTasks: 3.5
+--- !u!114 &8111807920774638880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6232430714456115890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1246fddb19ce7314798c3f0cccf3e7cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gapPrefab: {fileID: 6232811990994141330, guid: 81131edd16a32564da2ccd1cbd3fcbae,
+    type: 3}
+  overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
+    type: 3}
+  tasks: 00000000000000000100000001000000
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0
