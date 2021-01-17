@@ -12,7 +12,7 @@ namespace RasHack.GapOverlap.Main.Task
         public float StimulusTime;
     }
 
-    public class Gap : MonoBehaviour
+    public class Gap : MonoBehaviour, Task
     {
         #region Serialized fields
 
@@ -89,7 +89,7 @@ namespace RasHack.GapOverlap.Main.Task
         {
             var newOne = Instantiate(centralStimulus, Scaler.Center, Quaternion.identity);
             centralStimulus = newOne.GetComponent<CentralStimulus>();
-            centralStimulus.StartSimulating(simulator, times.CentralTime);
+            centralStimulus.StartSimulating(this, times.CentralTime);
         }
 
         private void StartWithStimulus()
@@ -97,7 +97,7 @@ namespace RasHack.GapOverlap.Main.Task
             var where = Vector3.Lerp(simulator.Scaler.TopLeft, simulator.Scaler.BottomRight, 0.33f);
             var newOne = Instantiate(stimulusPrefab, where, Quaternion.identity);
             activeStimulus = newOne.GetComponent<Stimulus>();
-            activeStimulus.StartSimulating(stimulusType, simulator, times.StimulusTime);
+            activeStimulus.StartSimulating(stimulusType, this, times.StimulusTime);
         }
 
         #endregion

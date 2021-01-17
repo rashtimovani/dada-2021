@@ -20,6 +20,7 @@
                 </e>
                 <e p="Task" t="Include">
                   <e p="Gap.cs" t="Include" />
+                  <e p="Task.cs" t="Include" />
                 </e>
               </e>
             </e>

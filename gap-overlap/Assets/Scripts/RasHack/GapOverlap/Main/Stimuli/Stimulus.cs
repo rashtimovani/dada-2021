@@ -25,14 +25,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region Provided fields from simulator
 
         private StimuliType type;
-        private Simulator owner;
+        private Task.Task owner;
         private float lifetime;
 
         #endregion
 
         #region API
 
-        public void StartSimulating(StimuliType type, Simulator owner, float lifetime)
+        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime)
         {
             this.type = type;
             this.owner = owner;
