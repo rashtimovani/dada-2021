@@ -4,7 +4,7 @@ namespace RasHack.GapOverlap.Main.Task
 {
     public interface Task
     {
-        void StartTask(Simulator owner);
+        void StartTask(Simulator owner, StimuliType stimulusType);
         
         void ReportCentralStimulusDied(CentralStimulus central);
 

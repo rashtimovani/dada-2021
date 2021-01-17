@@ -39,9 +39,10 @@ namespace RasHack.GapOverlap.Main.Task
 
         private Scaler Scaler => owner.Scaler;
 
-        public void StartTask(Simulator owner)
+        public void StartTask(Simulator owner, StimuliType stimulusType)
         {
             this.owner = owner;
+            this.stimulusType = stimulusType;
         }
 
         public void ReportStimulusDied(Stimulus active)
@@ -52,8 +53,10 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
+            Debug.Log($"{activeStimulus} has finished");
             activeStimulus = null;
             owner.ReportTaskFinished(this);
+            Destroy(gameObject);
         }
 
         public void ReportCentralStimulusDied(CentralStimulus central)
@@ -64,6 +67,7 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
+            Debug.Log($"{centralStimulus} has finished");
             centralStimulus = null;
             waitingTime = times.PauseTime;
         }
@@ -93,6 +97,7 @@ namespace RasHack.GapOverlap.Main.Task
         private void StartWithCentralStimulus()
         {
             var newOne = Instantiate(centralStimulusPrefab, Scaler.Center, Quaternion.identity);
+            newOne.name = name + "_central_stimulus"; 
             centralStimulus = newOne.GetComponent<CentralStimulus>();
             centralStimulus.StartSimulating(this, times.CentralTime);
         }
@@ -101,6 +106,7 @@ namespace RasHack.GapOverlap.Main.Task
         {
             var where = Vector3.Lerp(Scaler.TopLeft, Scaler.BottomRight, 0.33f);
             var newOne = Instantiate(stimulusPrefab, where, Quaternion.identity);
+            newOne.name = name + "_" + stimulusType + "_stimulus";
             activeStimulus = newOne.GetComponent<Stimulus>();
             activeStimulus.StartSimulating(stimulusType, this, times.StimulusTime);
         }

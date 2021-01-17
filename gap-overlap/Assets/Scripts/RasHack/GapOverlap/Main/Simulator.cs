@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Task;
+﻿using RasHack.GapOverlap.Main.Stimuli;
+using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -29,6 +30,7 @@ namespace RasHack.GapOverlap.Main
         private int taskId = 1;
         private float? waitingTime;
         private Task.Task currentTask;
+        private StimuliType nextStimulus;
 
         #endregion
 
@@ -44,6 +46,7 @@ namespace RasHack.GapOverlap.Main
                 return;
             }
 
+            Debug.Log($"{currentTask} has finished");
             currentTask = null;
             waitingTime = pauseBetweenTasks;
         }
@@ -109,7 +112,8 @@ namespace RasHack.GapOverlap.Main
             taskId++;
             currentTask = newOne.GetComponent<Gap>();
             
-            currentTask.StartTask(this);
+            currentTask.StartTask(this, nextStimulus);
+            nextStimulus = nextStimulus.next();
         }
 
         #endregion
