@@ -9,6 +9,7 @@ namespace RasHack.GapOverlap.Main.Task
     {
         [SerializeField] private GameObject stimulusPrefab;
 
+        
 
         private Simulator simulator;
         private float spentTime;
