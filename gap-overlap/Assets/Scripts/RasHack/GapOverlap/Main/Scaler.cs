@@ -4,11 +4,17 @@ namespace RasHack.GapOverlap.Main
 {
     public class Scaler
     {
+        #region Internal fields
+
         private const float TARGET_WIDTH = 1920;
         private const float TARGET_HEIGHT = 1080;
 
         private readonly Camera mainCamera;
         private readonly float depth;
+
+        #endregion
+
+        #region API
 
         public Scaler(Camera mainCamera, float depth)
         {
@@ -29,14 +35,20 @@ namespace RasHack.GapOverlap.Main
             new Vector3(Screen.width, Screen.height)));
 
 
+        public Vector3 point(Vector3 inputPosition)
+        {
+            return inDepth(mainCamera.ScreenToWorldPoint(inputPosition));
+        }
+
+        #endregion
+
+        #region Helpers
+
         private Vector3 inDepth(Vector3 original)
         {
             return new Vector3(original.x, original.y, depth);
         }
 
-        public Vector3 point(Vector3 inputPosition)
-        {
-            return inDepth(mainCamera.ScreenToWorldPoint(inputPosition));
-        }
+        #endregion
     }
 }

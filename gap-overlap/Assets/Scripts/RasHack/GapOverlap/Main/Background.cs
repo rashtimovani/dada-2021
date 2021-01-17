@@ -10,7 +10,7 @@ namespace RasHack.GapOverlap.Main
 
     public class Background : MonoBehaviour
     {
-        [SerializeField] private BackgroundColor usedColor = BackgroundColor.White;
+        #region Serialized fields
 
         [SerializeField] private Color black = Color.black;
 
@@ -18,7 +18,13 @@ namespace RasHack.GapOverlap.Main
 
         [SerializeField] private SpriteRenderer sprite;
 
-        void Start()
+        [SerializeField] private BackgroundColor usedColor = BackgroundColor.White;
+
+        #endregion
+
+        #region Mono methods
+
+        private void Start()
         {
             switch (usedColor)
             {
@@ -30,5 +36,7 @@ namespace RasHack.GapOverlap.Main
                     break;
             }
         }
+
+        #endregion
     }
 }
