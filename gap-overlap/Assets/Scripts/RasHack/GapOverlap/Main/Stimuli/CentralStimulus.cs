@@ -35,7 +35,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (spentLifetime < lifetime) return;
 
             owner.ReportCentralStimulusDied(this);
-            Destroy(gameObject);
         }
 
         #endregion

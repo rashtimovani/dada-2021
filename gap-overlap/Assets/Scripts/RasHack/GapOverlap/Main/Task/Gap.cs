@@ -54,6 +54,7 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             Debug.Log($"{activeStimulus} has finished");
+            Destroy(activeStimulus.gameObject);
             activeStimulus = null;
             owner.ReportTaskFinished(this);
             Destroy(gameObject);
@@ -68,6 +69,7 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             Debug.Log($"{centralStimulus} has finished");
+            Destroy(centralStimulus.gameObject);
             centralStimulus = null;
             waitingTime = times.PauseTime;
         }
