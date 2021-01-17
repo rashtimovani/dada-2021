@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main
 {
@@ -7,6 +8,7 @@ namespace RasHack.GapOverlap.Main
         #region Components
 
         [SerializeField] private GameObject homeMenu;
+        [SerializeField] private InputField nameInput;
 
         #endregion
 
@@ -30,7 +32,7 @@ namespace RasHack.GapOverlap.Main
 
         public void OnStart()
         {
-            simulator.StartTests();
+            simulator.StartTests(nameInput.text);
         }
 
         public void OnExit()

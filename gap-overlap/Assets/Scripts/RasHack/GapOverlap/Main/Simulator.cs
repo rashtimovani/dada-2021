@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -36,6 +37,7 @@ namespace RasHack.GapOverlap.Main
         private int testId;
         private float? waitingTime;
         private Task.Task currentTask;
+        private string lastEnteredName;
 
         #endregion
 
@@ -61,19 +63,26 @@ namespace RasHack.GapOverlap.Main
             waitingTime = pauseBetweenTasks;
         }
 
-        public void StartTests()
+        public void StartTests(string name)
         {
+            if (!(lastEnteredName?.Equals(name) ?? false))
+            {
+                lastEnteredName = name;
+                testId = 1;
+            }
+
             tasks.Reset();
             area.Reset();
             nextStimulus = StimuliType.Bee;
             IsActive = true;
-            results.StartTest(testId++.ToString());
-            newTask();
-        }
 
-        public void AttachResults(string testName, float responseTime)
-        {
-            results.AttachMeasurement(testName, responseTime);
+            string runName;
+            if (string.IsNullOrWhiteSpace(name)) runName = testId++.ToString();
+            else if (testId > 1) runName = $"{name} - run {testId++}";
+            else runName = name;
+
+            results.StartTest(runName);
+            newTask();
         }
 
         public void FlushToDisk()
