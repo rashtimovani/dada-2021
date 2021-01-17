@@ -1,38 +1,67 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class Stimulus : MonoBehaviour
     {
+        #region Sprites
+
         [SerializeField] private Sprite bee;
         [SerializeField] private Sprite octopus;
         [SerializeField] private Sprite rainbow;
         [SerializeField] private Sprite rainCloud;
         [SerializeField] private Sprite umbrella;
         [SerializeField] private Sprite yellowBird;
-        
+
+        #endregion
+
+        #region Internal fields
+
+        private SpriteRenderer renderer;
+        private float spentLifetime;
+
+        #endregion
+
+        #region Provided fields from simulator
+
         private StimuliType type;
         private Simulator owner;
-        private SpriteRenderer renderer;
+        private float lifetime;
 
-        // Start is called before the first frame update
+        #endregion
+
+        #region API
+
+        public void StartSimulating(StimuliType type, Simulator owner, float lifetime)
+        {
+            this.type = type;
+            this.owner = owner;
+            this.lifetime = lifetime;
+            if (renderer != null) SetUpSprite();
+        }
+
+        #endregion
+
+        #region Mono methods
+
         private void Start()
         {
             renderer = GetComponent<SpriteRenderer>();
             SetUpSprite();
         }
 
-        public void StartSimulating(StimuliType type, Simulator owner)
+        private void Update()
         {
-            this.type = type;
-            this.owner = owner;
-            if (renderer != null)
-            {
-                SetUpSprite();
-            }
+            spentLifetime += Time.deltaTime;
+            if (spentLifetime < lifetime) return;
+
+            owner.ReportStimulusDied(this);
+            Destroy(gameObject);
         }
+
+        #endregion
+
+        #region Helpers
 
         private void SetUpSprite()
         {
@@ -58,5 +87,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     break;
             }
         }
+
+        #endregion
     }
 }

@@ -1,10 +1,13 @@
-﻿using RasHack.GapOverlap.Main.Task;
+﻿using RasHack.GapOverlap.Main.Stimuli;
+using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
 {
     public class Simulator : MonoBehaviour
     {
+        #region Serialized fields
+
         [SerializeField] private SpriteRenderer pointer;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -13,12 +16,33 @@ namespace RasHack.GapOverlap.Main
 
         [SerializeField] private bool showPointer;
 
+        #endregion
+
+        #region Tasks
+
         private Gap gap;
+
+        #endregion
+
+        #region Fields
 
         private Scaler scaler;
         private Camera mainCamera;
 
+        #endregion
+
+        #region API
+
         public Scaler Scaler => scaler;
+
+        public void ReportStimulusDied(Stimulus active)
+        {
+            if (gap.enabled) gap.ReportStimulusDied(active);
+        }
+        
+        #endregion
+
+        #region Mono methods
 
         private void Start()
         {
@@ -40,6 +64,10 @@ namespace RasHack.GapOverlap.Main
             pointer.transform.position = scaler.point(Input.mousePosition);
         }
 
+        #endregion
+
+        #region Helpers
+
         private void UpdateShownState()
         {
             pointer.enabled = showPointer;
@@ -49,5 +77,7 @@ namespace RasHack.GapOverlap.Main
             topLeft.enabled = showPointer;
             topRight.enabled = showPointer;
         }
+
+        #endregion
     }
 }
