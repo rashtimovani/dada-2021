@@ -77,17 +77,10 @@ namespace RasHack.GapOverlap.Main
             IsActive = true;
 
             string runName;
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                runName = $"Run {testId}";
-                testId++;
-            }
-            else if (testId > 1)
-            {
-                runName = $"{name} - run {testId}";
-                testId++;
-            }
+            if (string.IsNullOrWhiteSpace(name)) runName = $"Run {testId}";
+            else if (testId > 1) runName = $"{name} - run {testId}";
             else runName = name;
+            testId++;
 
             results.StartTest(runName);
             newTask();
