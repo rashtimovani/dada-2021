@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Inputs;
+﻿using System;
+using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
@@ -102,6 +103,11 @@ namespace RasHack.GapOverlap.Main
             UpdateBounds();
             UpdateDebugVisibility();
             UpdatePause();
+        }
+
+        private void OnApplicationQuit()
+        {
+            FlushToDisk();
         }
 
         #endregion

@@ -35,8 +35,8 @@ namespace RasHack.GapOverlap.Main
 
         public void OnExit()
         {
-            simulator.FlushToDisk();
 #if UNITY_EDITOR
+            simulator.FlushToDisk();
             UnityEditor.EditorApplication.isPlaying = false;
 #else
             Application.Quit();
