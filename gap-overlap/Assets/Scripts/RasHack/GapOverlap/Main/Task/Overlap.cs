@@ -11,13 +11,9 @@ namespace RasHack.GapOverlap.Main.Task
         public float BothStimuli;
     }
 
-    public class Overlap : MonoBehaviour, Task
+    public class Overlap : Task
     {
         #region Serialized fields
-
-        [SerializeField] private GameObject centralStimulusPrefab;
-
-        [SerializeField] private GameObject stimulusPrefab;
 
         [SerializeField] private OverlapTimes times = new OverlapTimes {CentralTime = 1f, BothStimuli = 2.5f};
 
@@ -25,26 +21,15 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region Fields
 
-        private Simulator owner;
         private float? waitingTime;
-
         private CentralStimulus centralStimulus;
         private Stimulus activeStimulus;
-        private StimuliType stimulusType;
 
         #endregion
 
         #region API
 
-        private Scaler Scaler => owner.Scaler;
-
-        public void StartTask(Simulator owner, StimuliType stimulusType)
-        {
-            this.owner = owner;
-            this.stimulusType = stimulusType;
-        }
-
-        public void ReportStimulusDied(Stimulus active)
+        public override void ReportStimulusDied(Stimulus active)
         {
             if (active != activeStimulus)
             {
@@ -60,7 +45,7 @@ namespace RasHack.GapOverlap.Main.Task
             Destroy(gameObject);
         }
 
-        public void ReportCentralStimulusDied(CentralStimulus central)
+        public override void ReportCentralStimulusDied(CentralStimulus central)
         {
             if (central != centralStimulus)
             {
@@ -87,18 +72,14 @@ namespace RasHack.GapOverlap.Main.Task
 
         private void StartWithCentralStimulus()
         {
-            var newOne = Instantiate(centralStimulusPrefab, Scaler.Center, Quaternion.identity);
-            newOne.name = name + "_central_stimulus";
-            centralStimulus = newOne.GetComponent<CentralStimulus>();
+            centralStimulus = NewCentralStimulus();
             centralStimulus.StartSimulating(this, times.CentralTime);
         }
 
         private void StartWithStimulus()
         {
             var where = Vector3.Lerp(Scaler.TopLeft, Scaler.BottomRight, 0.33f);
-            var newOne = Instantiate(stimulusPrefab, where, Quaternion.identity);
-            newOne.name = name + "_" + stimulusType + "_stimulus";
-            activeStimulus = newOne.GetComponent<Stimulus>();
+            activeStimulus = NewStimulus(where);
             activeStimulus.StartSimulating(stimulusType, this, times.BothStimuli);
         }
 
