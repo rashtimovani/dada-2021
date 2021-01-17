@@ -46,9 +46,9 @@ namespace RasHack.GapOverlap.Main.Task
             return newOne.GetComponent<CentralStimulus>();
         }
 
-        protected Stimulus NewStimulus(Vector3 where)
+        protected Stimulus NewStimulus()
         {
-            var localWhere = transform.InverseTransformPoint(where);
+            var localWhere = transform.InverseTransformPoint(owner.Area.NextInWorld);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
             newOne.name = name + "_" + stimulusType + "_stimulus";
             return newOne.GetComponent<Stimulus>();

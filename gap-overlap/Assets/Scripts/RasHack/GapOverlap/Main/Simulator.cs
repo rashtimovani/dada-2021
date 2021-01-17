@@ -25,6 +25,7 @@ namespace RasHack.GapOverlap.Main
         private Scaler debugScaler;
         private Camera mainCamera;
         private TaskOrder tasks;
+        private StimuliArea area;
 
         private int taskId = 1;
         private float? waitingTime;
@@ -36,6 +37,7 @@ namespace RasHack.GapOverlap.Main
         #region API
 
         public Scaler Scaler => scaler;
+        public StimuliArea Area => area;
 
         public void ReportTaskFinished(Task.Task task)
         {
@@ -62,6 +64,7 @@ namespace RasHack.GapOverlap.Main
             debugScaler = new Scaler(mainCamera, -1);
 
             tasks = GetComponent<TaskOrder>();
+            area = GetComponent<StimuliArea>();
 
             newTask();
         }

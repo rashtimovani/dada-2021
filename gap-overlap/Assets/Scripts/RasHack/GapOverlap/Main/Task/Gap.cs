@@ -89,8 +89,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private void StartWithStimulus()
         {
-            var where = Vector3.Lerp(Scaler.TopLeft, Scaler.BottomRight, 0.33f);
-            activeStimulus = NewStimulus(where);
+            activeStimulus = NewStimulus();
             activeStimulus.StartSimulating(stimulusType, this, times.StimulusTime);
         }
 

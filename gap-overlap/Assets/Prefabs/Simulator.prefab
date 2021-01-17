@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 6232430714456115891}
   - component: {fileID: 6232430714456115892}
   - component: {fileID: 8111807920774638880}
+  - component: {fileID: 3700890592413371578}
   m_Layer: 0
   m_Name: Simulator
   m_TagString: Untagged
@@ -235,6 +236,20 @@ MonoBehaviour:
   overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
     type: 3}
   tasks: 00000000000000000100000001000000
+--- !u!114 &3700890592413371578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6232430714456115890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5265d45f1c60e7a4bb38e48ec035a2b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: {x: 0.15, y: 0.5}
+  right: {x: 0.85, y: 0.5}
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0
