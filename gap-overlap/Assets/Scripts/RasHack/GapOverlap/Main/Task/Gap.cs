@@ -30,6 +30,17 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        public override void ReportFocusedOn(Stimulus stimulus, float after)
+        {
+            if (stimulus != activeStimulus)
+            {
+                Debug.LogError($"{stimulus} stimulus is not the active one, don't care if it reported focused!");
+                return;
+            }
+
+            Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
+        }
+
         public override void ReportStimulusDied(Stimulus active)
         {
             if (active != activeStimulus)

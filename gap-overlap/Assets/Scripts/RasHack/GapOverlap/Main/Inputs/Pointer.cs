@@ -15,8 +15,8 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         #region Internals
 
-        private TouchPointer touch = new TouchPointer();
-        private MousePointer mouse = new MousePointer();
+        private readonly TouchPointer touch = new TouchPointer();
+        private readonly MousePointer mouse = new MousePointer();
 
         #endregion
 
@@ -34,7 +34,11 @@ namespace RasHack.GapOverlap.Main.Inputs
         private void Update()
         {
             var position = touch.Position ?? mouse.Position;
-            if (position.HasValue) transform.position = simulator.DebugScaler.point(position.Value);
+            if (position.HasValue)
+            {
+                transform.position = simulator.Scaler.point(position.Value);
+                spriteRenderer.transform.position = simulator.DebugScaler.point(position.Value);
+            }
         }
 
         #endregion

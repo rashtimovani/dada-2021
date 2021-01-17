@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RasHack.GapOverlap.Main.Inputs;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -18,7 +19,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region Internal fields
 
         private SpriteRenderer sprite;
-        private float? lifetime;
+        private float? spentLifetime;
+        private bool wasFocusedOn;
 
         #endregion
 
@@ -26,6 +28,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private StimuliType type;
         private Task.Task owner;
+        private float lifetime;
 
         #endregion
 
@@ -37,6 +40,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.owner = owner;
 
             this.lifetime = lifetime;
+            spentLifetime = 0;
             if (sprite != null) SetUpSprite();
         }
 
@@ -52,13 +56,22 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Update()
         {
-            if (!lifetime.HasValue) return;
+            if (!spentLifetime.HasValue) return;
 
-            lifetime -= Time.deltaTime;
-            if (lifetime > 0f) return;
+            spentLifetime += Time.deltaTime;
+            if (spentLifetime < lifetime) return;
 
-            lifetime = null;
             owner.ReportStimulusDied(this);
+            spentLifetime = null;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (wasFocusedOn || !spentLifetime.HasValue) return;
+            var pointer = other.gameObject.GetComponent<Pointer>();
+            if (pointer == null) return;
+            wasFocusedOn = true;
+            owner.ReportFocusedOn(this, spentLifetime.Value);
         }
 
         #endregion

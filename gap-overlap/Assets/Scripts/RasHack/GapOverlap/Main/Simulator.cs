@@ -29,7 +29,6 @@ namespace RasHack.GapOverlap.Main
         private TaskOrder tasks;
         private StimuliArea area;
 
-        private int taskId = 1;
         private float? waitingTime;
         private Task.Task currentTask;
         private StimuliType nextStimulus;
@@ -85,10 +84,10 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdateBounds()
         {
-            topLeft.transform.position = transform.InverseTransformPoint(debugScaler.TopLeft);
-            bottomLeft.transform.position = transform.InverseTransformPoint(debugScaler.BottomLeft);
-            bottomRight.transform.position = transform.InverseTransformPoint(debugScaler.BottomRight);
-            topRight.transform.position = transform.InverseTransformPoint(debugScaler.TopRight);
+            topLeft.transform.position = debugScaler.TopLeft;
+            bottomLeft.transform.position = debugScaler.BottomLeft;
+            bottomRight.transform.position = debugScaler.BottomRight;
+            topRight.transform.position = debugScaler.TopRight;
         }
 
         private void UpdateDebugVisibility()

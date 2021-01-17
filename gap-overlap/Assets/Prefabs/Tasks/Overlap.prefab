@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4571166909082092317}
   - component: {fileID: 9161749395295131272}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Overlap
-  m_TagString: Untagged
+  m_TagString: focusable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
