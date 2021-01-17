@@ -9,6 +9,7 @@ namespace RasHack.GapOverlap.Main
         #region Serialized fields
 
         [SerializeField] private GameObject gapPrefab;
+        [SerializeField] private GameObject overlapPrefab;
 
         [SerializeField] private SpriteRenderer pointer;
         [SerializeField] private SpriteRenderer bottomLeft;

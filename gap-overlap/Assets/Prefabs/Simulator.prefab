@@ -212,6 +212,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gapPrefab: {fileID: 6232811990994141330, guid: 81131edd16a32564da2ccd1cbd3fcbae,
     type: 3}
+  overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
+    type: 3}
   pointer: {fileID: 5394390877371616969}
   bottomLeft: {fileID: 3710660885855788370}
   bottomRight: {fileID: 5230554403686800800}

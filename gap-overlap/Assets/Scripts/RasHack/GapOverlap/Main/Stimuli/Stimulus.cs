@@ -18,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region Internal fields
 
         private SpriteRenderer sprite;
-        private float spentLifetime;
+        private float? lifetime;
 
         #endregion
 
@@ -26,7 +26,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private StimuliType type;
         private Task.Task owner;
-        private float lifetime;
 
         #endregion
 
@@ -36,6 +35,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             this.type = type;
             this.owner = owner;
+
             this.lifetime = lifetime;
             if (sprite != null) SetUpSprite();
         }
@@ -52,9 +52,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Update()
         {
-            spentLifetime += Time.deltaTime;
-            if (spentLifetime < lifetime) return;
+            if (!lifetime.HasValue) return;
 
+            lifetime -= Time.deltaTime;
+            if (lifetime > 0f) return;
+
+            lifetime = null;
             owner.ReportStimulusDied(this);
         }
 
