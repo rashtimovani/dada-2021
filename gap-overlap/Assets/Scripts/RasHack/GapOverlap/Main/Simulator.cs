@@ -153,7 +153,7 @@ namespace RasHack.GapOverlap.Main
 
         private void newTask()
         {
-            currentTask = tasks.CreateNext();
+            currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)
             {
                 Debug.Log("All tasks finished!");

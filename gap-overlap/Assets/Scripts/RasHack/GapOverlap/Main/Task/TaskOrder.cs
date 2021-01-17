@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Task
@@ -37,7 +38,7 @@ namespace RasHack.GapOverlap.Main.Task
             currentIndex = 0;
         }
 
-        public Task CreateNext()
+        public Task CreateNext(StimuliType type)
         {
             if (currentIndex >= tasks.Count) return null;
 
@@ -48,11 +49,11 @@ namespace RasHack.GapOverlap.Main.Task
             {
                 case TaskType.Overlap:
                     var newOverlap = Instantiate(overlapPrefab, Vector3.zero, Quaternion.identity);
-                    newOverlap.name = "Overlap_" + currentIndex;
+                    newOverlap.name = $"Overlap_{currentIndex}_{type}";
                     return newOverlap.GetComponent<Overlap>();
                 default:
                     var newGap = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
-                    newGap.name = "Gap_" + currentIndex;
+                    newGap.name = $"Gap_{currentIndex}_{type}";
                     return newGap.GetComponent<Gap>();
             }
         }
