@@ -1,5 +1,4 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
-using RasHack.GapOverlap.Main.Task;
+﻿using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -8,6 +7,8 @@ namespace RasHack.GapOverlap.Main
     {
         #region Serialized fields
 
+        [SerializeField] private GameObject gapPrefab;
+
         [SerializeField] private SpriteRenderer pointer;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -15,19 +16,19 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topRight;
 
         [SerializeField] private bool showPointer;
-
-        #endregion
-
-        #region Tasks
-
-        private Gap gap;
+        [SerializeField] private float pauseBetweenTasks = 3.5f;
 
         #endregion
 
         #region Fields
 
         private Scaler scaler;
+        private Scaler debugScaler;
         private Camera mainCamera;
+
+        private int taskId = 1;
+        private float? waitingTime;
+        private Task.Task currentTask;
 
         #endregion
 
@@ -35,14 +36,16 @@ namespace RasHack.GapOverlap.Main
 
         public Scaler Scaler => scaler;
 
-        public void ReportStimulusDied(Stimulus active)
+        public void ReportTaskFinished(Task.Task task)
         {
-            if (gap.enabled) gap.ReportStimulusDied(active);
-        }
+            if (task != currentTask)
+            {
+                Debug.LogError($"{task} reported as finished, but that ${currentTask} is currently active");
+                return;
+            }
 
-        public void ReportCentralStimulusDied(CentralStimulus central)
-        {
-            if (gap.enabled) gap.ReportCentralStimulusDied(central);
+            currentTask = null;
+            waitingTime = pauseBetweenTasks;
         }
 
         #endregion
@@ -52,19 +55,18 @@ namespace RasHack.GapOverlap.Main
         private void Start()
         {
             mainCamera = Camera.main;
-            gap = GetComponent<Gap>();
 
-            scaler = new Scaler(mainCamera, -1);
-
-            topLeft.transform.position = transform.InverseTransformPoint(scaler.TopLeft);
-            bottomLeft.transform.position = transform.InverseTransformPoint(scaler.BottomLeft);
-            bottomRight.transform.position = transform.InverseTransformPoint(scaler.BottomRight);
-            topRight.transform.position = transform.InverseTransformPoint(scaler.TopRight);
+            scaler = new Scaler(mainCamera, -2);
+            debugScaler = new Scaler(mainCamera, -1);
+            
+            newTask();
         }
 
         private void Update()
         {
-            UpdateShownState();
+            UpdateBounds();
+            UpdateDebugVisibility();
+            UpdatePause();
 
             pointer.transform.position = scaler.point(Input.mousePosition);
         }
@@ -73,7 +75,15 @@ namespace RasHack.GapOverlap.Main
 
         #region Helpers
 
-        private void UpdateShownState()
+        private void UpdateBounds()
+        {
+            topLeft.transform.position = transform.InverseTransformPoint(debugScaler.TopLeft);
+            bottomLeft.transform.position = transform.InverseTransformPoint(debugScaler.BottomLeft);
+            bottomRight.transform.position = transform.InverseTransformPoint(debugScaler.BottomRight);
+            topRight.transform.position = transform.InverseTransformPoint(debugScaler.TopRight);
+        }
+
+        private void UpdateDebugVisibility()
         {
             pointer.enabled = showPointer;
 
@@ -81,6 +91,25 @@ namespace RasHack.GapOverlap.Main
             bottomRight.enabled = showPointer;
             topLeft.enabled = showPointer;
             topRight.enabled = showPointer;
+        }
+
+        private void UpdatePause()
+        {
+            if (!waitingTime.HasValue) return;
+            waitingTime -= Time.deltaTime;
+            if (waitingTime > 0f) return;
+            waitingTime = null;
+            newTask();
+        }
+
+        private void newTask()
+        {
+            var newOne = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
+            newOne.name = "Gap_" + taskId;
+            taskId++;
+            currentTask = newOne.GetComponent<Gap>();
+            
+            currentTask.StartTask(this);
         }
 
         #endregion

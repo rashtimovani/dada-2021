@@ -210,12 +210,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21c57fee101dcab4eac5313df80b63ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gapPrefab: {fileID: 6232811990994141330, guid: 81131edd16a32564da2ccd1cbd3fcbae,
+    type: 3}
   pointer: {fileID: 5394390877371616969}
   bottomLeft: {fileID: 3710660885855788370}
   bottomRight: {fileID: 5230554403686800800}
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
   showPointer: 1
+  pauseBetweenTasks: 3.5
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0
