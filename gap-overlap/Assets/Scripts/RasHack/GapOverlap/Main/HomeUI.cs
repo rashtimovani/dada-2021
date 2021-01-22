@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using RasHack.GapOverlap.Main.Stimuli;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main
@@ -7,14 +9,28 @@ namespace RasHack.GapOverlap.Main
     {
         #region Components
 
-        [SerializeField] private GameObject homeMenu;
+        [SerializeField] private GameObject panel;
+
         [SerializeField] private InputField nameInput;
 
         #endregion
 
         #region Fields
-
+        
         private Simulator simulator;
+        private MainSettingsUI mainSettings;
+
+        private bool hidden;
+        
+        #endregion
+
+        #region API
+
+        public void Show()
+        {
+            hidden = false;
+            panel.SetActive(true);
+        }
 
         #endregion
 
@@ -23,11 +39,12 @@ namespace RasHack.GapOverlap.Main
         private void Start()
         {
             simulator = FindObjectOfType<Simulator>();
+            mainSettings = FindObjectOfType<MainSettingsUI>();
         }
 
         private void Update()
         {
-            homeMenu.gameObject.SetActive(!simulator.IsActive);
+            panel.SetActive(!hidden && !simulator.IsActive);
         }
 
         public void OnStart()
@@ -39,10 +56,17 @@ namespace RasHack.GapOverlap.Main
         {
 #if UNITY_EDITOR
             simulator.FlushToDisk();
-            UnityEditor.EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif
+        }
+
+        public void OnSettings()
+        {
+            mainSettings.Show();
+            hidden = true;
+            panel.SetActive(false);
         }
 
         #endregion
