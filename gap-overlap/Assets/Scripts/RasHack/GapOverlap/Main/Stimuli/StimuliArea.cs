@@ -9,6 +9,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private Vector2 left = new Vector2(0.15f, 0.5f);
 
         [SerializeField] private Vector2 right = new Vector2(0.85f, 0.5f);
+        [SerializeField] private bool randomOrder;
 
         #endregion
 
@@ -25,7 +26,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
         
         private Vector3 RightInWorld => simulator.Scaler.InWorld(right);
 
-        public Vector3 NextInWorld => count++ % 2 == 0 ? LeftInWorld : RightInWorld;
+        private bool IsNextSideLeft => randomOrder ? Random.Range(0, 2) == 0 : count++ % 2 == 0;
+        
+        public Vector3 NextInWorld => IsNextSideLeft ? LeftInWorld : RightInWorld;
 
         public void Reset()
         {
