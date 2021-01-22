@@ -40,6 +40,7 @@ namespace RasHack.GapOverlap.Main
         {
             simulator = FindObjectOfType<Simulator>();
             mainSettings = FindObjectOfType<MainSettingsUI>();
+            mainSettings.Hide();    
         }
 
         private void Update()

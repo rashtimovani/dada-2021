@@ -28,6 +28,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
             panel.SetActive(true);
         }
 
+        public void Hide()
+        {
+            panel.SetActive(false);
+        }
+        
         #endregion
 
         #region Unity methods
@@ -39,7 +44,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void OnClose()
         {
-            panel.SetActive(false);
+            Hide();
             home.Show();
         }
 
