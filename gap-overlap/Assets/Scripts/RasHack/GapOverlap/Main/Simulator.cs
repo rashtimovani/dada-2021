@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.NetworkInformation;
+﻿using RasHack.GapOverlap.Main.Data;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -20,6 +19,8 @@ namespace RasHack.GapOverlap.Main
 
         [SerializeField] private bool showPointer;
         [SerializeField] private float pauseBetweenTasks = 3.5f;
+
+        [SerializeField] private MainSettings settings;
 
         #endregion
 
@@ -44,6 +45,8 @@ namespace RasHack.GapOverlap.Main
         #region API
 
         public bool IsActive { get; private set; }
+
+        public MainSettings Settings => settings;
 
         public Scaler Scaler => scaler;
         public Scaler DebugScaler => debugScaler;
