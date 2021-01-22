@@ -1,18 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
-public class StimuliTimeUI : MonoBehaviour
+namespace RasHack.GapOverlap.Main.Stimuli
 {
-    // Start is called before the first frame update
-    void Start()
+    public class StimuliTimeUI : MonoBehaviour
     {
+        #region Serializable
         
-    }
+        #endregion
+        
+        // Start is called before the first frame update
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
