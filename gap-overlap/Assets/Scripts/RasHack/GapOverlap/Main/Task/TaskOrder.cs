@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
+using static UnityEngine.Random;
 
 namespace RasHack.GapOverlap.Main.Task
 {
@@ -16,6 +17,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         [SerializeField] private GameObject gapPrefab;
         [SerializeField] private GameObject overlapPrefab;
+        [SerializeField] private bool randomTaskOrder;
 
         [SerializeField] private List<TaskType> tasks = new List<TaskType>
         {
@@ -41,8 +43,8 @@ namespace RasHack.GapOverlap.Main.Task
         public Task CreateNext(StimuliType type)
         {
             if (currentIndex >= tasks.Count) return null;
-
-            var next = tasks[currentIndex];
+            
+            var next = randomTaskOrder ?  (TaskType) Range((int) TaskType.Gap, (int)TaskType.Overlap + 1) : tasks[currentIndex];
             currentIndex++;
 
             switch (next)

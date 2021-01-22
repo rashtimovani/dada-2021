@@ -320,6 +320,7 @@ MonoBehaviour:
     type: 3}
   overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
     type: 3}
+  randomTaskOrder: 1
   tasks: 00000000000000000100000001000000
 --- !u!114 &3700890592413371578
 MonoBehaviour:
