@@ -8,11 +8,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region Sprites
 
         [SerializeField] private Sprite bee;
-        [SerializeField] private Sprite octopus;
+        [SerializeField] private Sprite bird;
+        [SerializeField] private Sprite owl;
         [SerializeField] private Sprite rainbow;
         [SerializeField] private Sprite rainCloud;
         [SerializeField] private Sprite umbrella;
-        [SerializeField] private Sprite yellowBird;
 
         #endregion
 
@@ -82,8 +82,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             switch (type)
             {
-                case StimuliType.Octopus:
-                    sprite.sprite = octopus;
+                case StimuliType.Bird:
+                    sprite.sprite = bird;
+                    break;
+                case StimuliType.Owl:
+                    sprite.sprite = owl;
                     break;
                 case StimuliType.Rainbow:
                     sprite.sprite = rainbow;
@@ -93,9 +96,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     break;
                 case StimuliType.Umbrella:
                     sprite.sprite = umbrella;
-                    break;
-                case StimuliType.YellowBird:
-                    sprite.sprite = yellowBird;
                     break;
                 default:
                     sprite.sprite = bee;
