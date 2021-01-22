@@ -88,3 +88,4 @@ crashlytics-build.properties
 # Result files
 /gap-overlap/*.csv
 
+gap-overlap/settings.json

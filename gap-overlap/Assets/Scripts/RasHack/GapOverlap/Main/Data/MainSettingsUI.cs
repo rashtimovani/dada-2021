@@ -25,17 +25,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region API
 
-        public GapTimes GapTimes
+        private GapTimes GapTimes
         {
-            get
+            get => new GapTimes
             {
-                return new GapTimes
-                {
-                    CentralTime = float.Parse(gapCentralTime.text),
-                    PauseTime = float.Parse(gapPauseTime.text),
-                    StimulusTime = float.Parse(gapStimulusTime.text)
-                };
-            }
+                CentralTime = float.Parse(gapCentralTime.text),
+                PauseTime = float.Parse(gapPauseTime.text),
+                StimulusTime = float.Parse(gapStimulusTime.text)
+            };
+
             set
             {
                 gapCentralTime.text = $"{value.CentralTime:0.000}";
@@ -47,13 +45,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public void Show()
         {
             panel.SetActive(true);
+            
             GapTimes = simulator.Settings.GapTimes;
         }
 
         public void Hide()
         {
             panel.SetActive(false);
+            
             simulator.Settings.GapTimes = GapTimes;
+            
+            simulator.Settings.Store();
         }
 
         #endregion

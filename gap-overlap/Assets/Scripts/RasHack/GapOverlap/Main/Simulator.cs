@@ -109,6 +109,9 @@ namespace RasHack.GapOverlap.Main
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
+
+            var settings = MainSettings.Load();
+            if (settings != null) this.settings = settings;
         }
 
         private void Update()
