@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Task;
+﻿using RasHack.GapOverlap.Main.Data;
+using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,7 +47,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             panel.SetActive(true);
 
-            GapTimes = simulator.Settings.GapTimes;
+            Display();
         }
 
         public void Hide(bool dontStore = false)
@@ -74,6 +75,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
             home.Show();
         }
 
+        public void OnReset()
+        {
+            var defaults = new MainSettings();
+
+            simulator.Settings.GapTimes = defaults.GapTimes;
+            
+            Display();
+        }
+
         #endregion
 
         #region Helpers
@@ -81,6 +91,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private static float ParseInput(InputField field, float defaultValue)
         {
             return string.IsNullOrWhiteSpace(field.text) ? defaultValue : float.Parse(field.text);
+        }
+
+        private void Display()
+        {
+            GapTimes = simulator.Settings.GapTimes;
         }
 
         #endregion
