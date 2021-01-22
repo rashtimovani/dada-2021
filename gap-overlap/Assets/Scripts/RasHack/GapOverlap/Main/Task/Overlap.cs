@@ -30,6 +30,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        private OverlapTimes Times => owner.Settings?.OverlapTimes ?? times;
+
         public override void ReportFocusedOn(Stimulus stimulus, float after)
         {
             if (stimulus != activeStimulus)
@@ -41,7 +43,7 @@ namespace RasHack.GapOverlap.Main.Task
             measurement = after;
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
-        
+
         public override void ReportStimulusDied(Stimulus active)
         {
             if (active != activeStimulus)
@@ -86,13 +88,13 @@ namespace RasHack.GapOverlap.Main.Task
         private void StartWithCentralStimulus()
         {
             centralStimulus = NewCentralStimulus();
-            centralStimulus.StartSimulating(this, times.CentralTime);
+            centralStimulus.StartSimulating(this, Times.CentralTime);
         }
 
         private void StartWithStimulus()
         {
             activeStimulus = NewStimulus();
-            activeStimulus.StartSimulating(stimulusType, this, times.BothStimuli);
+            activeStimulus.StartSimulating(stimulusType, this, Times.BothStimuli);
         }
 
         #endregion
