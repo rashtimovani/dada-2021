@@ -29,9 +29,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             get => new GapTimes
             {
-                CentralTime = float.Parse(gapCentralTime.text),
-                PauseTime = float.Parse(gapPauseTime.text),
-                StimulusTime = float.Parse(gapStimulusTime.text)
+                CentralTime = ParseInput(gapCentralTime, 1f),
+                PauseTime = ParseInput(gapPauseTime, 0.5f),
+                StimulusTime = ParseInput(gapStimulusTime, 2f)
             };
 
             set
@@ -45,17 +45,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public void Show()
         {
             panel.SetActive(true);
-            
+
             GapTimes = simulator.Settings.GapTimes;
         }
 
-        public void Hide()
+        public void Hide(bool dontStore = false)
         {
             panel.SetActive(false);
-            
+
             simulator.Settings.GapTimes = GapTimes;
-            
-            simulator.Settings.Store();
+
+            if (!dontStore) simulator.Settings.Store();
         }
 
         #endregion
@@ -72,6 +72,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             Hide();
             home.Show();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private static float ParseInput(InputField field, float defaultValue)
+        {
+            return string.IsNullOrWhiteSpace(field.text) ? defaultValue : float.Parse(field.text);
         }
 
         #endregion
