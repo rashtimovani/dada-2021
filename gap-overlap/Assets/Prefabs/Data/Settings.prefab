@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 2676939004076329272}
   - component: {fileID: 2741493443341298947}
   m_Layer: 5
-  m_Name: PauseTimeLabel
+  m_Name: BothStimuliTimeLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2160,7 +2160,7 @@ GameObject:
   - component: {fileID: 8317481805288613766}
   - component: {fileID: 8515518441414828629}
   m_Layer: 5
-  m_Name: PauseTimeInput
+  m_Name: BothStimuliTimeInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2577,6 +2577,8 @@ MonoBehaviour:
   gapCentralTime: {fileID: 874383604977359773}
   gapPauseTime: {fileID: 3554235556774192178}
   gapStimulusTime: {fileID: 7556007153154109384}
+  overlapCentralTime: {fileID: 6182497199081078834}
+  overlapStimulusTime: {fileID: 8515518441414828629}
 --- !u!1 &8720993455116298211
 GameObject:
   m_ObjectHideFlags: 0

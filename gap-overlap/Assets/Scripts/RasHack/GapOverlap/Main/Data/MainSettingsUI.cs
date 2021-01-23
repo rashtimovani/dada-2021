@@ -15,6 +15,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private InputField gapPauseTime;
         [SerializeField] private InputField gapStimulusTime;
 
+        [SerializeField] private InputField overlapCentralTime;
+        [SerializeField] private InputField overlapStimulusTime;
+
         #endregion
 
         #region Fields
@@ -43,6 +46,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
+        private OverlapTimes OverlapTimes
+        {
+            get => new OverlapTimes
+            {
+                CentralTime = ParseInput(overlapCentralTime, 1f),
+                BothStimuli = ParseInput(overlapStimulusTime, 2.5f),
+            };
+
+            set
+            {
+                overlapCentralTime.text = $"{value.CentralTime:0.000}";
+                overlapStimulusTime.text = $"{value.BothStimuli:0.000}";
+            }
+        }
+
         public void Show()
         {
             panel.SetActive(true);
@@ -53,10 +71,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public void Hide(bool dontStore = false)
         {
             panel.SetActive(false);
+            if (dontStore) return;
 
             simulator.Settings.GapTimes = GapTimes;
+            simulator.Settings.OverlapTimes = OverlapTimes;
 
-            if (!dontStore) simulator.Settings.Store();
+            simulator.Settings.Store();
         }
 
         #endregion
@@ -80,7 +100,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var defaults = new MainSettings();
 
             simulator.Settings.GapTimes = defaults.GapTimes;
-            
+            simulator.Settings.OverlapTimes = defaults.OverlapTimes;
+
             Display();
         }
 
@@ -96,6 +117,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Display()
         {
             GapTimes = simulator.Settings.GapTimes;
+            OverlapTimes = simulator.Settings.OverlapTimes;
         }
 
         #endregion
