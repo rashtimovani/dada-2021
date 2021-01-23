@@ -31,7 +31,7 @@ namespace RasHack.GapOverlap.Main.Data
 
         public void Store()
         {
-            var json = JsonUtility.ToJson(this);
+            var json = JsonUtility.ToJson(this, true);
             File.WriteAllText(FILENAME, json, Encoding.UTF8);
         }
 
