@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Data;
+﻿using System;
+using RasHack.GapOverlap.Main.Data;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -84,6 +85,9 @@ namespace RasHack.GapOverlap.Main
             else runName = name;
             testId++;
 
+            settings.LastUsedName = name;
+            settings.Store();
+            
             results.StartTest(runName);
             newTask();
         }
@@ -97,6 +101,12 @@ namespace RasHack.GapOverlap.Main
 
         #region Mono methods
 
+        private void Awake()
+        {
+            var settings = MainSettings.Load();
+            if (settings != null) this.settings = settings;
+        }
+
         private void Start()
         {
             Application.targetFrameRate = 120;
@@ -108,9 +118,6 @@ namespace RasHack.GapOverlap.Main
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
-
-            var settings = MainSettings.Load();
-            if (settings != null) this.settings = settings;
         }
 
         private void Update()

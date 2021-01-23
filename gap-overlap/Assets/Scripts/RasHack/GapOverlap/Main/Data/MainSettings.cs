@@ -11,6 +11,8 @@ namespace RasHack.GapOverlap.Main.Data
     {
         #region Settings related to times
 
+        [HideInInspector] public string LastUsedName = "";
+
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
         public float PauseBetweenTasks = 3.5f;
 
