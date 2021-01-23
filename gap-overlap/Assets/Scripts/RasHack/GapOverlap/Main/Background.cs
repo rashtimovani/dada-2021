@@ -22,9 +22,28 @@ namespace RasHack.GapOverlap.Main
 
         #endregion
 
+        #region API
+
+        public void SetBackground(BackgroundColor color)
+        {
+            usedColor = color;
+            UpdateColor();
+        }
+
+        #endregion
+        
         #region Mono methods
 
         private void Start()
+        {
+            UpdateColor();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private void UpdateColor()
         {
             switch (usedColor)
             {

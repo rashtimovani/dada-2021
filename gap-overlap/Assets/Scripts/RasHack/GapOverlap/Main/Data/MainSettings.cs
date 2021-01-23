@@ -13,6 +13,8 @@ namespace RasHack.GapOverlap.Main.Data
 
         [HideInInspector] public string LastUsedName = "";
 
+        [Header("General")] public BackgroundColor BackgroundColor = BackgroundColor.Black;
+        
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
         public float PauseBetweenTasks = 3.5f;
 

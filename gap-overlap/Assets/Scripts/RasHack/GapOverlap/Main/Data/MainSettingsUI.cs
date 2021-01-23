@@ -22,6 +22,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private InputField overlapsInput;
 
         [SerializeField] private InputField pauseInput;
+        
+        [SerializeField] private Dropdown backgroundInput;
 
         #endregion
 
@@ -86,6 +88,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             get => ParseInput(pauseInput, 3.5f);
             set => pauseInput.text = $"{value:0.000}";
         }
+        
+        private BackgroundColor BackgroundColor
+        {
+            get => (BackgroundColor) backgroundInput.value;
+            set => backgroundInput.value = (int) value;
+        }
 
         public void Show()
         {
@@ -103,6 +111,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
             simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
+            simulator.Settings.BackgroundColor = BackgroundColor;
 
             simulator.Settings.Store();
         }
@@ -121,6 +130,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             Hide();
             home.Show();
+            simulator.UpdateBackground();
         }
 
         public void OnReset()
@@ -131,6 +141,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
             simulator.Settings.TaskCount = defaults.TaskCount;
             simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
+            simulator.Settings.BackgroundColor = defaults.BackgroundColor;
 
             Display();
         }
@@ -155,6 +166,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
             PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
+            BackgroundColor = simulator.Settings.BackgroundColor;
         }
 
         #endregion
