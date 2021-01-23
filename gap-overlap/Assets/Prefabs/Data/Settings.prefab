@@ -3704,6 +3704,9 @@ MonoBehaviour:
   gapStimulusTime: {fileID: 7556007153154109384}
   overlapCentralTime: {fileID: 6182497199081078834}
   overlapStimulusTime: {fileID: 8515518441414828629}
+  gapsInput: {fileID: 131365967082550422}
+  overlapsInput: {fileID: 1768480648319740963}
+  pauseInput: {fileID: 2957244353605360610}
 --- !u!1 &8720993455116298211
 GameObject:
   m_ObjectHideFlags: 0

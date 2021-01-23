@@ -11,6 +11,9 @@ namespace RasHack.GapOverlap.Main.Data
     {
         #region Settings related to times
 
+        [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
+        public float PauseBetweenTasks = 3.5f;
+
         [Header("Task times")] public GapTimes GapTimes = new GapTimes
             {CentralTime = 1f, PauseTime = 0.5f, StimulusTime = 2f};
 

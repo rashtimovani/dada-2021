@@ -18,7 +18,6 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topRight;
 
         [SerializeField] private bool showPointer;
-        [SerializeField] private float pauseBetweenTasks = 3.5f;
 
         [SerializeField] private MainSettings settings;
 
@@ -63,7 +62,7 @@ namespace RasHack.GapOverlap.Main
             results.AttachMeasurement(task.name, measurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
-            waitingTime = pauseBetweenTasks;
+            waitingTime = settings.PauseBetweenTasks;
         }
 
         public void StartTests(string name)
@@ -74,7 +73,7 @@ namespace RasHack.GapOverlap.Main
                 testId = 1;
             }
 
-            tasks.Reset();
+            tasks.Reset(settings.TaskCount);
             area.Reset();
             nextStimulus = StimuliType.Bee;
             IsActive = true;

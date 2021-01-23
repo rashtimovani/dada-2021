@@ -18,6 +18,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private InputField overlapCentralTime;
         [SerializeField] private InputField overlapStimulusTime;
 
+        [SerializeField] private InputField gapsInput;
+        [SerializeField] private InputField overlapsInput;
+
+        [SerializeField] private InputField pauseInput;
+
         #endregion
 
         #region Fields
@@ -61,6 +66,27 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
+        private TaskCount TaskCount
+        {
+            get => new TaskCount
+            {
+                Gaps = ParseInput(gapsInput, 18),
+                Overlaps = ParseInput(overlapsInput, 18),
+            };
+
+            set
+            {
+                gapsInput.text = $"{value.Gaps}";
+                overlapsInput.text = $"{value.Overlaps}";
+            }
+        }
+
+        private float PauseBetweenTasks
+        {
+            get => ParseInput(pauseInput, 3.5f);
+            set => pauseInput.text = $"{value:0.000}";
+        }
+
         public void Show()
         {
             panel.SetActive(true);
@@ -75,6 +101,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             simulator.Settings.GapTimes = GapTimes;
             simulator.Settings.OverlapTimes = OverlapTimes;
+            simulator.Settings.TaskCount = TaskCount;
+            simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
 
             simulator.Settings.Store();
         }
@@ -101,6 +129,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             simulator.Settings.GapTimes = defaults.GapTimes;
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
+            simulator.Settings.TaskCount = defaults.TaskCount;
+            simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
 
             Display();
         }
@@ -114,10 +144,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return string.IsNullOrWhiteSpace(field.text) ? defaultValue : float.Parse(field.text);
         }
 
+        private static int ParseInput(InputField field, int defaultValue)
+        {
+            return string.IsNullOrWhiteSpace(field.text) ? defaultValue : int.Parse(field.text);
+        }
+
         private void Display()
         {
             GapTimes = simulator.Settings.GapTimes;
             OverlapTimes = simulator.Settings.OverlapTimes;
+            TaskCount = simulator.Settings.TaskCount;
+            PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
         }
 
         #endregion
