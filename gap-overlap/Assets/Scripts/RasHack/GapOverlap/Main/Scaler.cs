@@ -33,16 +33,30 @@ namespace RasHack.GapOverlap.Main
             this.settings = settings;
         }
 
-        public Vector3 BottomLeft => inDepth(mainCamera.ScreenToWorldPoint(
+        public Vector3 ScreenInCM
+        {
+            get
+            {
+                var ratio = (float) Screen.height / Screen.width;
+                var sizeInCM = settings.ReferencePoint.ScreenDiagonalInInches * 2.54f;
+
+                var width = Mathf.Sqrt(sizeInCM * sizeInCM / (1 + ratio * ratio));
+                var height = ratio * width;
+
+                return new Vector3(width, height, 0);
+            }
+        }
+        
+        public Vector3 BottomLeft => InDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(0, 0)));
 
-        public Vector3 BottomRight => inDepth(mainCamera.ScreenToWorldPoint(
+        public Vector3 BottomRight => InDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(Screen.width, 0)));
 
-        public Vector3 TopLeft => inDepth(mainCamera.ScreenToWorldPoint(
+        public Vector3 TopLeft => InDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(0, Screen.height)));
 
-        public Vector3 TopRight => inDepth(mainCamera.ScreenToWorldPoint(
+        public Vector3 TopRight => InDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(Screen.width, Screen.height)));
 
         public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
@@ -51,13 +65,13 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 InWorld(Vector2 screenPercent)
         {
-            return inDepth(point(
+            return InDepth(point(
                 new Vector3(screenPercent.x * Screen.width, screenPercent.y * Screen.height, depth)));
         }
 
         public Vector3 point(Vector3 inputPosition)
         {
-            return inDepth(mainCamera.ScreenToWorldPoint(inputPosition));
+            return InDepth(mainCamera.ScreenToWorldPoint(inputPosition));
         }
 
         public Vector3 ScaleSize(Vector3 currentScale, float sizeInDegrees, float offsetInDegrees)
@@ -83,11 +97,12 @@ namespace RasHack.GapOverlap.Main
             return anchor + direction * distance;
         }
 
+
         #endregion
 
         #region Helpers
 
-        private Vector3 inDepth(Vector3 original)
+        private Vector3 InDepth(Vector3 original)
         {
             return new Vector3(original.x, original.y, depth);
         }

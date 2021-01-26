@@ -176,6 +176,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             screenWidth.text = $"{(size.x):0.000}";
             var distance = simulator.Scaler.ScreenPosition(Vector3.zero, 10f, Vector3.right);
             eyeTrackerDistance.text = $"{(distance.x):0.000}";
+            var width = simulator.Scaler.ScreenInCM.y;
+            eyeTrackerDistance.text = $"{(width):0.000}";
         }
 
         #endregion
