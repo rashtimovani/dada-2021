@@ -46,7 +46,7 @@ namespace RasHack.GapOverlap.Main
                 return new Vector3(width, height, 0);
             }
         }
-        
+
         public Vector3 BottomLeft => InDepth(mainCamera.ScreenToWorldPoint(
             new Vector3(0, 0)));
 
@@ -92,11 +92,11 @@ namespace RasHack.GapOverlap.Main
         {
             var radians = Mathf.Deg2Rad * degrees;
 
-            var distance = Mathf.Tan(radians) * settings.ReferencePoint.DistanceFromEyesInCM;
+            var distanceInCM = Mathf.Tan(radians) * settings.ReferencePoint.DistanceFromEyesInCM;
+            var distance = CMToPixel(direction * distanceInCM);
 
-            return anchor + direction * distance;
+            return anchor + distance;
         }
-
 
         #endregion
 
@@ -105,6 +105,19 @@ namespace RasHack.GapOverlap.Main
         private Vector3 InDepth(Vector3 original)
         {
             return new Vector3(original.x, original.y, depth);
+        }
+
+        private Vector3 CMToPixel(Vector3 inCm)
+        {
+            var screenInCM = ScreenInCM;
+            
+            var widthRatio = inCm.x / screenInCM.x;
+            var heightRatio = inCm.y / screenInCM.y;
+
+            var width = widthRatio * Screen.width;
+            var height = heightRatio * Screen.height;
+
+            return new Vector3(width, height, 0);
         }
 
         #endregion
