@@ -1,7 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using RasHack.GapOverlap.Main.Data;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
 {
+    [Serializable]
+    public struct ReferencePoint
+    {
+        public float DistanceFromEyesInCM;
+        public float ScreenDiagonalInInches;
+    }
+
     public class Scaler
     {
         #region Internal fields
@@ -11,15 +20,17 @@ namespace RasHack.GapOverlap.Main
 
         private readonly Camera mainCamera;
         private readonly float depth;
+        private readonly MainSettings settings;
 
         #endregion
 
         #region API
 
-        public Scaler(Camera mainCamera, float depth)
+        public Scaler(Camera mainCamera, float depth, MainSettings settings)
         {
             this.mainCamera = mainCamera;
             this.depth = depth;
+            this.settings = settings;
         }
 
         public Vector3 BottomLeft => inDepth(mainCamera.ScreenToWorldPoint(
@@ -45,6 +56,20 @@ namespace RasHack.GapOverlap.Main
         public Vector3 point(Vector3 inputPosition)
         {
             return inDepth(mainCamera.ScreenToWorldPoint(inputPosition));
+        }
+
+        public Vector3 ScaleSize(Vector3 currentScale, float sizeInDegrees, float offsetInDegrees)
+        {
+            var halfSizeInRadians = Mathf.PI * sizeInDegrees / 180f / 2f;
+            var offsetInRadians = Mathf.Deg2Rad * offsetInDegrees;
+
+            var farFromCenter = Mathf.Tan(offsetInRadians + halfSizeInRadians); 
+
+            var nearFromCenter = Mathf.Tan(offsetInRadians - halfSizeInRadians);
+
+            var sizeInCM = (farFromCenter - nearFromCenter) * settings.ReferencePoint.DistanceFromEyesInCM;
+
+            return new Vector3(sizeInCM, sizeInCM, 1);
         }
 
         #endregion

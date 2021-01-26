@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Data;
+﻿using System;
+using RasHack.GapOverlap.Main.Data;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +23,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private InputField overlapsInput;
 
         [SerializeField] private InputField pauseInput;
-        
+
         [SerializeField] private Dropdown backgroundInput;
+
+        [SerializeField] private InputField screenWidth;
 
         #endregion
 
@@ -88,7 +91,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             get => ParseInput(pauseInput, 3.5f);
             set => pauseInput.text = $"{value:0.000}";
         }
-        
+
         private BackgroundColor BackgroundColor
         {
             get => (BackgroundColor) backgroundInput.value;
@@ -167,6 +170,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
             TaskCount = simulator.Settings.TaskCount;
             PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
             BackgroundColor = simulator.Settings.BackgroundColor;
+
+            var size = simulator.Scaler.ScaleSize(Vector3.one, 3.5f, 10f);
+            screenWidth.text = $"{(size.x):0.000}";
         }
 
         #endregion

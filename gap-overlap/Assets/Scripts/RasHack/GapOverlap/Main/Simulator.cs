@@ -71,7 +71,7 @@ namespace RasHack.GapOverlap.Main
         {
             background.SetBackground(settings.BackgroundColor);
         }
-        
+
         public void StartTests(string name)
         {
             if (lastEnteredName != name)
@@ -95,7 +95,7 @@ namespace RasHack.GapOverlap.Main
 
             settings.LastUsedName = name;
             settings.Store();
-            
+
             results.StartTest(runName);
             newTask();
         }
@@ -119,12 +119,12 @@ namespace RasHack.GapOverlap.Main
         {
             Application.targetFrameRate = 120;
             mainCamera = Camera.main;
-            
+
             background = FindObjectOfType<Background>();
             UpdateBackground();
 
-            scaler = new Scaler(mainCamera, -1);
-            debugScaler = new Scaler(mainCamera, -2);
+            scaler = new Scaler(mainCamera, -1, settings);
+            debugScaler = new Scaler(mainCamera, -2, settings);
             results = new TestResults();
 
             tasks = GetComponent<TaskOrder>();

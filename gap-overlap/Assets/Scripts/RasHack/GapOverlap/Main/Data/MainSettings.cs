@@ -14,7 +14,10 @@ namespace RasHack.GapOverlap.Main.Data
         [HideInInspector] public string LastUsedName = "";
 
         [Header("General")] public BackgroundColor BackgroundColor = BackgroundColor.Black;
-        
+
+        public ReferencePoint ReferencePoint = new ReferencePoint
+            {DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f};
+
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
         public float PauseBetweenTasks = 3.5f;
 
