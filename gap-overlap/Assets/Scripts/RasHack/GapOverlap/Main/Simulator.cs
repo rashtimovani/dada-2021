@@ -94,6 +94,8 @@ namespace RasHack.GapOverlap.Main
             settings.LastUsedName = name;
             settings.Store();
 
+            FlushToDisk();
+            
             results.StartTest(runName);
             newTask();
         }
