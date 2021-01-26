@@ -20,6 +20,8 @@ namespace RasHack.GapOverlap.Main.Data
 
         [Header("Stimulus dimension specification")]
         public float StimulusDistanceInDegrees = 20f;
+        public float CentralStimulusSizeInDegrees = 3.5f;
+        public float PeripheralStimulusSizeInDegrees = 3f;
 
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
         public float PauseBetweenTasks = 3.5f;

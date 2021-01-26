@@ -6810,6 +6810,8 @@ MonoBehaviour:
   screenDiagonal: {fileID: 5536774219819462092}
   eyeTrackerDistance: {fileID: 5235659887691190838}
   distanceBetweenStimuli: {fileID: 2120505944166104599}
+  centralSize: {fileID: 7231782045953661182}
+  peripheralSize: {fileID: 5602070349754191763}
 --- !u!1 &8720993455116298211
 GameObject:
   m_ObjectHideFlags: 0
