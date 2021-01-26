@@ -26,8 +26,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private Dropdown backgroundInput;
 
-        [SerializeField] private InputField screenWidth;
+        [SerializeField] private InputField screenDiagonal;
         [SerializeField] private InputField eyeTrackerDistance;
+
+        [SerializeField] private InputField distanceBetweenStimuli;
 
         #endregion
 
@@ -51,9 +53,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             set
             {
-                gapCentralTime.text = $"{value.CentralTime:0.000}";
-                gapPauseTime.text = $"{value.PauseTime:0.000}";
-                gapStimulusTime.text = $"{value.StimulusTime:0.000}";
+                gapCentralTime.text = $"{value.CentralTime:0.00}";
+                gapPauseTime.text = $"{value.PauseTime:0.00}";
+                gapStimulusTime.text = $"{value.StimulusTime:0.00}";
             }
         }
 
@@ -67,8 +69,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             set
             {
-                overlapCentralTime.text = $"{value.CentralTime:0.000}";
-                overlapStimulusTime.text = $"{value.BothStimuli:0.000}";
+                overlapCentralTime.text = $"{value.CentralTime:0.00}";
+                overlapStimulusTime.text = $"{value.BothStimuli:0.00}";
             }
         }
 
@@ -90,13 +92,33 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private float PauseBetweenTasks
         {
             get => ParseInput(pauseInput, 3.5f);
-            set => pauseInput.text = $"{value:0.000}";
+            set => pauseInput.text = $"{value:0.00}";
         }
 
         private BackgroundColor BackgroundColor
         {
             get => (BackgroundColor) backgroundInput.value;
             set => backgroundInput.value = (int) value;
+        }
+
+        private ReferencePoint ReferencePoint
+        {
+            get => new ReferencePoint
+            {
+                ScreenDiagonalInInches = ParseInput(screenDiagonal, 15.6f),
+                DistanceFromEyesInCM = ParseInput(eyeTrackerDistance, 60f),
+            };
+            set
+            {
+                screenDiagonal.text = $"{value.ScreenDiagonalInInches:0.0}";
+                eyeTrackerDistance.text = $"{value.DistanceFromEyesInCM:0.0}";
+            }
+        }
+
+        private float StimulusDistanceInDegrees
+        {
+            get => ParseInput(distanceBetweenStimuli, 20f);
+            set => distanceBetweenStimuli.text = $"{value:0.0}";
         }
 
         public void Show()
@@ -116,6 +138,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.TaskCount = TaskCount;
             simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
             simulator.Settings.BackgroundColor = BackgroundColor;
+            simulator.Settings.ReferencePoint = ReferencePoint;
+            simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
 
             simulator.Settings.Store();
         }
@@ -146,6 +170,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.TaskCount = defaults.TaskCount;
             simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
             simulator.Settings.BackgroundColor = defaults.BackgroundColor;
+            simulator.Settings.ReferencePoint = defaults.ReferencePoint;
+            simulator.Settings.StimulusDistanceInDegrees = defaults.StimulusDistanceInDegrees;
 
             Display();
         }
@@ -171,13 +197,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             TaskCount = simulator.Settings.TaskCount;
             PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
             BackgroundColor = simulator.Settings.BackgroundColor;
-
-            var size = simulator.Scaler.ScaleSize(Vector3.one, 3.5f, 10f);
-            screenWidth.text = $"{(size.x):0.000}";
-            var distance = simulator.Scaler.ScreenPosition(Vector3.zero, 10f, Vector3.right);
-            eyeTrackerDistance.text = $"{(distance.x):0.000}";
-            var width = simulator.Scaler.ScreenInCM.y;
-            eyeTrackerDistance.text = $"{(width):0.000}";
+            ReferencePoint = simulator.Settings.ReferencePoint;
+            StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
         }
 
         #endregion
