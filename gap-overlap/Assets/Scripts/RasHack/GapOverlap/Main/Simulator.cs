@@ -1,5 +1,4 @@
-﻿using System;
-using RasHack.GapOverlap.Main.Data;
+﻿using RasHack.GapOverlap.Main.Data;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -64,7 +63,7 @@ namespace RasHack.GapOverlap.Main
             results.AttachMeasurement(task.name, measurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
-            waitingTime = settings.PauseBetweenTasks;
+            waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : 0.01f;
         }
 
         public void UpdateBackground()
@@ -135,6 +134,7 @@ namespace RasHack.GapOverlap.Main
             UpdateBounds();
             UpdateDebugVisibility();
             UpdatePause();
+            DetectInterruptedTest();
         }
 
         private void OnApplicationQuit()
@@ -185,6 +185,23 @@ namespace RasHack.GapOverlap.Main
 
             currentTask.StartTask(this, nextStimulus);
             nextStimulus = nextStimulus.next();
+        }
+
+        private void DetectInterruptedTest()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Debug.LogWarning("Test aborted by user!");
+                tasks.End();
+                if (currentTask != null)
+                {
+                    Destroy(currentTask.gameObject);
+                    currentTask = null;
+                }
+
+                IsActive = false;
+                waitingTime = 0.01f;
+            }
         }
 
         #endregion

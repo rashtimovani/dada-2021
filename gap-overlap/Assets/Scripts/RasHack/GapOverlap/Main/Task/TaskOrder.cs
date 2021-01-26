@@ -38,6 +38,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        public bool HasNext => remainingGaps > 0 || remainingOverlaps > 0;
+
         public void Reset(TaskCount taskCount)
         {
             currentIndex = 0;
@@ -45,9 +47,15 @@ namespace RasHack.GapOverlap.Main.Task
             remainingOverlaps = taskCount.Overlaps;
         }
 
+        public void End()
+        {
+            remainingGaps = 0;
+            remainingOverlaps = 0;
+        }
+
         public Task CreateNext(StimuliType type)
         {
-            if (remainingGaps <= 0 && remainingOverlaps <= 0) return null;
+            if (!HasNext) return null;
 
             TaskType next;
             if (remainingGaps == 0) next = TaskType.Overlap;

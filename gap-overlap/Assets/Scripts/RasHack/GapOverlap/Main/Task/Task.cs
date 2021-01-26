@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
+﻿using System;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Task
@@ -35,6 +36,12 @@ namespace RasHack.GapOverlap.Main.Task
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 
         public abstract void ReportStimulusDied(Stimulus active);
+
+        #endregion
+
+        #region Mono methods
+
+        protected abstract void OnDestroy();
 
         #endregion
 

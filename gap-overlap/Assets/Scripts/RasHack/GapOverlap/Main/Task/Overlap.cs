@@ -81,6 +81,12 @@ namespace RasHack.GapOverlap.Main.Task
             StartWithCentralStimulus();
         }
 
+        protected override void OnDestroy()
+        {
+            if (centralStimulus != null) Destroy(centralStimulus.gameObject);
+            if (activeStimulus != null) Destroy(activeStimulus.gameObject);
+        }
+
         #endregion
 
         #region Helpers
