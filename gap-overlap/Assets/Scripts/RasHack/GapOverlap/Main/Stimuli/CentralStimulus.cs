@@ -2,7 +2,7 @@
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
-    public class CentralStimulus : MonoBehaviour
+    public class CentralStimulus : ScalableStimulus
     {
         #region Provided fields from simulator
 

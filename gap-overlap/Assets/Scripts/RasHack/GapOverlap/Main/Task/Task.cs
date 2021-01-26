@@ -42,17 +42,25 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected CentralStimulus NewCentralStimulus()
         {
-            var localWhere = transform.InverseTransformPoint(Scaler.Center);
+            var area = owner.Area.CenterInWorld;
+
+            var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(centralStimulusPrefab, localWhere, Quaternion.identity, transform);
-            newOne.name = name + "_central_stimulus";
-            return newOne.GetComponent<CentralStimulus>();
+            newOne.name = name + "_" + area + "_stimulus";
+
+            var stimulus = newOne.GetComponent<CentralStimulus>();
+            var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(3.5f, area.OffsetInDegrees);
+            stimulus.Scale(desiredSize);
+
+            return stimulus;
         }
 
         protected Stimulus NewStimulus()
         {
-            var localWhere = transform.InverseTransformPoint(owner.Area.NextInWorld);
+            var area = owner.Area.NextInWorld;
+            var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
-            newOne.name = name + "_" + stimulusType + "_stimulus";
+            newOne.name = name + "_" + stimulusType + "_" + area.Side + "_stimulus";
             return newOne.GetComponent<Stimulus>();
         }
 

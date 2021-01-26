@@ -2,6 +2,13 @@
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
+    public struct NextArea
+    {
+        public Vector3 Position;
+        public float OffsetInDegrees;
+        public string Side;
+    }
+
     public class StimuliArea : MonoBehaviour
     {
         #region Internals
@@ -12,11 +19,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region API
 
-        private Vector3 LeftInWorld => Point(Vector3.left);
+        private NextArea LeftInWorld => Point(Vector3.left);
 
-        private Vector3 RightInWorld => Point(Vector3.right);
+        private NextArea RightInWorld => Point(Vector3.right);
 
-        public Vector3 NextInWorld => Random.Range(0, 2) == 0 ? LeftInWorld : RightInWorld;
+        public NextArea NextInWorld => Random.Range(0, 2) == 0 ? LeftInWorld : RightInWorld;
+
+        public NextArea CenterInWorld => new NextArea {Position = Scaler.Center, OffsetInDegrees = 0f, Side = "central"};
 
         #endregion
 
@@ -37,9 +46,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private Vector3 Center => Scaler.ScreenCenter;
 
-        private Vector3 Point(Vector3 direction)
+        private NextArea Point(Vector3 direction)
         {
-            return Scaler.Point(Scaler.ScreenPosition(Center, Degrees, direction));
+            var position = Scaler.Point(Scaler.ScreenPosition(Center, Degrees, direction));
+            var offsetInDegrees = direction.x * Degrees;
+            var side = direction.x > 0 ? "right" : "left";
+            return new NextArea {Position = position, OffsetInDegrees = offsetInDegrees, Side = side};
         }
 
         #endregion

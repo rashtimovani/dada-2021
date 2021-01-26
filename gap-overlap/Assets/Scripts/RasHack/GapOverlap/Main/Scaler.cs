@@ -47,28 +47,24 @@ namespace RasHack.GapOverlap.Main
             }
         }
 
-        public Vector3 BottomLeft => InDepth(mainCamera.ScreenToWorldPoint(
-            new Vector3(0, 0)));
+        public Vector3 BottomLeft => Point(new Vector3(0, 0));
 
-        public Vector3 BottomRight => InDepth(mainCamera.ScreenToWorldPoint(
-            new Vector3(Screen.width, 0)));
+        public Vector3 BottomRight => Point(new Vector3(Screen.width, 0));
 
-        public Vector3 TopLeft => InDepth(mainCamera.ScreenToWorldPoint(
-            new Vector3(0, Screen.height)));
+        public Vector3 TopLeft => Point(new Vector3(0, Screen.height));
 
-        public Vector3 TopRight => InDepth(mainCamera.ScreenToWorldPoint(
-            new Vector3(Screen.width, Screen.height)));
+        public Vector3 TopRight => Point(new Vector3(Screen.width, Screen.height));
 
         public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
 
-        public Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+        public static Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
 
         public Vector3 Point(Vector3 inputPosition)
         {
             return InDepth(mainCamera.ScreenToWorldPoint(inputPosition));
         }
 
-        public Vector3 ScaleSize(Vector3 currentScale, float sizeInDegrees, float offsetInDegrees)
+        public Vector3 ScreenSizeFromDegrees(float sizeInDegrees, float offsetInDegrees)
         {
             var halfSizeInRadians = Mathf.Deg2Rad * sizeInDegrees / 2f;
             var offsetInRadians = Mathf.Deg2Rad * offsetInDegrees;
@@ -79,7 +75,15 @@ namespace RasHack.GapOverlap.Main
 
             var sizeInCM = (farFromCenter - nearFromCenter) * settings.ReferencePoint.DistanceFromEyesInCM;
 
-            return new Vector3(sizeInCM, sizeInCM, 1);
+            return CMToPixel(new Vector3(sizeInCM, sizeInCM, 1));
+        }
+
+        public Vector3 RealWorldSizeFromDegrees(float sizeInDegrees, float offsetInDegrees)
+        {
+            var screenSize = ScreenSizeFromDegrees(sizeInDegrees, offsetInDegrees);
+
+            var size = Point(screenSize) - Point(Vector3.zero);
+            return new Vector3(size.x, size.y, 1);
         }
 
         public Vector3 ScreenPosition(Vector3 anchor, float degrees, Vector3 direction)
@@ -111,7 +115,7 @@ namespace RasHack.GapOverlap.Main
             var width = widthRatio * Screen.width;
             var height = heightRatio * Screen.height;
 
-            return new Vector3(width, height, 0);
+            return new Vector3(width, height, 1);
         }
 
         #endregion
