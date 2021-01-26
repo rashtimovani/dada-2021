@@ -47,6 +47,8 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
 
+        public Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
+
         public Vector3 InWorld(Vector2 screenPercent)
         {
             return inDepth(point(
@@ -60,16 +62,25 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 ScaleSize(Vector3 currentScale, float sizeInDegrees, float offsetInDegrees)
         {
-            var halfSizeInRadians = Mathf.PI * sizeInDegrees / 180f / 2f;
+            var halfSizeInRadians = Mathf.Deg2Rad * sizeInDegrees / 2f;
             var offsetInRadians = Mathf.Deg2Rad * offsetInDegrees;
 
-            var farFromCenter = Mathf.Tan(offsetInRadians + halfSizeInRadians); 
+            var farFromCenter = Mathf.Tan(offsetInRadians + halfSizeInRadians);
 
             var nearFromCenter = Mathf.Tan(offsetInRadians - halfSizeInRadians);
 
             var sizeInCM = (farFromCenter - nearFromCenter) * settings.ReferencePoint.DistanceFromEyesInCM;
 
             return new Vector3(sizeInCM, sizeInCM, 1);
+        }
+
+        public Vector3 ScreenPosition(Vector3 anchor, float degrees, Vector3 direction)
+        {
+            var radians = Mathf.Deg2Rad * degrees;
+
+            var distance = Mathf.Tan(radians) * settings.ReferencePoint.DistanceFromEyesInCM;
+
+            return anchor + direction * distance;
         }
 
         #endregion

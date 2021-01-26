@@ -2912,7 +2912,7 @@ GameObject:
   - component: {fileID: 7293696962708142415}
   - component: {fileID: 6650810739298573528}
   m_Layer: 5
-  m_Name: PauseTimeLabel
+  m_Name: EyeTrackerDistanceLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4910,7 +4910,7 @@ GameObject:
   - component: {fileID: 4606351911706963258}
   - component: {fileID: 5235659887691190838}
   m_Layer: 5
-  m_Name: PauseTimeInput
+  m_Name: EyeTrackerDistanceInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6041,6 +6041,7 @@ MonoBehaviour:
   pauseInput: {fileID: 2957244353605360610}
   backgroundInput: {fileID: 6646810502750585245}
   screenWidth: {fileID: 5536774219819462092}
+  eyeTrackerDistance: {fileID: 5235659887691190838}
 --- !u!1 &8720993455116298211
 GameObject:
   m_ObjectHideFlags: 0

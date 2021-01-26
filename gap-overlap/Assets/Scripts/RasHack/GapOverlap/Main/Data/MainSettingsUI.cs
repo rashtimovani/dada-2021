@@ -27,6 +27,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private Dropdown backgroundInput;
 
         [SerializeField] private InputField screenWidth;
+        [SerializeField] private InputField eyeTrackerDistance;
 
         #endregion
 
@@ -173,6 +174,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             var size = simulator.Scaler.ScaleSize(Vector3.one, 3.5f, 10f);
             screenWidth.text = $"{(size.x):0.000}";
+            var distance = simulator.Scaler.ScreenPosition(Vector3.zero, 10f, Vector3.right);
+            eyeTrackerDistance.text = $"{(distance.x):0.000}";
         }
 
         #endregion
