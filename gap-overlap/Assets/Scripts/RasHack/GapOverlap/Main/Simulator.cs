@@ -81,7 +81,6 @@ namespace RasHack.GapOverlap.Main
             }
 
             tasks.Reset(settings.TaskCount);
-            area.Reset();
             nextStimulus = StimuliType.Bee;
             IsActive = true;
 

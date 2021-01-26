@@ -63,13 +63,7 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
 
-        public Vector3 InWorld(Vector2 screenPercent)
-        {
-            return InDepth(point(
-                new Vector3(screenPercent.x * Screen.width, screenPercent.y * Screen.height, depth)));
-        }
-
-        public Vector3 point(Vector3 inputPosition)
+        public Vector3 Point(Vector3 inputPosition)
         {
             return InDepth(mainCamera.ScreenToWorldPoint(inputPosition));
         }
@@ -110,7 +104,7 @@ namespace RasHack.GapOverlap.Main
         private Vector3 CMToPixel(Vector3 inCm)
         {
             var screenInCM = ScreenInCM;
-            
+
             var widthRatio = inCm.x / screenInCM.x;
             var heightRatio = inCm.y / screenInCM.y;
 

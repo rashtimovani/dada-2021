@@ -4,36 +4,19 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class StimuliArea : MonoBehaviour
     {
-        #region Serialized fields
-
-        [SerializeField] private Vector2 left = new Vector2(0.15f, 0.5f);
-
-        [SerializeField] private Vector2 right = new Vector2(0.85f, 0.5f);
-        [SerializeField] private bool randomOrder;
-
-        #endregion
-
         #region Internals
 
         private Simulator simulator;
-        private int count;
 
         #endregion
 
         #region API
 
-        private Vector3 LeftInWorld => simulator.Scaler.InWorld(left);
-        
-        private Vector3 RightInWorld => simulator.Scaler.InWorld(right);
+        private Vector3 LeftInWorld => Point(Vector3.left);
 
-        private bool IsNextSideLeft => randomOrder ? Random.Range(0, 2) == 0 : count++ % 2 == 0;
-        
-        public Vector3 NextInWorld => IsNextSideLeft ? LeftInWorld : RightInWorld;
+        private Vector3 RightInWorld => Point(Vector3.right);
 
-        public void Reset()
-        {
-            count = 0;
-        }
+        public Vector3 NextInWorld => Random.Range(0, 2) == 0 ? LeftInWorld : RightInWorld;
 
         #endregion
 
@@ -42,6 +25,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Awake()
         {
             simulator = GetComponent<Simulator>();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private float Degrees => simulator.Settings.StimulusDistanceInDegrees / 2;
+
+        private Scaler Scaler => simulator.Scaler;
+
+        private Vector3 Center => Scaler.ScreenCenter;
+
+        private Vector3 Point(Vector3 direction)
+        {
+            return Scaler.Point(Scaler.ScreenPosition(Center, Degrees, direction));
         }
 
         #endregion

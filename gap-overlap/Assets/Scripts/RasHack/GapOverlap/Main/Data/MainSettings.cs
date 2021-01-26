@@ -18,6 +18,9 @@ namespace RasHack.GapOverlap.Main.Data
         public ReferencePoint ReferencePoint = new ReferencePoint
             {DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f};
 
+        [Header("Stimulus dimension specification")]
+        public float StimulusDistanceInDegrees = 20f;
+
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount {Gaps = 18, Overlaps = 18};
         public float PauseBetweenTasks = 3.5f;
 
