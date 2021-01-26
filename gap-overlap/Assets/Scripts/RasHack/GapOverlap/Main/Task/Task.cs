@@ -46,10 +46,11 @@ namespace RasHack.GapOverlap.Main.Task
 
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(centralStimulusPrefab, localWhere, Quaternion.identity, transform);
-            newOne.name = name + "_" + area + "_stimulus";
+            newOne.name = name + "_" + area.Side + "_stimulus";
 
             var stimulus = newOne.GetComponent<CentralStimulus>();
-            var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(3.5f, area.OffsetInDegrees);
+            var sizeInDegrees = owner.Settings.CentralStimulusSizeInDegrees;
+            var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
             stimulus.Scale(desiredSize);
 
             return stimulus;
@@ -58,10 +59,17 @@ namespace RasHack.GapOverlap.Main.Task
         protected Stimulus NewStimulus()
         {
             var area = owner.Area.NextInWorld;
+            
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
             newOne.name = name + "_" + stimulusType + "_" + area.Side + "_stimulus";
-            return newOne.GetComponent<Stimulus>();
+            
+            var stimulus = newOne.GetComponent<Stimulus>();
+            var sizeInDegrees = owner.Settings.PeripheralStimulusSizeInDegrees;
+            var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
+            stimulus.Scale(desiredSize);
+            
+            return stimulus;
         }
 
         #endregion

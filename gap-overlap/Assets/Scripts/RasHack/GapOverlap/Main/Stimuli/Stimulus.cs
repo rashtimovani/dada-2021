@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
-    public class Stimulus : MonoBehaviour
+    public class Stimulus : ScalableStimulus
     {
         #region Sprites
 
