@@ -24,7 +24,7 @@ namespace RasHack.GapOverlap.Main.Task
         #region API
 
         protected abstract TaskType TaskType { get; }
-        
+
         protected Scaler Scaler => owner.Scaler;
 
         public void StartTask(Simulator owner, StimuliType stimulusType)
@@ -67,17 +67,17 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Stimulus NewStimulus()
         {
-            var area = owner.Area.NextInWorld;
-            
+            var area = owner.Area.NextInWorld(TaskType);
+
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
             newOne.name = name + "_" + stimulusType + "_" + area.Side + "_stimulus";
-            
+
             var stimulus = newOne.GetComponent<Stimulus>();
             var sizeInDegrees = owner.Settings.PeripheralStimulusSizeInDegrees;
             var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
             stimulus.Scale(desiredSize);
-            
+
             return stimulus;
         }
 
