@@ -21,30 +21,33 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private InputField gapsInput;
         [SerializeField] private InputField overlapsInput;
 
-        [SerializeField] private InputField distanceBetweenStimuli;
-        [SerializeField] private InputField centralSize;
-        [SerializeField] private InputField peripheralSize;
-
         #endregion
 
         #region Fields
 
+        private readonly MainSettings defaults = new MainSettings();
+
         private HomeUI home;
         private Simulator simulator;
-        private readonly MainSettings defaults = new MainSettings();
 
         #endregion
 
         #region General
 
         [Header("General")] [SerializeField] private Dropdown background;
-        
+
         private BackgroundColor Background
         {
             get => (BackgroundColor) background.value;
             set => background.value = (int) value;
         }
-        
+
+        private BackgroundColor ResetBackground()
+        {
+            Background = defaults.Background;
+            return Background;
+        }
+
         #endregion
 
         #region Pauses
@@ -56,7 +59,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Screen
-        
+
         [Header("Screen")] [SerializeField] private FloatInput screenDiagonal;
         [SerializeField] private IntInput eyeTrackerDistance;
 
@@ -82,6 +85,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
         }
 
         #endregion
+
+        #region Stimuli dimensions
+
+        [Header("Stimuli dimensions")] [SerializeField] private FloatInput distanceBetweenPeripheralStimuli;
+        [SerializeField] private FloatInput centralStimulusSize;
+        [SerializeField] private FloatInput peripheralStimulusSize;
+
+        #endregion
+
 
         #region API
 
@@ -132,27 +144,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-
-
-
-        private float StimulusDistanceInDegrees
-        {
-            get => ParseInput(distanceBetweenStimuli, defaults.StimulusDistanceInDegrees);
-            set => distanceBetweenStimuli.text = $"{value:0.0}";
-        }
-
-        private float CentralStimulusSizeInDegrees
-        {
-            get => ParseInput(centralSize, defaults.CentralStimulusSizeInDegrees);
-            set => centralSize.text = $"{value:0.0}";
-        }
-
-        private float PeripheralStimulusSizeInDegrees
-        {
-            get => ParseInput(peripheralSize, defaults.PeripheralStimulusSizeInDegrees);
-            set => peripheralSize.text = $"{value:0.0}";
-        }
-
         public void Show()
         {
             panel.SetActive(true);
@@ -172,14 +163,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
 
             simulator.Settings.ReferencePoint = ReferencePoint;
-            
+
+            simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Value;
+            simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Value;
+            simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Value;
+
             simulator.Settings.GapTimes = GapTimes;
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
-            
-            simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
-            simulator.Settings.CentralStimulusSizeInDegrees = CentralStimulusSizeInDegrees;
-            simulator.Settings.PeripheralStimulusSizeInDegrees = PeripheralStimulusSizeInDegrees;
 
             simulator.Settings.Store();
         }
@@ -210,24 +201,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void OnReset()
         {
-            var defaults = new MainSettings();
-
-            simulator.Settings.Background = defaults.Background;
+            simulator.Settings.Background = ResetBackground();
 
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Reset();
 
             simulator.Settings.ReferencePoint = ResetReferencePoint();
-            
+
+            simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Reset();
+            simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Reset();
+            simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Reset();
+
             simulator.Settings.GapTimes = defaults.GapTimes;
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
             simulator.Settings.TaskCount = defaults.TaskCount;
-            simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
-            
-            simulator.Settings.StimulusDistanceInDegrees = defaults.StimulusDistanceInDegrees;
-            simulator.Settings.CentralStimulusSizeInDegrees = defaults.CentralStimulusSizeInDegrees;
-            simulator.Settings.PeripheralStimulusSizeInDegrees = defaults.PeripheralStimulusSizeInDegrees;
 
             Display();
         }
@@ -265,15 +253,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
             pauseAfterTasks.Value = simulator.Settings.PauseAfterTasks;
 
             ReferencePoint = simulator.Settings.ReferencePoint;
+
+            distanceBetweenPeripheralStimuli.Value = simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees;
+            centralStimulusSize.Value = simulator.Settings.CentralStimulusSizeInDegrees;
+            peripheralStimulusSize.Value = simulator.Settings.PeripheralStimulusSizeInDegrees;
             
             GapTimes = simulator.Settings.GapTimes;
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
             // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
-            
-            StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
-            CentralStimulusSizeInDegrees = simulator.Settings.CentralStimulusSizeInDegrees;
-            PeripheralStimulusSizeInDegrees = simulator.Settings.PeripheralStimulusSizeInDegrees;
         }
 
         #endregion

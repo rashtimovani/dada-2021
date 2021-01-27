@@ -40,7 +40,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region Helpers
 
-        private float Degrees => simulator.Settings.StimulusDistanceInDegrees / 2;
+        private float Degrees => simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
         private Scaler Scaler => simulator.Scaler;
 

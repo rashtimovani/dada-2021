@@ -24,7 +24,7 @@ namespace RasHack.GapOverlap.Main.Data
             {DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f};
 
         [Header("Stimulus dimension specification")]
-        public float StimulusDistanceInDegrees = 20f;
+        public float DistanceBetweenPeripheralStimuliInDegrees = 20f;
 
         public float CentralStimulusSizeInDegrees = 3.5f;
         public float PeripheralStimulusSizeInDegrees = 3f;
