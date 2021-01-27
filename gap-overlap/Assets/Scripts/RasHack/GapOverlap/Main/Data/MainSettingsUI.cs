@@ -11,12 +11,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private GameObject panel;
 
-
-        [SerializeField] private InputField overlapCentralTime;
-        [SerializeField] private InputField overlapStimulusTime;
-
-        [SerializeField] private InputField overlapsInput;
-
         #endregion
 
         #region Fields
@@ -100,7 +94,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private FloatInput gapPauseBetweenStimuli;
         [SerializeField] private FloatInput gapPeripheralStimulusTime;
         [SerializeField] private IntInput gapTaskCount;
-        
+
         private GapTimes GapTimes
         {
             get => new GapTimes
@@ -117,13 +111,44 @@ namespace RasHack.GapOverlap.Main.Stimuli
                 gapPeripheralStimulusTime.Value = value.StimulusTime;
             }
         }
-        
+
         private GapTimes ResetGapTimes()
         {
             gapCentralStimulusTime.Reset();
             gapPauseBetweenStimuli.Reset();
             gapPeripheralStimulusTime.Reset();
             return GapTimes;
+        }
+
+        #endregion
+
+        #region Overlap
+        
+        [Header("Overlap settings")]
+        [SerializeField] private FloatInput overlapCentralStimulusTime;
+        [SerializeField] private FloatInput overlapBothStimuliTime;
+        [SerializeField] private IntInput overlapTaskCount;
+
+        private OverlapTimes OverlapTimes
+        {
+            get => new OverlapTimes
+            {
+                CentralTime = overlapCentralStimulusTime.Value,
+                BothStimuli = overlapBothStimuliTime.Value
+            };
+
+            set
+            {
+                overlapCentralStimulusTime.Value = value.CentralTime;
+                overlapBothStimuliTime.Value = value.BothStimuli;
+            }
+        }
+
+        private OverlapTimes ResetOverlapTimes()
+        {
+            overlapCentralStimulusTime.Reset();
+            overlapBothStimuliTime.Reset();
+            return OverlapTimes;
         }
 
         #endregion
@@ -135,42 +160,27 @@ namespace RasHack.GapOverlap.Main.Stimuli
             get => new TaskCount
             {
                 Gaps = gapTaskCount.Value,
-                Overlaps = ParseInput(overlapsInput, defaults.TaskCount.Overlaps),
+                Overlaps = overlapTaskCount.Value
             };
 
             set
             {
                 gapTaskCount.Value = value.Gaps;
-                overlapsInput.text = $"{value.Overlaps}";
+                overlapTaskCount.Value = value.Overlaps;
             }
         }
-        
+
         private TaskCount ResetTaskCount()
         {
             gapTaskCount.Reset();
-            gapPauseBetweenStimuli.Reset();
-            gapPeripheralStimulusTime.Reset();
+            overlapTaskCount.Reset();
             return TaskCount;
         }
 
         #endregion
 
+
         #region API
-
-        private OverlapTimes OverlapTimes
-        {
-            get => new OverlapTimes
-            {
-                CentralTime = ParseInput(overlapCentralTime, defaults.OverlapTimes.CentralTime),
-                BothStimuli = ParseInput(overlapStimulusTime, defaults.OverlapTimes.BothStimuli),
-            };
-
-            set
-            {
-                overlapCentralTime.text = $"{value.CentralTime:0.00}";
-                overlapStimulusTime.text = $"{value.BothStimuli:0.00}";
-            }
-        }
 
         public void Show()
         {
@@ -197,7 +207,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Value;
 
             simulator.Settings.GapTimes = GapTimes;
+
             simulator.Settings.OverlapTimes = OverlapTimes;
+
             simulator.Settings.TaskCount = TaskCount;
 
             simulator.Settings.Store();
@@ -218,14 +230,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             screenDiagonal.SetDefault(() => defaults.ReferencePoint.ScreenDiagonalInInches);
             eyeTrackerDistance.SetDefault(() => ToMM(defaults.ReferencePoint.DistanceFromEyesInCM));
-            
+
             gapCentralStimulusTime.SetDefault(() => defaults.GapTimes.CentralTime);
             gapPauseBetweenStimuli.SetDefault(() => defaults.GapTimes.PauseTime);
             gapPeripheralStimulusTime.SetDefault(() => defaults.GapTimes.StimulusTime);
-            
-            
-            
+
+            overlapCentralStimulusTime.SetDefault(() => defaults.OverlapTimes.CentralTime);
+            overlapBothStimuliTime.SetDefault(() => defaults.OverlapTimes.BothStimuli);
+
             gapTaskCount.SetDefault(() => defaults.TaskCount.Gaps);
+            overlapTaskCount.SetDefault(() => defaults.TaskCount.Overlaps);
         }
 
         public void OnClose()
@@ -250,8 +264,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Reset();
 
             simulator.Settings.GapTimes = ResetGapTimes();
-            simulator.Settings.OverlapTimes = defaults.OverlapTimes;
-            
+
+            simulator.Settings.OverlapTimes = ResetOverlapTimes();
+
             simulator.Settings.TaskCount = ResetTaskCount();
 
             Display();
@@ -271,16 +286,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return mm / 10f;
         }
 
-        private static float ParseInput(InputField field, float defaultValue)
-        {
-            return string.IsNullOrWhiteSpace(field.text) ? defaultValue : float.Parse(field.text);
-        }
-
-        private static int ParseInput(InputField field, int defaultValue)
-        {
-            return string.IsNullOrWhiteSpace(field.text) ? defaultValue : int.Parse(field.text);
-        }
-
         private void Display()
         {
             Background = simulator.Settings.Background;
@@ -298,7 +303,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             GapTimes = simulator.Settings.GapTimes;
 
             OverlapTimes = simulator.Settings.OverlapTimes;
-           
+
             TaskCount = simulator.Settings.TaskCount;
         }
 
