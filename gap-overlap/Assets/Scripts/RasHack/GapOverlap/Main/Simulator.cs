@@ -63,7 +63,7 @@ namespace RasHack.GapOverlap.Main
             results.AttachMeasurement(task.name, measurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
-            waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : 0.01f;
+            waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : settings.PauseAfterTasks;
         }
 
         public void UpdateBackground()
@@ -97,7 +97,7 @@ namespace RasHack.GapOverlap.Main
             FlushToDisk();
             
             results.StartTest(runName);
-            newTask();
+            waitingTime = settings.PauseBeforeTasks;
         }
 
         public void FlushToDisk()

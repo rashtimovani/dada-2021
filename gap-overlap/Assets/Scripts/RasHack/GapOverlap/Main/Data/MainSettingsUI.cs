@@ -11,6 +11,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private GameObject panel;
 
+        [Header("General")] [SerializeField] private Dropdown background;
+
+        [Header("Pauses")] [SerializeField] private TimeInput pauseBeforeTasks;
+        [SerializeField] private TimeInput pauseBetweenTasks;
+        [SerializeField] private TimeInput pauseAfterTasks;
+
         [SerializeField] private InputField gapCentralTime;
         [SerializeField] private InputField gapPauseTime;
         [SerializeField] private InputField gapStimulusTime;
@@ -20,10 +26,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private InputField gapsInput;
         [SerializeField] private InputField overlapsInput;
-
-        [SerializeField] private InputField pauseInput;
-
-        [SerializeField] private Dropdown backgroundInput;
 
         [SerializeField] private InputField screenDiagonal;
         [SerializeField] private InputField eyeTrackerDistance;
@@ -91,16 +93,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        private float PauseBetweenTasks
-        {
-            get => ParseInput(pauseInput, defaults.PauseBetweenTasks);
-            set => pauseInput.text = $"{value:0.00}";
-        }
 
         private BackgroundColor BackgroundColor
         {
-            get => (BackgroundColor) backgroundInput.value;
-            set => backgroundInput.value = (int) value;
+            get => (BackgroundColor) background.value;
+            set => background.value = (int) value;
         }
 
         private ReferencePoint ReferencePoint
@@ -150,7 +147,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.GapTimes = GapTimes;
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
-            simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
+            // simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
             simulator.Settings.BackgroundColor = BackgroundColor;
             simulator.Settings.ReferencePoint = ReferencePoint;
             simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
@@ -168,6 +165,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             home = FindObjectOfType<HomeUI>();
             simulator = FindObjectOfType<Simulator>();
+
+            var defaults = new MainSettings();
+
+            pauseBeforeTasks.SetDefault(() => defaults.PauseBeforeTasks);
+            pauseBetweenTasks.SetDefault(() => defaults.PauseBetweenTasks);
+            pauseAfterTasks.SetDefault(() => defaults.PauseAfterTasks);
         }
 
         public void OnClose()
@@ -181,11 +184,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             var defaults = new MainSettings();
 
+            simulator.Settings.BackgroundColor = defaults.BackgroundColor;
+
+            simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
+            simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
+            simulator.Settings.PauseAfterTasks = pauseAfterTasks.Reset();
+
             simulator.Settings.GapTimes = defaults.GapTimes;
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
             simulator.Settings.TaskCount = defaults.TaskCount;
             simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
-            simulator.Settings.BackgroundColor = defaults.BackgroundColor;
             simulator.Settings.ReferencePoint = defaults.ReferencePoint;
             simulator.Settings.StimulusDistanceInDegrees = defaults.StimulusDistanceInDegrees;
             simulator.Settings.CentralStimulusSizeInDegrees = defaults.CentralStimulusSizeInDegrees;
@@ -213,7 +221,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             GapTimes = simulator.Settings.GapTimes;
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
-            PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
+            // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
             BackgroundColor = simulator.Settings.BackgroundColor;
             ReferencePoint = simulator.Settings.ReferencePoint;
             StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
