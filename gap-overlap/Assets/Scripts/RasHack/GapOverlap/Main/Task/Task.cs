@@ -23,6 +23,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        protected abstract TaskType TaskType { get; }
+        
         protected Scaler Scaler => owner.Scaler;
 
         public void StartTask(Simulator owner, StimuliType stimulusType)
