@@ -3,11 +3,13 @@ using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
-    public class TimeInput : MonoBehaviour
+    public class FloatInput : MonoBehaviour
     {
         #region Serialized fields
 
         [SerializeField] private InputField time;
+
+        [SerializeField] private string format = "0.00";
 
         #endregion
 
@@ -29,14 +31,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public float Reset()
         {
             var resetValue = Default;
-            Time = resetValue;
+            Value = resetValue;
             return resetValue;
         }
 
-        public float Time
+        public float Value
         {
             get => ParseInput(time);
-            set => time.text = $"{value:0.00}";
+            set => time.text = value.ToString(format);
         }
 
         private float Default => defaultValue?.Invoke() ?? 0f;

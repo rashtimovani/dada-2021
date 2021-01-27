@@ -13,9 +13,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [Header("General")] [SerializeField] private Dropdown background;
 
-        [Header("Pauses")] [SerializeField] private TimeInput pauseBeforeTasks;
-        [SerializeField] private TimeInput pauseBetweenTasks;
-        [SerializeField] private TimeInput pauseAfterTasks;
+        [Header("Pauses")] [SerializeField] private FloatInput pauseBeforeTasks;
+        [SerializeField] private FloatInput pauseBetweenTasks;
+        [SerializeField] private FloatInput pauseAfterTasks;
 
         [SerializeField] private InputField gapCentralTime;
         [SerializeField] private InputField gapPauseTime;
@@ -144,11 +144,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
             panel.SetActive(false);
             if (dontStore) return;
 
+            simulator.Settings.Background = Background;
+
+            simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
+            simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
+            simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
+
             simulator.Settings.GapTimes = GapTimes;
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
-            // simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
-            simulator.Settings.Background = Background;
             simulator.Settings.ReferencePoint = ReferencePoint;
             simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
             simulator.Settings.CentralStimulusSizeInDegrees = CentralStimulusSizeInDegrees;
@@ -218,11 +222,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Display()
         {
+            Background = simulator.Settings.Background;
+            
+            pauseBeforeTasks.Value = simulator.Settings.PauseBeforeTasks;
+            pauseBetweenTasks.Value = simulator.Settings.PauseBetweenTasks;
+            pauseAfterTasks.Value = simulator.Settings.PauseAfterTasks;
+
             GapTimes = simulator.Settings.GapTimes;
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
             // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
-            Background = simulator.Settings.Background;
+            
             ReferencePoint = simulator.Settings.ReferencePoint;
             StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
             CentralStimulusSizeInDegrees = simulator.Settings.CentralStimulusSizeInDegrees;
