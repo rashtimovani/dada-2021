@@ -11,14 +11,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private GameObject panel;
 
-        [SerializeField] private InputField gapCentralTime;
-        [SerializeField] private InputField gapPauseTime;
-        [SerializeField] private InputField gapStimulusTime;
 
         [SerializeField] private InputField overlapCentralTime;
         [SerializeField] private InputField overlapStimulusTime;
 
-        [SerializeField] private InputField gapsInput;
         [SerializeField] private InputField overlapsInput;
 
         #endregion
@@ -88,31 +84,78 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region Stimuli dimensions
 
-        [Header("Stimuli dimensions")] [SerializeField] private FloatInput distanceBetweenPeripheralStimuli;
+        [Header("Stimuli dimensions")] [SerializeField]
+        private FloatInput distanceBetweenPeripheralStimuli;
+
         [SerializeField] private FloatInput centralStimulusSize;
         [SerializeField] private FloatInput peripheralStimulusSize;
 
         #endregion
 
+        #region Gaps
 
-        #region API
+        [Header("Gap settings")] [SerializeField]
+        private FloatInput gapCentralStimulusTime;
 
+        [SerializeField] private FloatInput gapPauseBetweenStimuli;
+        [SerializeField] private FloatInput gapPeripheralStimulusTime;
+        [SerializeField] private IntInput gapTaskCount;
+        
         private GapTimes GapTimes
         {
             get => new GapTimes
             {
-                CentralTime = ParseInput(gapCentralTime, defaults.GapTimes.CentralTime),
-                PauseTime = ParseInput(gapPauseTime, defaults.GapTimes.PauseTime),
-                StimulusTime = ParseInput(gapStimulusTime, defaults.GapTimes.StimulusTime)
+                CentralTime = gapCentralStimulusTime.Value,
+                PauseTime = gapPauseBetweenStimuli.Value,
+                StimulusTime = gapPeripheralStimulusTime.Value
             };
 
             set
             {
-                gapCentralTime.text = $"{value.CentralTime:0.00}";
-                gapPauseTime.text = $"{value.PauseTime:0.00}";
-                gapStimulusTime.text = $"{value.StimulusTime:0.00}";
+                gapCentralStimulusTime.Value = value.CentralTime;
+                gapPauseBetweenStimuli.Value = value.PauseTime;
+                gapPeripheralStimulusTime.Value = value.StimulusTime;
             }
         }
+        
+        private GapTimes ResetGapTimes()
+        {
+            gapCentralStimulusTime.Reset();
+            gapPauseBetweenStimuli.Reset();
+            gapPeripheralStimulusTime.Reset();
+            return GapTimes;
+        }
+
+        #endregion
+
+        #region Task count
+
+        private TaskCount TaskCount
+        {
+            get => new TaskCount
+            {
+                Gaps = gapTaskCount.Value,
+                Overlaps = ParseInput(overlapsInput, defaults.TaskCount.Overlaps),
+            };
+
+            set
+            {
+                gapTaskCount.Value = value.Gaps;
+                overlapsInput.text = $"{value.Overlaps}";
+            }
+        }
+        
+        private TaskCount ResetTaskCount()
+        {
+            gapTaskCount.Reset();
+            gapPauseBetweenStimuli.Reset();
+            gapPeripheralStimulusTime.Reset();
+            return TaskCount;
+        }
+
+        #endregion
+
+        #region API
 
         private OverlapTimes OverlapTimes
         {
@@ -126,21 +169,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             {
                 overlapCentralTime.text = $"{value.CentralTime:0.00}";
                 overlapStimulusTime.text = $"{value.BothStimuli:0.00}";
-            }
-        }
-
-        private TaskCount TaskCount
-        {
-            get => new TaskCount
-            {
-                Gaps = ParseInput(gapsInput, defaults.TaskCount.Gaps),
-                Overlaps = ParseInput(overlapsInput, defaults.TaskCount.Overlaps),
-            };
-
-            set
-            {
-                gapsInput.text = $"{value.Gaps}";
-                overlapsInput.text = $"{value.Overlaps}";
             }
         }
 
@@ -190,6 +218,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             screenDiagonal.SetDefault(() => defaults.ReferencePoint.ScreenDiagonalInInches);
             eyeTrackerDistance.SetDefault(() => ToMM(defaults.ReferencePoint.DistanceFromEyesInCM));
+            
+            gapCentralStimulusTime.SetDefault(() => defaults.GapTimes.CentralTime);
+            gapPauseBetweenStimuli.SetDefault(() => defaults.GapTimes.PauseTime);
+            gapPeripheralStimulusTime.SetDefault(() => defaults.GapTimes.StimulusTime);
+            
+            
+            
+            gapTaskCount.SetDefault(() => defaults.TaskCount.Gaps);
         }
 
         public void OnClose()
@@ -213,9 +249,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Reset();
             simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Reset();
 
-            simulator.Settings.GapTimes = defaults.GapTimes;
+            simulator.Settings.GapTimes = ResetGapTimes();
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
-            simulator.Settings.TaskCount = defaults.TaskCount;
+            
+            simulator.Settings.TaskCount = ResetTaskCount();
 
             Display();
         }
@@ -257,11 +294,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             distanceBetweenPeripheralStimuli.Value = simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees;
             centralStimulusSize.Value = simulator.Settings.CentralStimulusSizeInDegrees;
             peripheralStimulusSize.Value = simulator.Settings.PeripheralStimulusSizeInDegrees;
-            
+
             GapTimes = simulator.Settings.GapTimes;
+
             OverlapTimes = simulator.Settings.OverlapTimes;
+           
             TaskCount = simulator.Settings.TaskCount;
-            // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
         }
 
         #endregion
