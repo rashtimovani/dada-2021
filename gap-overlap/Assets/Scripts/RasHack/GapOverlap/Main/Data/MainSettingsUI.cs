@@ -94,7 +94,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         }
 
 
-        private BackgroundColor BackgroundColor
+        private BackgroundColor Background
         {
             get => (BackgroundColor) background.value;
             set => background.value = (int) value;
@@ -148,7 +148,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
             // simulator.Settings.PauseBetweenTasks = PauseBetweenTasks;
-            simulator.Settings.BackgroundColor = BackgroundColor;
+            simulator.Settings.Background = Background;
             simulator.Settings.ReferencePoint = ReferencePoint;
             simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
             simulator.Settings.CentralStimulusSizeInDegrees = CentralStimulusSizeInDegrees;
@@ -184,7 +184,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             var defaults = new MainSettings();
 
-            simulator.Settings.BackgroundColor = defaults.BackgroundColor;
+            simulator.Settings.Background = defaults.Background;
 
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
@@ -222,7 +222,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
             // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
-            BackgroundColor = simulator.Settings.BackgroundColor;
+            Background = simulator.Settings.Background;
             ReferencePoint = simulator.Settings.ReferencePoint;
             StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
             CentralStimulusSizeInDegrees = simulator.Settings.CentralStimulusSizeInDegrees;

@@ -13,7 +13,7 @@ namespace RasHack.GapOverlap.Main.Data
 
         [HideInInspector] public string LastUsedName = "";
 
-        [Header("General")] public BackgroundColor BackgroundColor = BackgroundColor.Black;
+        [Header("General")] public BackgroundColor Background = BackgroundColor.Black;
         
         [Header("Pauses")]
         public float PauseBeforeTasks = 1f;

@@ -68,7 +68,7 @@ namespace RasHack.GapOverlap.Main
 
         public void UpdateBackground()
         {
-            background.SetBackground(settings.BackgroundColor);
+            background.SetBackground(settings.Background);
         }
 
         public void StartTests(string name)
