@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -7,7 +8,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
     {
         #region Serialized fields
 
-        [SerializeField] private InputField time;
+        [FormerlySerializedAs("time")] [SerializeField]
+        private InputField valueInput;
 
         [SerializeField] private string format = "0.00";
 
@@ -37,19 +39,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public float Value
         {
-            get => ParseInput(time);
-            set => time.text = value.ToString(format);
+            get => ParseInput();
+            set => valueInput.text = value.ToString(format);
         }
 
         private float Default => defaultValue?.Invoke() ?? 0f;
+
+        public bool HasValue => !string.IsNullOrWhiteSpace(valueInput.text);
 
         #endregion
 
         #region Helpers
 
-        private float ParseInput(InputField field)
+        private float ParseInput()
         {
-            return string.IsNullOrWhiteSpace(field.text) ? Default : float.Parse(field.text);
+            return HasValue ? float.Parse(valueInput.text) : Default;
         }
 
         #endregion

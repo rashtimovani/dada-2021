@@ -7,7 +7,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
     {
         #region Serialized fields
 
-        [SerializeField] private InputField time;
+        [SerializeField] private InputField valueInput;
 
         #endregion
 
@@ -35,19 +35,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public int Value
         {
-            get => ParseInput(time);
-            set => time.text = value.ToString();
+            get => ParseInput();
+            set => valueInput.text = value.ToString();
         }
 
         private int Default => defaultValue?.Invoke() ?? 0;
+
+        public bool HasValue => !string.IsNullOrWhiteSpace(valueInput.text);
 
         #endregion
 
         #region Helpers
 
-        private int ParseInput(InputField field)
+        private int ParseInput()
         {
-            return string.IsNullOrWhiteSpace(field.text) ? Default : int.Parse(field.text);
+            return HasValue ? int.Parse(valueInput.text) : Default;
         }
 
         #endregion
