@@ -16,7 +16,9 @@ namespace RasHack.GapOverlap.Main.Task
     public struct TaskCount
     {
         public int Gaps;
+        public int LeftGaps;
         public int Overlaps;
+        public int LeftOverlaps;
     }
 
     public class TaskOrder : MonoBehaviour

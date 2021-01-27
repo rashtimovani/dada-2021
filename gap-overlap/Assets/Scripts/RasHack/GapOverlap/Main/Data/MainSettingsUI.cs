@@ -94,6 +94,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private FloatInput gapPauseBetweenStimuli;
         [SerializeField] private FloatInput gapPeripheralStimulusTime;
         [SerializeField] private IntInput gapTaskCount;
+        [SerializeField] private AreaRatio gapSides;
 
         private GapTimes GapTimes
         {
@@ -123,11 +124,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Overlap
-        
-        [Header("Overlap settings")]
-        [SerializeField] private FloatInput overlapCentralStimulusTime;
+
+        [Header("Overlap settings")] [SerializeField]
+        private FloatInput overlapCentralStimulusTime;
+
         [SerializeField] private FloatInput overlapBothStimuliTime;
         [SerializeField] private IntInput overlapTaskCount;
+        [SerializeField] private AreaRatio overlapSides;
 
         private OverlapTimes OverlapTimes
         {
@@ -160,20 +163,26 @@ namespace RasHack.GapOverlap.Main.Stimuli
             get => new TaskCount
             {
                 Gaps = gapTaskCount.Value,
-                Overlaps = overlapTaskCount.Value
+                LeftGaps = gapSides.Left,
+                Overlaps = overlapTaskCount.Value,
+                LeftOverlaps = overlapSides.Left,
             };
 
             set
             {
                 gapTaskCount.Value = value.Gaps;
+                gapSides.Initial(value.LeftGaps);
                 overlapTaskCount.Value = value.Overlaps;
+                overlapSides.Initial(value.LeftOverlaps);
             }
         }
 
         private TaskCount ResetTaskCount()
         {
             gapTaskCount.Reset();
+            gapSides.Initial(defaults.TaskCount.LeftGaps);
             overlapTaskCount.Reset();
+            overlapSides.Initial(defaults.TaskCount.LeftOverlaps);
             return TaskCount;
         }
 
@@ -230,6 +239,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             screenDiagonal.SetDefault(() => defaults.ReferencePoint.ScreenDiagonalInInches);
             eyeTrackerDistance.SetDefault(() => ToMM(defaults.ReferencePoint.DistanceFromEyesInCM));
+
+            distanceBetweenPeripheralStimuli.SetDefault(() => defaults.DistanceBetweenPeripheralStimuliInDegrees);
+            centralStimulusSize.SetDefault(() => defaults.CentralStimulusSizeInDegrees);
+            peripheralStimulusSize.SetDefault(() => defaults.PeripheralStimulusSizeInDegrees);
 
             gapCentralStimulusTime.SetDefault(() => defaults.GapTimes.CentralTime);
             gapPauseBetweenStimuli.SetDefault(() => defaults.GapTimes.PauseTime);

@@ -23,7 +23,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region API
 
         public int Left => Mathf.RoundToInt(slider.value);
-        public int Right => oldMax - Left;
+        private int Right => oldMax - Left;
 
         public void Initial(float value)
         {
@@ -47,9 +47,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
             slider.maxValue = valueInput.Value;
 
             var newValue = Mathf.RoundToInt(percent * max);
-            slider.value = newValue;
 
             oldMax = max;
+            slider.value = newValue;
+            OnSliderValueChanged();
         }
 
         public void OnSliderValueChanged()
