@@ -11,12 +11,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private GameObject panel;
 
-        [Header("General")] [SerializeField] private Dropdown background;
-
-        [Header("Pauses")] [SerializeField] private FloatInput pauseBeforeTasks;
-        [SerializeField] private FloatInput pauseBetweenTasks;
-        [SerializeField] private FloatInput pauseAfterTasks;
-
         [SerializeField] private InputField gapCentralTime;
         [SerializeField] private InputField gapPauseTime;
         [SerializeField] private InputField gapStimulusTime;
@@ -26,9 +20,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private InputField gapsInput;
         [SerializeField] private InputField overlapsInput;
-
-        [SerializeField] private InputField screenDiagonal;
-        [SerializeField] private InputField eyeTrackerDistance;
 
         [SerializeField] private InputField distanceBetweenStimuli;
         [SerializeField] private InputField centralSize;
@@ -41,6 +32,54 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private HomeUI home;
         private Simulator simulator;
         private readonly MainSettings defaults = new MainSettings();
+
+        #endregion
+
+        #region General
+
+        [Header("General")] [SerializeField] private Dropdown background;
+        
+        private BackgroundColor Background
+        {
+            get => (BackgroundColor) background.value;
+            set => background.value = (int) value;
+        }
+        
+        #endregion
+
+        #region Pauses
+
+        [Header("Pauses")] [SerializeField] private FloatInput pauseBeforeTasks;
+        [SerializeField] private FloatInput pauseBetweenTasks;
+        [SerializeField] private FloatInput pauseAfterTasks;
+
+        #endregion
+
+        #region Screen
+        
+        [Header("Screen")] [SerializeField] private FloatInput screenDiagonal;
+        [SerializeField] private IntInput eyeTrackerDistance;
+
+        private ReferencePoint ReferencePoint
+        {
+            get => new ReferencePoint
+            {
+                ScreenDiagonalInInches = screenDiagonal.Value,
+                DistanceFromEyesInCM = ToCM(eyeTrackerDistance.Value)
+            };
+            set
+            {
+                screenDiagonal.Value = value.ScreenDiagonalInInches;
+                eyeTrackerDistance.Value = ToMM(value.DistanceFromEyesInCM);
+            }
+        }
+
+        private ReferencePoint ResetReferencePoint()
+        {
+            screenDiagonal.Reset();
+            eyeTrackerDistance.Reset();
+            return ReferencePoint;
+        }
 
         #endregion
 
@@ -94,25 +133,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         }
 
 
-        private BackgroundColor Background
-        {
-            get => (BackgroundColor) background.value;
-            set => background.value = (int) value;
-        }
 
-        private ReferencePoint ReferencePoint
-        {
-            get => new ReferencePoint
-            {
-                ScreenDiagonalInInches = ParseInput(screenDiagonal, defaults.ReferencePoint.ScreenDiagonalInInches),
-                DistanceFromEyesInCM = ParseInput(eyeTrackerDistance, defaults.ReferencePoint.DistanceFromEyesInCM),
-            };
-            set
-            {
-                screenDiagonal.text = $"{value.ScreenDiagonalInInches:0.0}";
-                eyeTrackerDistance.text = $"{value.DistanceFromEyesInCM:0.0}";
-            }
-        }
 
         private float StimulusDistanceInDegrees
         {
@@ -150,10 +171,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
 
+            simulator.Settings.ReferencePoint = ReferencePoint;
+            
             simulator.Settings.GapTimes = GapTimes;
             simulator.Settings.OverlapTimes = OverlapTimes;
             simulator.Settings.TaskCount = TaskCount;
-            simulator.Settings.ReferencePoint = ReferencePoint;
+            
             simulator.Settings.StimulusDistanceInDegrees = StimulusDistanceInDegrees;
             simulator.Settings.CentralStimulusSizeInDegrees = CentralStimulusSizeInDegrees;
             simulator.Settings.PeripheralStimulusSizeInDegrees = PeripheralStimulusSizeInDegrees;
@@ -170,11 +193,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             home = FindObjectOfType<HomeUI>();
             simulator = FindObjectOfType<Simulator>();
 
-            var defaults = new MainSettings();
-
             pauseBeforeTasks.SetDefault(() => defaults.PauseBeforeTasks);
             pauseBetweenTasks.SetDefault(() => defaults.PauseBetweenTasks);
             pauseAfterTasks.SetDefault(() => defaults.PauseAfterTasks);
+
+            screenDiagonal.SetDefault(() => defaults.ReferencePoint.ScreenDiagonalInInches);
+            eyeTrackerDistance.SetDefault(() => ToMM(defaults.ReferencePoint.DistanceFromEyesInCM));
         }
 
         public void OnClose()
@@ -194,11 +218,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Reset();
 
+            simulator.Settings.ReferencePoint = ResetReferencePoint();
+            
             simulator.Settings.GapTimes = defaults.GapTimes;
             simulator.Settings.OverlapTimes = defaults.OverlapTimes;
             simulator.Settings.TaskCount = defaults.TaskCount;
             simulator.Settings.PauseBetweenTasks = defaults.PauseBetweenTasks;
-            simulator.Settings.ReferencePoint = defaults.ReferencePoint;
+            
             simulator.Settings.StimulusDistanceInDegrees = defaults.StimulusDistanceInDegrees;
             simulator.Settings.CentralStimulusSizeInDegrees = defaults.CentralStimulusSizeInDegrees;
             simulator.Settings.PeripheralStimulusSizeInDegrees = defaults.PeripheralStimulusSizeInDegrees;
@@ -209,6 +235,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Helpers
+
+        private static int ToMM(float cm)
+        {
+            return Mathf.RoundToInt(cm * 10f);
+        }
+
+        private static float ToCM(int mm)
+        {
+            return mm / 10f;
+        }
 
         private static float ParseInput(InputField field, float defaultValue)
         {
@@ -223,17 +259,18 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Display()
         {
             Background = simulator.Settings.Background;
-            
+
             pauseBeforeTasks.Value = simulator.Settings.PauseBeforeTasks;
             pauseBetweenTasks.Value = simulator.Settings.PauseBetweenTasks;
             pauseAfterTasks.Value = simulator.Settings.PauseAfterTasks;
 
+            ReferencePoint = simulator.Settings.ReferencePoint;
+            
             GapTimes = simulator.Settings.GapTimes;
             OverlapTimes = simulator.Settings.OverlapTimes;
             TaskCount = simulator.Settings.TaskCount;
             // PauseBetweenTasks = simulator.Settings.PauseBetweenTasks;
             
-            ReferencePoint = simulator.Settings.ReferencePoint;
             StimulusDistanceInDegrees = simulator.Settings.StimulusDistanceInDegrees;
             CentralStimulusSizeInDegrees = simulator.Settings.CentralStimulusSizeInDegrees;
             PeripheralStimulusSizeInDegrees = simulator.Settings.PeripheralStimulusSizeInDegrees;
