@@ -33,52 +33,41 @@ namespace RasHack.GapOverlap.Main.Task
         #region Fields
 
         private int currentIndex;
-        private int remainingGaps;
-        private int remainingOverlaps;
+
+        private readonly ManagedRandom<TaskType> randomTasks =
+            new ManagedRandom<TaskType>(TaskType.Gap, TaskType.Overlap);
 
         #endregion
 
         #region API
 
-        public bool HasNext => remainingGaps > 0 || remainingOverlaps > 0;
+        public bool HasNext => randomTasks.HasNext;
 
         public void Reset(TaskCount taskCount)
         {
             currentIndex = 0;
-            remainingGaps = taskCount.Gaps;
-            remainingOverlaps = taskCount.Overlaps;
+            randomTasks.Reset(taskCount.Gaps, taskCount.Overlaps);
         }
 
         public void End()
         {
-            remainingGaps = 0;
-            remainingOverlaps = 0;
+            randomTasks.End();
         }
 
         public Task CreateNext(StimuliType type)
         {
             if (!HasNext) return null;
 
-            TaskType next;
-            if (remainingGaps == 0) next = TaskType.Overlap;
-            else
-            {
-                var weighted = remainingGaps + remainingOverlaps;
-                var rounded = Mathf.FloorToInt(Random.value * weighted);
-                next = rounded < remainingGaps ? TaskType.Gap : TaskType.Overlap;
-            }
-
             currentIndex++;
+            var next = randomTasks.Next();
 
             switch (next)
             {
                 case TaskType.Overlap:
-                    remainingOverlaps--;
                     var newOverlap = Instantiate(overlapPrefab, Vector3.zero, Quaternion.identity);
                     newOverlap.name = $"Overlap_{currentIndex}_{type}";
                     return newOverlap.GetComponent<Overlap>();
                 default:
-                    remainingGaps--;
                     var newGap = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
                     newGap.name = $"Gap_{currentIndex}_{type}";
                     return newGap.GetComponent<Gap>();
