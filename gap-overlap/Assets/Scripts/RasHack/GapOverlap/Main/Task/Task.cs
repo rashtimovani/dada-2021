@@ -18,6 +18,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Simulator owner;
         protected StimuliType stimulusType;
+        protected NextArea area;
 
         #endregion
 
@@ -31,6 +32,9 @@ namespace RasHack.GapOverlap.Main.Task
         {
             this.owner = owner;
             this.stimulusType = stimulusType;
+
+            area = owner.Area.NextInWorld(TaskType);
+            gameObject.name = gameObject.name + "_" + area.Side;
         }
 
         public abstract void ReportFocusedOn(Stimulus stimulus, float after);
@@ -67,8 +71,6 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Stimulus NewStimulus()
         {
-            var area = owner.Area.NextInWorld(TaskType);
-
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
             newOne.name = name + "_" + stimulusType + "_" + area.Side + "_stimulus";
