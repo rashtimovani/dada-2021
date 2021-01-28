@@ -20,6 +20,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private AudioClip rainbowSound;
         
         [SerializeField] private Sprite rainCloud;
+        [SerializeField] private AudioClip rainCloudSound;
+        
         [SerializeField] private Sprite umbrella;
 
         #endregion
@@ -74,7 +76,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     audioSource.clip = rainbowSound;
                     break;
                 case StimuliType.RainCloud:
-                    sprite.sprite = rainCloud;
+                    audioSource.clip = rainCloudSound;
                     break;
                 case StimuliType.Umbrella:
                     sprite.sprite = umbrella;
