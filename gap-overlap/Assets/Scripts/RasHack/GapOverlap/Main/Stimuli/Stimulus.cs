@@ -8,6 +8,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #region Sprites
 
         [SerializeField] private Sprite bee;
+        [SerializeField] private AudioClip beeSound;
+        
         [SerializeField] private Sprite bird;
         [SerializeField] private Sprite owl;
         [SerializeField] private Sprite rainbow;
@@ -52,6 +54,30 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             sprite = GetComponent<SpriteRenderer>();
             SetUpSprite();
+
+            var audioSource = GetComponent<AudioSource>();
+            switch (type)
+            {
+                case StimuliType.Bird:
+                    sprite.sprite = bird;
+                    break;
+                case StimuliType.Owl:
+                    sprite.sprite = owl;
+                    break;
+                case StimuliType.Rainbow:
+                    sprite.sprite = rainbow;
+                    break;
+                case StimuliType.RainCloud:
+                    sprite.sprite = rainCloud;
+                    break;
+                case StimuliType.Umbrella:
+                    sprite.sprite = umbrella;
+                    break;
+                default:
+                    audioSource.clip = beeSound;
+                    break;
+            }
+            audioSource.Play();
         }
 
         private void Update()
