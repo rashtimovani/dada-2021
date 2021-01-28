@@ -1,4 +1,7 @@
-﻿namespace RasHack.GapOverlap.Main.Stimuli
+﻿using System;
+using Random = UnityEngine.Random;
+
+namespace RasHack.GapOverlap.Main.Stimuli
 {
     public enum StimuliType
     {
@@ -12,10 +15,9 @@
 
     public static class StimuliTypeExtensions
     {
-        public static StimuliType next(this StimuliType current)
+        public static StimuliType Next()
         {
-            if (current >= StimuliType.Umbrella || current < StimuliType.Bee) return StimuliType.Bee;
-            return current + 1;
+            return (StimuliType) Random.Range((int) StimuliType.Bee, (int) StimuliType.Umbrella + 1);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace RasHack.GapOverlap.Main
 
             tasks.Reset(settings.TaskCount);
             area.Reset(settings.TaskCount);
-            nextStimulus = StimuliType.Bee;
+            nextStimulus = StimuliTypeExtensions.Next();
             IsActive = true;
 
             string runName;
@@ -187,7 +187,7 @@ namespace RasHack.GapOverlap.Main
             }
 
             currentTask.StartTask(this, nextStimulus);
-            nextStimulus = nextStimulus.next();
+            nextStimulus = StimuliTypeExtensions.Next();
         }
 
         private void DetectInterruptedTest()
