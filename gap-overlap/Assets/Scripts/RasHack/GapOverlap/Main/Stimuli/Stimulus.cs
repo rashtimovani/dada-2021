@@ -9,20 +9,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private Sprite bee;
         [SerializeField] private AudioClip beeSound;
-        
+
         [SerializeField] private Sprite bird;
         [SerializeField] private AudioClip birdSound;
-        
+
         [SerializeField] private Sprite owl;
         [SerializeField] private AudioClip owlSound;
-        
+
         [SerializeField] private Sprite rainbow;
         [SerializeField] private AudioClip rainbowSound;
-        
+
         [SerializeField] private Sprite rainCloud;
         [SerializeField] private AudioClip rainCloudSound;
-        
+
         [SerializeField] private Sprite umbrella;
+        [SerializeField] private AudioClip umbrellaSound;
 
         #endregion
 
@@ -79,12 +80,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     audioSource.clip = rainCloudSound;
                     break;
                 case StimuliType.Umbrella:
-                    sprite.sprite = umbrella;
+                    audioSource.clip = umbrellaSound;
                     break;
                 default:
                     audioSource.clip = beeSound;
                     break;
             }
+
             audioSource.Play();
         }
 

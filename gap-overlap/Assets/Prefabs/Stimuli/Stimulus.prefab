@@ -122,6 +122,7 @@ MonoBehaviour:
   rainCloud: {fileID: 21300000, guid: 1e893c9e2fb6aca43baf07b3567534dc, type: 3}
   rainCloudSound: {fileID: 8300000, guid: 73166cbb4fb957347b8c076414362c13, type: 3}
   umbrella: {fileID: 21300000, guid: 629483ab2b49d1d48bcf15f22f3df77b, type: 3}
+  umbrellaSound: {fileID: 8300000, guid: 7bf77dfa71b61404bba32fd101c03c30, type: 3}
 --- !u!212 &5904628059071163581
 SpriteRenderer:
   m_ObjectHideFlags: 0
