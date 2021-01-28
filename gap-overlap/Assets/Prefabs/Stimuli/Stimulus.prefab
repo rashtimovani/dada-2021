@@ -115,6 +115,7 @@ MonoBehaviour:
   beeSound: {fileID: 8300000, guid: 8283e222a74c844459cbd6e257f28cdf, type: 3}
   bird: {fileID: 21300000, guid: 526d42236ceb9d14586f64e4083d3c57, type: 3}
   owl: {fileID: 21300000, guid: 4026f03323844bc42bbd7c720d9be615, type: 3}
+  owlSound: {fileID: 8300000, guid: fbab5de316a98b84a976745f1029b2ba, type: 3}
   rainbow: {fileID: 21300000, guid: ce6e85734fcf42d4ea2e97ecec6501ca, type: 3}
   rainCloud: {fileID: 21300000, guid: 1e893c9e2fb6aca43baf07b3567534dc, type: 3}
   umbrella: {fileID: 21300000, guid: 629483ab2b49d1d48bcf15f22f3df77b, type: 3}
