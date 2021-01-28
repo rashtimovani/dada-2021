@@ -22,6 +22,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Mono methods
+        
+        private void Start() 
+        {
+            GetComponent<AudioSource>().Play();
+        }
 
         private void Update()
         {
