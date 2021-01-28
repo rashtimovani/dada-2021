@@ -11,6 +11,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private AudioClip beeSound;
         
         [SerializeField] private Sprite bird;
+        [SerializeField] private AudioClip birdSound;
         
         [SerializeField] private Sprite owl;
         [SerializeField] private AudioClip owlSound;
@@ -62,7 +63,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             switch (type)
             {
                 case StimuliType.Bird:
-                    sprite.sprite = bird;
+                    audioSource.clip = birdSound;
                     break;
                 case StimuliType.Owl:
                     audioSource.clip = owlSound;
