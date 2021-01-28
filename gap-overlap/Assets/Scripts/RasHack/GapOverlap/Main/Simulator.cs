@@ -96,6 +96,7 @@ namespace RasHack.GapOverlap.Main
             settings.Store();
 
             FlushToDisk();
+            AudioListener.volume = settings.SoundVolume;
             
             results.StartTest(runName);
             waitingTime = settings.PauseBeforeTasks;
