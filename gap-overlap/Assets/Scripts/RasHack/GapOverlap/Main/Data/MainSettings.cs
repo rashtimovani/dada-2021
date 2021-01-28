@@ -13,18 +13,19 @@ namespace RasHack.GapOverlap.Main.Data
 
         [HideInInspector] public string LastUsedName = "";
 
-        [Header("General")] public BackgroundColor Background = BackgroundColor.Black;
+        [Header("General")] public float SoundVolume = 1f;
 
         [Header("Pauses")] public float PauseBeforeTasks = 1f;
         public float PauseBetweenTasks = 2.7f;
         public float PauseAfterTasks = 1f;
 
+        [Header("Screen")]
         public ReferencePoint ReferencePoint = new ReferencePoint
             {DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f};
+        public BackgroundColor Background = BackgroundColor.Black;
 
         [Header("Stimulus dimension specification")]
         public float DistanceBetweenPeripheralStimuliInDegrees = 20f;
-
         public float CentralStimulusSizeInDegrees = 3.5f;
         public float PeripheralStimulusSizeInDegrees = 3f;
 

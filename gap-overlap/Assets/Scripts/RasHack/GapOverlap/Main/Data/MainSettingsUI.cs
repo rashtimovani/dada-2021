@@ -24,18 +24,18 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region General
 
-        [Header("General")] [SerializeField] private Dropdown background;
+        [Header("General")] [SerializeField] private Slider soundVolume;
 
-        private BackgroundColor Background
+        private float SoundVolume
         {
-            get => (BackgroundColor) background.value;
-            set => background.value = (int) value;
+            get => Mathf.Clamp01(soundVolume.value);
+            set => soundVolume.value = Mathf.Clamp01(value);
         }
 
-        private BackgroundColor ResetBackground()
+        private float ResetSoundVolume()
         {
-            Background = defaults.Background;
-            return Background;
+            SoundVolume = defaults.SoundVolume;
+            return SoundVolume;
         }
 
         #endregion
@@ -72,6 +72,20 @@ namespace RasHack.GapOverlap.Main.Stimuli
             screenDiagonal.Reset();
             eyeTrackerDistance.Reset();
             return ReferencePoint;
+        }
+
+        [SerializeField] private Dropdown background;
+
+        private BackgroundColor Background
+        {
+            get => (BackgroundColor) background.value;
+            set => background.value = (int) value;
+        }
+
+        private BackgroundColor ResetBackground()
+        {
+            Background = defaults.Background;
+            return Background;
         }
 
         #endregion
@@ -203,13 +217,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
             panel.SetActive(false);
             if (dontStore) return;
 
-            simulator.Settings.Background = Background;
+            simulator.Settings.SoundVolume = SoundVolume;
 
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
 
             simulator.Settings.ReferencePoint = ReferencePoint;
+            simulator.Settings.Background = Background;
 
             simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Value;
             simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Value;
@@ -264,13 +279,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void OnReset()
         {
-            simulator.Settings.Background = ResetBackground();
-
+            simulator.Settings.SoundVolume = ResetSoundVolume();
+            
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Reset();
 
             simulator.Settings.ReferencePoint = ResetReferencePoint();
+            simulator.Settings.Background = ResetBackground();
 
             simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Reset();
             simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Reset();
@@ -299,16 +315,19 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return mm / 10f;
         }
 
+        #endregion
+
         private void Display()
         {
-            Background = simulator.Settings.Background;
+            SoundVolume = simulator.Settings.SoundVolume;           
 
             pauseBeforeTasks.Value = simulator.Settings.PauseBeforeTasks;
             pauseBetweenTasks.Value = simulator.Settings.PauseBetweenTasks;
             pauseAfterTasks.Value = simulator.Settings.PauseAfterTasks;
-
+           
             ReferencePoint = simulator.Settings.ReferencePoint;
-
+            Background = simulator.Settings.Background;
+            
             distanceBetweenPeripheralStimuli.Value = simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees;
             centralStimulusSize.Value = simulator.Settings.CentralStimulusSizeInDegrees;
             peripheralStimulusSize.Value = simulator.Settings.PeripheralStimulusSizeInDegrees;
@@ -319,7 +338,5 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             TaskCount = simulator.Settings.TaskCount;
         }
-
-        #endregion
     }
 }
