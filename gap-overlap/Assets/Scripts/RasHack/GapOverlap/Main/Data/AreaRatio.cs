@@ -38,6 +38,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region Mono methods
 
+        private void Start()
+        {
+            OnSliderValueChanged();
+        }
+
         private void Update()
         {
             if (!valueInput.HasValue)
