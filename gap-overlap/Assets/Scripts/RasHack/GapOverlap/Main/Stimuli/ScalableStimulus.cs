@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -8,6 +9,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private Transform bottomLeft;
         [SerializeField] private Transform topRight;
+
+        #endregion
+
+        #region Fields
+
+        protected StimuliAnimation currentAnimation;
 
         #endregion
 

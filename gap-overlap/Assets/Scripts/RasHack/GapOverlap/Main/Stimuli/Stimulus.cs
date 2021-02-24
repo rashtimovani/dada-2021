@@ -1,4 +1,5 @@
 ﻿using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Stimuli.Animaition;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -53,6 +54,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.lifetime = lifetime;
             spentLifetime = 0;
             if (sprite != null) SetUpSprite();
+            
+            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using RasHack.GapOverlap.Main.Stimuli;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Task
@@ -27,6 +28,8 @@ namespace RasHack.GapOverlap.Main.Task
         protected abstract TaskType TaskType { get; }
 
         protected Scaler Scaler => owner.Scaler;
+
+        public float FadeInOut => owner.Settings.FadeInOut;
 
         public void StartTask(Simulator owner, StimuliType stimulusType)
         {

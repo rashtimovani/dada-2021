@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -26,6 +27,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Start() 
         {
             GetComponent<AudioSource>().Play();
+            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut);
         }
 
         private void Update()

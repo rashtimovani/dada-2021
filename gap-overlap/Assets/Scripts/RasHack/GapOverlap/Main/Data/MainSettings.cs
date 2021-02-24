@@ -14,6 +14,7 @@ namespace RasHack.GapOverlap.Main.Data
         [HideInInspector] public string LastUsedName = "";
 
         [Header("General")] public float SoundVolume = 1f;
+        public float FadeInOut = 0.1f;
 
         [Header("Pauses")] public float PauseBeforeTasks = 1f;
         public float PauseBetweenTasks = 2.7f;
