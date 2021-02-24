@@ -19,15 +19,21 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 
         public static FadeIn ForStimuli(GameObject grow, float duration, Action onFinish)
         {
+            if (duration <= 0f)
+            {
+                onFinish?.Invoke();
+                return null;
+            }
+
             var fadeIn = grow.AddComponent<FadeIn>();
 
             fadeIn.totalLife = duration;
             fadeIn.onFinish = onFinish;
-            
+
             fadeIn.grow = grow;
             fadeIn.initialScale = grow.transform.localScale;
             grow.transform.localScale = Vector3.zero;
-            
+
             fadeIn.show = grow.GetComponent<SpriteRenderer>();
             fadeIn.initialAlpha = fadeIn.show.color.a;
             fadeIn.show.color = fadeIn.ColorWithAlpha(0f);
@@ -48,7 +54,7 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
         #endregion
 
         #region Implementation
-        
+
         protected override void Animate()
         {
             var clamp = Clamp;
