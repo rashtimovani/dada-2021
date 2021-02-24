@@ -1,4 +1,6 @@
-﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
+﻿using System;
+using System.Runtime.InteropServices;
+using RasHack.GapOverlap.Main.Stimuli.Animaition;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -13,18 +15,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Fields
-
-        protected StimuliAnimation currentAnimation;
+        
+        private StimuliAnimation currentAnimation;
+        
+        private float fadeInOut;
+        private float rotateDuration;
 
         #endregion
 
         #region API
 
-        protected void StartAnimation(StimuliAnimation animation)
-        {
-            Destroy(currentAnimation);
-            currentAnimation = animation;
-        }
+
 
         private Vector3 Size
         {
@@ -44,6 +45,33 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var originalScale = transform.localScale;
             transform.localScale = new Vector3(originalScale.x * scaleChange.x, originalScale.y * scaleChange.y,
                 originalScale.z * scaleChange.z);
+        }
+
+        #endregion
+
+        #region Helpers
+
+        protected void DoFadeIn(float totalDuration, float fadeInOut)
+        {
+            this.fadeInOut = fadeInOut;
+            rotateDuration = totalDuration - 2 * fadeInOut;
+            StartAnimation(FadeIn.ForStimuli(gameObject, fadeInOut, DoRotate));
+        }
+
+        private void DoRotate()
+        {
+            StartAnimation(Rotate.ForStimuli(gameObject, rotateDuration, DoFadeOut)); 
+        }
+        
+        private void DoFadeOut()
+        {
+            StartAnimation(FadeOut.ForStimuli(gameObject, fadeInOut));
+        }
+        
+        private void StartAnimation(StimuliAnimation animation)
+        {
+            Destroy(currentAnimation);
+            currentAnimation = animation;
         }
 
         #endregion

@@ -16,6 +16,8 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 
         #region API
 
+        protected float Spent => spentLife;
+        
         private bool HasEnded => spentLife >= totalLife;
 
         protected float Clamp => Mathf.Clamp01(spentLife / totalLife);
