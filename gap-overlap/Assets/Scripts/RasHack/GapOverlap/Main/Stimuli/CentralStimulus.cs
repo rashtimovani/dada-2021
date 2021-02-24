@@ -1,5 +1,4 @@
-﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -18,15 +17,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             this.owner = owner;
             this.lifetime = lifetime;
-            
+
             DoFadeIn(lifetime, owner.FadeInOut);
         }
 
         #endregion
 
         #region Mono methods
-        
-        private void Start() 
+
+        private void Start()
         {
             GetComponent<AudioSource>().Play();
         }

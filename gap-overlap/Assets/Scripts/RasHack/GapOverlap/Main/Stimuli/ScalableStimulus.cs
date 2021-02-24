@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using RasHack.GapOverlap.Main.Stimuli.Animaition;
+﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -15,17 +13,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
         #endregion
 
         #region Fields
-        
+
         private StimuliAnimation currentAnimation;
-        
+
         private float fadeInOut;
         private float rotateDuration;
 
         #endregion
 
         #region API
-
-
 
         private Vector3 Size
         {
@@ -60,14 +56,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void DoRotate()
         {
-            StartAnimation(Rotate.ForStimuli(gameObject, rotateDuration, DoFadeOut)); 
+            StartAnimation(Rotate.ForStimuli(gameObject, rotateDuration, DoFadeOut));
         }
-        
+
         private void DoFadeOut()
         {
             StartAnimation(FadeOut.ForStimuli(gameObject, fadeInOut));
         }
-        
+
         private void StartAnimation(StimuliAnimation animation)
         {
             Destroy(currentAnimation);

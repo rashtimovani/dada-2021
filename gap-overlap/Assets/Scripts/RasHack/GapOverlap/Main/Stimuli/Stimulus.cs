@@ -54,7 +54,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.lifetime = lifetime;
             spentLifetime = 0;
             if (sprite != null) SetUpSprite();
-            
+
             DoFadeIn(lifetime, owner.FadeInOut);
         }
 
