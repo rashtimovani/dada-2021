@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 {
@@ -16,11 +17,12 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 
         #region API
 
-        public static FadeIn ForStimuli(GameObject grow, float duration)
+        public static FadeIn ForStimuli(GameObject grow, float duration, Action onFinish)
         {
             var fadeIn = grow.AddComponent<FadeIn>();
 
             fadeIn.totalLife = duration;
+            fadeIn.onFinish = onFinish;
             
             fadeIn.grow = grow;
             fadeIn.initialScale = grow.transform.localScale;

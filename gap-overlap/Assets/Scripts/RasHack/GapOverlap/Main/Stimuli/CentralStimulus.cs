@@ -27,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Start() 
         {
             GetComponent<AudioSource>().Play();
-            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut);
+            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut, () => Debug.Log("Finished"));
         }
 
         private void Update()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 {
@@ -8,6 +9,8 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 
         private float spentLife;
         protected float totalLife;
+
+        protected Action onFinish;
 
         #endregion
 
@@ -29,6 +32,7 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
             if (HasEnded)
             {
                 Destroy(this);
+                onFinish?.Invoke();
                 return;
             }
 

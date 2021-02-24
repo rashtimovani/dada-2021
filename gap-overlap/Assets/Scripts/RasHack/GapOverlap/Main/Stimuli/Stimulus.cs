@@ -55,7 +55,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime = 0;
             if (sprite != null) SetUpSprite();
             
-            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut);
+            currentAnimation = FadeIn.ForStimuli(gameObject, owner.FadeInOut, () => Debug.Log("Finished"));
         }
 
         #endregion

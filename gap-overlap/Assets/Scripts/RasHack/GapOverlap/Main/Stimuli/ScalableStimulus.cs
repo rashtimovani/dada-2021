@@ -20,6 +20,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region API
 
+        protected void StartAnimation(StimuliAnimation animation)
+        {
+            Destroy(currentAnimation);
+            currentAnimation = animation;
+        }
+
         private Vector3 Size
         {
             get
