@@ -23,11 +23,24 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [Header("General")] [SerializeField] private Slider soundVolume;
 
         [SerializeField] private FloatInput fadeInOut;
-        
+        [SerializeField] private Slider rotationFactor;
+
         private float SoundVolume
         {
             get => Mathf.Clamp01(soundVolume.value);
             set => soundVolume.value = Mathf.Clamp01(value);
+        }
+
+        private int RotationFactor
+        {
+            get => Mathf.RoundToInt(rotationFactor.value);
+            set => rotationFactor.value = value;
+        }
+
+        private int ResetRotationFactor()
+        {
+            RotationFactor = defaults.RotationFactor;
+            return RotationFactor;
         }
 
         private float ResetSoundVolume()
@@ -217,6 +230,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             simulator.Settings.SoundVolume = SoundVolume;
             simulator.Settings.FadeInOut = fadeInOut.Value;
+            simulator.Settings.RotationFactor = RotationFactor;
 
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
@@ -248,7 +262,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             simulator = FindObjectOfType<Simulator>();
 
             fadeInOut.SetDefault(() => defaults.FadeInOut);
-            
+
             pauseBeforeTasks.SetDefault(() => defaults.PauseBeforeTasks);
             pauseBetweenTasks.SetDefault(() => defaults.PauseBetweenTasks);
             pauseAfterTasks.SetDefault(() => defaults.PauseAfterTasks);
@@ -282,7 +296,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             simulator.Settings.SoundVolume = ResetSoundVolume();
             simulator.Settings.FadeInOut = fadeInOut.Reset();
-            
+            simulator.Settings.RotationFactor = ResetRotationFactor();
+
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
             simulator.Settings.PauseAfterTasks = pauseAfterTasks.Reset();
@@ -323,14 +338,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             SoundVolume = simulator.Settings.SoundVolume;
             fadeInOut.Value = simulator.Settings.FadeInOut;
+            RotationFactor = simulator.Settings.RotationFactor;
 
             pauseBeforeTasks.Value = simulator.Settings.PauseBeforeTasks;
             pauseBetweenTasks.Value = simulator.Settings.PauseBetweenTasks;
             pauseAfterTasks.Value = simulator.Settings.PauseAfterTasks;
-           
+
             ReferencePoint = simulator.Settings.ReferencePoint;
             Background = simulator.Settings.Background;
-            
+
             distanceBetweenPeripheralStimuli.Value = simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees;
             centralStimulusSize.Value = simulator.Settings.CentralStimulusSizeInDegrees;
             peripheralStimulusSize.Value = simulator.Settings.PeripheralStimulusSizeInDegrees;
