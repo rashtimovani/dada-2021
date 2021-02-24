@@ -15,6 +15,7 @@ namespace RasHack.GapOverlap.Main.Data
 
         [Header("General")] public float SoundVolume = 1f;
         public float FadeInOut = 0.1f;
+        public int RotationFactor = 4;
 
         [Header("Pauses")] public float PauseBeforeTasks = 1f;
         public float PauseBetweenTasks = 2.7f;

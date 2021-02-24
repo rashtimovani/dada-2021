@@ -8,6 +8,7 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
         #region Fields
 
         private GameObject rotate;
+        private float cycles;
         private Quaternion toLeft;
         private Quaternion toRight;
 
@@ -15,33 +16,28 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animaition
 
         #region API
 
-        public static Rotate ForStimuli(GameObject toRotate, float duration, Action onFinish)
+        public static Rotate ForStimuli(GameObject toRotate, float duration, int rotationFactor, Action onFinish)
         {
-            if (duration <= 0f)
-            {
-                onFinish?.Invoke();
-                return null;
-            }
-
             var rotate = toRotate.AddComponent<Rotate>();
 
             rotate.totalLife = duration;
             rotate.onFinish = onFinish;
 
+            rotate.cycles = Mathf.PI * rotationFactor;
             rotate.rotate = toRotate;
-            rotate.toLeft = Quaternion.Euler(new Vector3(0,0, 20f));
-            rotate.toRight = Quaternion.Euler(new Vector3(0,0, -20f));
+            rotate.toLeft = Quaternion.Euler(new Vector3(0, 0, 20f));
+            rotate.toRight = Quaternion.Euler(new Vector3(0, 0, -20f));
 
             return rotate;
         }
 
         #endregion
-        
+
         #region Implementation
-        
+
         protected override void Animate()
         {
-            var lerp = 0.5F * (1.0F + Mathf.Sin(Mathf.PI * Spent * 1f));
+            var lerp = 0.5F * (1.0F + Mathf.Sin(cycles * Spent));
             rotate.transform.localRotation = Quaternion.Lerp(toLeft, toRight, lerp);
         }
 

@@ -17,6 +17,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private StimuliAnimation currentAnimation;
 
         private float fadeInOut;
+        private int rotationFactor;
         private float rotateDuration;
 
         #endregion
@@ -47,16 +48,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region Helpers
 
-        protected void DoFadeIn(float totalDuration, float fadeInOut)
+        protected void DoFadeIn(float totalDuration, float fadeInOut, int rotationFactor)
         {
             this.fadeInOut = fadeInOut;
+            this.rotationFactor = rotationFactor;
             rotateDuration = totalDuration - 2 * fadeInOut;
             StartAnimation(FadeIn.ForStimuli(gameObject, fadeInOut, DoRotate));
         }
 
         private void DoRotate()
         {
-            StartAnimation(Rotate.ForStimuli(gameObject, rotateDuration, DoFadeOut));
+            StartAnimation(Rotate.ForStimuli(gameObject, rotateDuration, rotationFactor, DoFadeOut));
         }
 
         private void DoFadeOut()

@@ -18,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.owner = owner;
             this.lifetime = lifetime;
 
-            DoFadeIn(lifetime, owner.FadeInOut);
+            DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
 
         #endregion

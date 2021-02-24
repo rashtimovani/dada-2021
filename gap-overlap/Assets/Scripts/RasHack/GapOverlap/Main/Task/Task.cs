@@ -30,6 +30,8 @@ namespace RasHack.GapOverlap.Main.Task
         protected Scaler Scaler => owner.Scaler;
 
         public float FadeInOut => owner.Settings.FadeInOut;
+        
+        public int RotationFactor => owner.Settings.RotationFactor;
 
         public void StartTask(Simulator owner, StimuliType stimulusType)
         {
