@@ -11,10 +11,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private GameObject panel;
 
-        #endregion
-
-        #region Fields
-
         private readonly MainSettings defaults = new MainSettings();
 
         private HomeUI home;
@@ -26,6 +22,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [Header("General")] [SerializeField] private Slider soundVolume;
 
+        [SerializeField] private FloatInput fadeInOut;
+        
         private float SoundVolume
         {
             get => Mathf.Clamp01(soundVolume.value);
@@ -218,6 +216,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (dontStore) return;
 
             simulator.Settings.SoundVolume = SoundVolume;
+            simulator.Settings.FadeInOut = fadeInOut.Value;
 
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
@@ -248,6 +247,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             home = FindObjectOfType<HomeUI>();
             simulator = FindObjectOfType<Simulator>();
 
+            fadeInOut.SetDefault(() => defaults.FadeInOut);
+            
             pauseBeforeTasks.SetDefault(() => defaults.PauseBeforeTasks);
             pauseBetweenTasks.SetDefault(() => defaults.PauseBetweenTasks);
             pauseAfterTasks.SetDefault(() => defaults.PauseAfterTasks);
@@ -280,6 +281,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public void OnReset()
         {
             simulator.Settings.SoundVolume = ResetSoundVolume();
+            simulator.Settings.FadeInOut = fadeInOut.Reset();
             
             simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Reset();
             simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Reset();
@@ -319,7 +321,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Display()
         {
-            SoundVolume = simulator.Settings.SoundVolume;           
+            SoundVolume = simulator.Settings.SoundVolume;
+            fadeInOut.Value = simulator.Settings.FadeInOut;
 
             pauseBeforeTasks.Value = simulator.Settings.PauseBeforeTasks;
             pauseBetweenTasks.Value = simulator.Settings.PauseBetweenTasks;
