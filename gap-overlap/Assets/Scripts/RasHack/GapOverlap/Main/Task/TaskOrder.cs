@@ -10,6 +10,7 @@ namespace RasHack.GapOverlap.Main.Task
     {
         Gap = 0,
         Overlap = 1,
+        Baseline = 2,
     }
 
     [Serializable]

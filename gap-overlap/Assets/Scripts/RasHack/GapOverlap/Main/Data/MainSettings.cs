@@ -40,6 +40,8 @@ namespace RasHack.GapOverlap.Main.Data
 
         public OverlapTimes OverlapTimes = new OverlapTimes {CentralTime = 1.2f, BothStimuli = 1.5f};
 
+        public BaselineTimes BaselineTimes = new BaselineTimes { CentralTime = 1f, CentralOutStimulusIn = 1f, StimulusTime = 1f };
+        
         #endregion
 
         #region API
