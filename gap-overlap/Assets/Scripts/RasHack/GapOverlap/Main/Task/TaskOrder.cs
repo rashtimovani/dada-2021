@@ -19,6 +19,8 @@ namespace RasHack.GapOverlap.Main.Task
         public int LeftGaps;
         public int Overlaps;
         public int LeftOverlaps;
+        public int Baselines;
+        public int LeftBaselines;
     }
 
     public class TaskOrder : MonoBehaviour
@@ -35,8 +37,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private int currentIndex;
 
-        private readonly ManagedRandom<TaskType> randomTasks =
-            new ManagedRandom<TaskType>(TaskType.Gap, TaskType.Overlap);
+        private readonly ManagedRandom<TaskType> randomTasks = new ManagedRandom<TaskType>();
 
         #endregion
 
@@ -47,7 +48,9 @@ namespace RasHack.GapOverlap.Main.Task
         public void Reset(TaskCount taskCount)
         {
             currentIndex = 0;
-            randomTasks.Reset(taskCount.Gaps, taskCount.Overlaps);
+            randomTasks.SetOptions(new RandomOption<TaskType>(TaskType.Gap, taskCount.Gaps),
+                new RandomOption<TaskType>(TaskType.Overlap, taskCount.Overlaps),
+                new RandomOption<TaskType>(TaskType.Baseline, taskCount.Baselines));
         }
 
         public void End()
@@ -68,6 +71,10 @@ namespace RasHack.GapOverlap.Main.Task
                     var newOverlap = Instantiate(overlapPrefab, Vector3.zero, Quaternion.identity);
                     newOverlap.name = $"Overlap_{currentIndex}_{type}";
                     return newOverlap.GetComponent<Overlap>();
+                case TaskType.Baseline:
+                    var newBaseline = Instantiate(baselinePrefab, Vector3.zero, Quaternion.identity);
+                    newBaseline.name = $"Baseline_{currentIndex}_{type}";
+                    return newBaseline.GetComponent<Baseline>();
                 default:
                     var newGap = Instantiate(gapPrefab, Vector3.zero, Quaternion.identity);
                     newGap.name = $"Gap_{currentIndex}_{type}";

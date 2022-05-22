@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.ConstrainedExecution;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -45,6 +41,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private readonly Side right;
         private readonly ManagedRandom<Side> gapSides;
         private readonly ManagedRandom<Side> overlapSides;
+        private readonly ManagedRandom<Side> baselineSides;
 
         private Simulator simulator;
 
@@ -57,12 +54,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
             left = new Side(this, Vector3.left);
             right = new Side(this, Vector3.right);
 
-            gapSides = new ManagedRandom<Side>(left, right);
-            overlapSides = new ManagedRandom<Side>(left, right);
+            gapSides = new ManagedRandom<Side>();
+            overlapSides = new ManagedRandom<Side>();
+            baselineSides = new ManagedRandom<Side>();
         }
 
         public NextArea CenterInWorld =>
-            new NextArea {Position = Scaler.Center, OffsetInDegrees = 0f, Side = "central"};
+            new NextArea { Position = Scaler.Center, OffsetInDegrees = 0f, Side = "central" };
 
         public NextArea NextInWorld(TaskType taskType)
         {
@@ -70,6 +68,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             {
                 case TaskType.Overlap:
                     return overlapSides.Next().Point;
+                case TaskType.Baseline:
+                    return baselineSides.Next().Point;
                 default:
                     return gapSides.Next().Point;
             }
@@ -79,11 +79,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             var leftGaps = Math.Max(0, Math.Min(taskCount.Gaps, taskCount.LeftGaps));
             var rightGaps = Math.Max(taskCount.Gaps - leftGaps, 0);
-            gapSides.Reset(leftGaps, rightGaps);
+            gapSides.SetOptions(new RandomOption<Side>(left, leftGaps), new RandomOption<Side>(right, rightGaps));
 
             var leftOverlaps = Math.Max(0, Math.Min(taskCount.Overlaps, taskCount.LeftOverlaps));
             var rightOverlaps = Math.Max(taskCount.Overlaps - leftOverlaps, 0);
-            overlapSides.Reset(leftOverlaps, rightOverlaps);
+            overlapSides.SetOptions(new RandomOption<Side>(left, leftOverlaps),
+                new RandomOption<Side>(right, rightOverlaps));
+
+            var leftBaselines = Math.Max(0, Math.Min(taskCount.Baselines, taskCount.LeftBaselines));
+            var rightBaseline = Math.Max(taskCount.Baselines - leftBaselines, 0);
+            baselineSides.SetOptions(new RandomOption<Side>(left, leftBaselines),
+                new RandomOption<Side>(right, rightBaseline));
         }
 
         #endregion
@@ -110,7 +116,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var position = Scaler.Point(Scaler.ScreenPosition(Center, Degrees, direction));
             var offsetInDegrees = direction.x * Degrees;
             var side = direction.x > 0 ? "right" : "left";
-            return new NextArea {Position = position, OffsetInDegrees = offsetInDegrees, Side = side};
+            return new NextArea { Position = position, OffsetInDegrees = offsetInDegrees, Side = side };
         }
 
         #endregion

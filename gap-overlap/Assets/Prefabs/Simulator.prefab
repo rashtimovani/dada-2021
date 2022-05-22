@@ -321,10 +321,12 @@ MonoBehaviour:
     CentralStimulusSizeInDegrees: 3.5
     PeripheralStimulusSizeInDegrees: 3
     TaskCount:
-      Gaps: 18
-      LeftGaps: 9
-      Overlaps: 18
-      LeftOverlaps: 9
+      Gaps: 20
+      LeftGaps: 10
+      Overlaps: 20
+      LeftOverlaps: 10
+      Baselines: 20
+      LeftBaselines: 10
     GapTimes:
       CentralTime: 1
       PauseTime: 0.2
