@@ -46,6 +46,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -211,6 +212,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -303,7 +305,37 @@ MonoBehaviour:
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
   showPointer: 1
-  pauseBetweenTasks: 3.5
+  settings:
+    LastUsedName: 
+    SoundVolume: 1
+    FadeInOut: 0.1
+    RotationFactor: 4
+    PauseBeforeTasks: 1
+    PauseBetweenTasks: 2.7
+    PauseAfterTasks: 1
+    ReferencePoint:
+      DistanceFromEyesInCM: 60
+      ScreenDiagonalInInches: 15.6
+    Background: 0
+    DistanceBetweenPeripheralStimuliInDegrees: 20
+    CentralStimulusSizeInDegrees: 3.5
+    PeripheralStimulusSizeInDegrees: 3
+    TaskCount:
+      Gaps: 18
+      LeftGaps: 9
+      Overlaps: 18
+      LeftOverlaps: 9
+    GapTimes:
+      CentralTime: 1
+      PauseTime: 0.2
+      StimulusTime: 1.5
+    OverlapTimes:
+      CentralTime: 1.2
+      BothStimuli: 1.5
+    BaselineTimes:
+      CentralTime: 1
+      CentralOutStimulusIn: 1
+      StimulusTime: 1
 --- !u!114 &8111807920774638880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,8 +352,8 @@ MonoBehaviour:
     type: 3}
   overlapPrefab: {fileID: 6810065476646968817, guid: e6250101c8f0bb040aa5998f17bfde5a,
     type: 3}
-  randomTaskOrder: 1
-  tasks: 00000000000000000100000001000000
+  baselinePrefab: {fileID: 6232811990994141330, guid: 8e667fa7671067f4eb6398c35c05c45f,
+    type: 3}
 --- !u!114 &3700890592413371578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,8 +366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5265d45f1c60e7a4bb38e48ec035a2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  left: {x: 0.15, y: 0.5}
-  right: {x: 0.85, y: 0.5}
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +412,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -463,6 +494,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -544,6 +576,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

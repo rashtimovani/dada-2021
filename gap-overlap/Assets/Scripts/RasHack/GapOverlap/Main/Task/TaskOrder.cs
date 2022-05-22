@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace RasHack.GapOverlap.Main.Task
 {
@@ -28,6 +27,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         [SerializeField] private GameObject gapPrefab;
         [SerializeField] private GameObject overlapPrefab;
+        [SerializeField] private GameObject baselinePrefab;
 
         #endregion
 
