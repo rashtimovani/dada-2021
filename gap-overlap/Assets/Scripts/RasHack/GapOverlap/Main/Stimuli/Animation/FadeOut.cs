@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RasHack.GapOverlap.Main.Stimuli.Animaition
+namespace RasHack.GapOverlap.Main.Stimuli.Animation
 {
     public class FadeOut : StimuliAnimation
     {

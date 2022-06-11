@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace RasHack.GapOverlap.Main.Data
+namespace RasHack.GapOverlap.Main.Inputs
 {
-    public class IntInput : MonoBehaviour
+    public class FloatInput : MonoBehaviour
     {
         #region Serialized fields
 
-        [SerializeField] private InputField valueInput;
+        [FormerlySerializedAs("time")] [SerializeField]
+        private InputField valueInput;
+
+        [SerializeField] private string format = "0.00";
 
         #endregion
 
@@ -19,27 +23,27 @@ namespace RasHack.GapOverlap.Main.Data
 
         #region API
 
-        public delegate int DefaultValueProvider();
+        public delegate float DefaultValueProvider();
 
         public void SetDefault(DefaultValueProvider newDefault)
         {
             defaultValue = newDefault;
         }
 
-        public int Reset()
+        public float Reset()
         {
             var resetValue = Default;
             Value = resetValue;
             return resetValue;
         }
 
-        public int Value
+        public float Value
         {
             get => ParseInput();
-            set => valueInput.text = value.ToString();
+            set => valueInput.text = value.ToString(format);
         }
 
-        private int Default => defaultValue?.Invoke() ?? 0;
+        private float Default => defaultValue?.Invoke() ?? 0f;
 
         public bool HasValue => !string.IsNullOrWhiteSpace(valueInput.text);
 
@@ -47,9 +51,9 @@ namespace RasHack.GapOverlap.Main.Data
 
         #region Helpers
 
-        private int ParseInput()
+        private float ParseInput()
         {
-            return HasValue ? int.Parse(valueInput.text) : Default;
+            return HasValue ? float.Parse(valueInput.text) : Default;
         }
 
         #endregion

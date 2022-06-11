@@ -1,5 +1,4 @@
-﻿using RasHack.GapOverlap.Main.Data;
-using RasHack.GapOverlap.Main.Inputs;
+﻿using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;

@@ -1,4 +1,4 @@
-﻿using RasHack.GapOverlap.Main.Stimuli.Animaition;
+﻿using RasHack.GapOverlap.Main.Stimuli.Animation;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RasHack.GapOverlap.Main.Data
+namespace RasHack.GapOverlap.Main.Inputs
 {
     public class AreaRatio : MonoBehaviour
     {
