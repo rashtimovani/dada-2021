@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace RasHack.GapOverlap.Main.Stimuli
+namespace RasHack.GapOverlap.Main.Data
 {
     public class IntInput : MonoBehaviour
     {

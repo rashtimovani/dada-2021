@@ -4,7 +4,7 @@ using System.Text;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
-namespace RasHack.GapOverlap.Main.Data
+namespace RasHack.GapOverlap.Main.Settings
 {
     [Serializable]
     public class MainSettings

@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
+﻿using RasHack.GapOverlap.Main.Settings;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;

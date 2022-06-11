@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RasHack.GapOverlap.Main.Stimuli
+namespace RasHack.GapOverlap.Common
 {
     #region Helper structure
 

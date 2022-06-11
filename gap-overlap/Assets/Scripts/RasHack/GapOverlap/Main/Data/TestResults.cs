@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace RasHack.GapOverlap.Main
+namespace RasHack.GapOverlap.Main.Result
 {
     public struct TestMeasurement
     {

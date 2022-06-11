@@ -1,5 +1,6 @@
 ﻿using System;
 using RasHack.GapOverlap.Main.Data;
+using RasHack.GapOverlap.Main.Settings;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main

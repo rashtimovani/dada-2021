@@ -3,7 +3,7 @@ using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RasHack.GapOverlap.Main.Stimuli
+namespace RasHack.GapOverlap.Main.Settings
 {
     public class MainSettingsUI : MonoBehaviour
     {
