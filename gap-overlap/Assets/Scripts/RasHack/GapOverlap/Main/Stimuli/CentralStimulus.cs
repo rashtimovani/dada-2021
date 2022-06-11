@@ -21,6 +21,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
 
+        public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
+        {
+            this.owner = owner;
+            this.lifetime = lifetime;
+
+            DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);
+        }
+
         #endregion
 
         #region Mono methods

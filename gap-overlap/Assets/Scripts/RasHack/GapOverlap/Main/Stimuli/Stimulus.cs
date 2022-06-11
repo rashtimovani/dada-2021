@@ -47,6 +47,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(StimuliType type, Task.Task owner, float lifetime)
         {
+            StartSimulating(type, owner, lifetime, owner.FadeInOut);
+        }
+        
+        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn) 
+        {
             this.type = type;
             this.owner = owner;
 
@@ -54,7 +59,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime = 0;
             if (sprite != null) SetUpSprite();
 
-            DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
+            DoFadeIn(lifetime, fadeIn, owner.FadeInOut, owner.RotationFactor);
         }
 
         #endregion
