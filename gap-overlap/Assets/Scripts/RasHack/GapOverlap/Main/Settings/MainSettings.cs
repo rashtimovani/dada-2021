@@ -32,7 +32,7 @@ namespace RasHack.GapOverlap.Main.Settings
         public float PeripheralStimulusSizeInDegrees = 3f;
 
         [Header("Task specification")] public TaskCount TaskCount = new TaskCount
-            {Gaps = 18, LeftGaps = 9, Overlaps = 18, LeftOverlaps = 9};
+            {Gaps = 18, LeftGaps = 9, Overlaps = 18, LeftOverlaps = 9, Baselines = 18, LeftBaselines = 9};
 
 
         [Header("Task times")] public GapTimes GapTimes = new GapTimes

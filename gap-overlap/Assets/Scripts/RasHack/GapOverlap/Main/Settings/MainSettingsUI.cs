@@ -326,12 +326,13 @@ namespace RasHack.GapOverlap.Main.Settings
             overlapCentralStimulusTime.SetDefault(() => defaults.OverlapTimes.CentralTime);
             overlapBothStimuliTime.SetDefault(() => defaults.OverlapTimes.BothStimuli);
 
-            baselineStimulusTime.SetDefault(() => defaults.BaselineTimes.CentralTime);
+            baselineCentralStimulusTime.SetDefault(() => defaults.BaselineTimes.CentralTime);
             baselineCentralOutStimulusInTime.SetDefault(() => defaults.BaselineTimes.CentralOutStimulusIn);
             baselineStimulusTime.SetDefault(() => defaults.BaselineTimes.StimulusTime);
 
             gapTaskCount.SetDefault(() => defaults.TaskCount.Gaps);
             overlapTaskCount.SetDefault(() => defaults.TaskCount.Overlaps);
+            baselineTaskCount.SetDefault(() => defaults.TaskCount.Baselines);
         }
 
         public void OnClose()
