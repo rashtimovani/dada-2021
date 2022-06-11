@@ -89,8 +89,8 @@ namespace RasHack.GapOverlap.Main.Settings
 
         private BackgroundColor Background
         {
-            get => (BackgroundColor) background.value;
-            set => background.value = (int) value;
+            get => (BackgroundColor)background.value;
+            set => background.value = (int)value;
         }
 
         private BackgroundColor ResetBackground()
@@ -181,6 +181,43 @@ namespace RasHack.GapOverlap.Main.Settings
 
         #endregion
 
+        #region Baseline
+
+        [Header("Baseline settings")] [SerializeField]
+        private FloatInput baselineCentralStimulusTime;
+
+        [SerializeField] private FloatInput baselineCentralOutStimulusInTime;
+        [SerializeField] private FloatInput baselineStimulusTime;
+        [SerializeField] private IntInput baselineTaskCount;
+        [SerializeField] private AreaRatio baselineSides;
+
+        private BaselineTimes BaselineTimes
+        {
+            get => new BaselineTimes
+            {
+                CentralTime = baselineCentralStimulusTime.Value,
+                CentralOutStimulusIn = baselineCentralOutStimulusInTime.Value,
+                StimulusTime = baselineStimulusTime.Value
+            };
+
+            set
+            {
+                baselineCentralStimulusTime.Value = value.CentralTime;
+                baselineCentralOutStimulusInTime.Value = value.CentralOutStimulusIn;
+                baselineStimulusTime.Value = value.StimulusTime;
+            }
+        }
+
+        private BaselineTimes ResetBaselineTimes()
+        {
+            baselineCentralStimulusTime.Reset();
+            baselineCentralOutStimulusInTime.Reset();
+            baselineStimulusTime.Reset();
+            return BaselineTimes;
+        }
+
+        #endregion
+
         #region Task count
 
         private TaskCount TaskCount
@@ -191,6 +228,8 @@ namespace RasHack.GapOverlap.Main.Settings
                 LeftGaps = gapSides.Left,
                 Overlaps = overlapTaskCount.Value,
                 LeftOverlaps = overlapSides.Left,
+                Baselines = baselineTaskCount.Value,
+                LeftBaselines = baselineSides.Left,
             };
 
             set
@@ -199,6 +238,8 @@ namespace RasHack.GapOverlap.Main.Settings
                 gapSides.Initial(value.LeftGaps);
                 overlapTaskCount.Value = value.Overlaps;
                 overlapSides.Initial(value.LeftOverlaps);
+                baselineTaskCount.Value = value.Baselines;
+                baselineSides.Initial(value.LeftBaselines);
             }
         }
 
@@ -208,6 +249,8 @@ namespace RasHack.GapOverlap.Main.Settings
             gapSides.Initial(defaults.TaskCount.LeftGaps);
             overlapTaskCount.Reset();
             overlapSides.Initial(defaults.TaskCount.LeftOverlaps);
+            baselineTaskCount.Reset();
+            baselineSides.Initial(defaults.TaskCount.LeftBaselines);
             return TaskCount;
         }
 
@@ -247,6 +290,8 @@ namespace RasHack.GapOverlap.Main.Settings
 
             simulator.Settings.OverlapTimes = OverlapTimes;
 
+            simulator.Settings.BaselineTimes = BaselineTimes;
+
             simulator.Settings.TaskCount = TaskCount;
 
             simulator.Settings.Store();
@@ -281,6 +326,10 @@ namespace RasHack.GapOverlap.Main.Settings
             overlapCentralStimulusTime.SetDefault(() => defaults.OverlapTimes.CentralTime);
             overlapBothStimuliTime.SetDefault(() => defaults.OverlapTimes.BothStimuli);
 
+            baselineStimulusTime.SetDefault(() => defaults.BaselineTimes.CentralTime);
+            baselineCentralOutStimulusInTime.SetDefault(() => defaults.BaselineTimes.CentralOutStimulusIn);
+            baselineStimulusTime.SetDefault(() => defaults.BaselineTimes.StimulusTime);
+
             gapTaskCount.SetDefault(() => defaults.TaskCount.Gaps);
             overlapTaskCount.SetDefault(() => defaults.TaskCount.Overlaps);
         }
@@ -312,6 +361,8 @@ namespace RasHack.GapOverlap.Main.Settings
             simulator.Settings.GapTimes = ResetGapTimes();
 
             simulator.Settings.OverlapTimes = ResetOverlapTimes();
+
+            simulator.Settings.BaselineTimes = ResetBaselineTimes();
 
             simulator.Settings.TaskCount = ResetTaskCount();
 
@@ -354,6 +405,8 @@ namespace RasHack.GapOverlap.Main.Settings
             GapTimes = simulator.Settings.GapTimes;
 
             OverlapTimes = simulator.Settings.OverlapTimes;
+
+            BaselineTimes = simulator.Settings.BaselineTimes;
 
             TaskCount = simulator.Settings.TaskCount;
         }
