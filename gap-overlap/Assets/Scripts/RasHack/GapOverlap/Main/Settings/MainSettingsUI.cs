@@ -256,6 +256,24 @@ namespace RasHack.GapOverlap.Main.Settings
 
         #endregion
 
+        #region Debug
+
+        [Header("Debug settings")] 
+        [SerializeField] private Toggle showPointer;
+
+        public bool ShowPointer
+        {
+            get => showPointer.isOn;
+            set => showPointer.isOn = value;
+        }
+
+        private bool ResetShowPointer()
+        {
+            showPointer.isOn = defaults.ShowPointer;
+            return defaults.ShowPointer;
+        }
+
+        #endregion
 
         #region API
 
@@ -266,40 +284,16 @@ namespace RasHack.GapOverlap.Main.Settings
             Display();
         }
 
-        public void Hide(bool dontStore = false)
-        {
-            panel.SetActive(false);
-            if (dontStore) return;
-
-            simulator.Settings.SoundVolume = SoundVolume;
-            simulator.Settings.FadeInOut = fadeInOut.Value;
-            simulator.Settings.RotationFactor = RotationFactor;
-
-            simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
-            simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
-            simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
-
-            simulator.Settings.ReferencePoint = ReferencePoint;
-            simulator.Settings.Background = Background;
-
-            simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Value;
-            simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Value;
-            simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Value;
-
-            simulator.Settings.GapTimes = GapTimes;
-
-            simulator.Settings.OverlapTimes = OverlapTimes;
-
-            simulator.Settings.BaselineTimes = BaselineTimes;
-
-            simulator.Settings.TaskCount = TaskCount;
-
-            simulator.Settings.Store();
-        }
-
         #endregion
 
         #region Unity methods
+        
+        public void OnClose()
+        {
+            Hide();
+            home.Show();
+            simulator.UpdateBackground();
+        }
 
         private void Start()
         {
@@ -335,13 +329,6 @@ namespace RasHack.GapOverlap.Main.Settings
             baselineTaskCount.SetDefault(() => defaults.TaskCount.Baselines);
         }
 
-        public void OnClose()
-        {
-            Hide();
-            home.Show();
-            simulator.UpdateBackground();
-        }
-
         public void OnReset()
         {
             simulator.Settings.SoundVolume = ResetSoundVolume();
@@ -367,24 +354,14 @@ namespace RasHack.GapOverlap.Main.Settings
 
             simulator.Settings.TaskCount = ResetTaskCount();
 
+            simulator.Settings.ShowPointer = ResetShowPointer();
+
             Display();
         }
 
         #endregion
 
-        #region Helpers
-
-        private static int ToMM(float cm)
-        {
-            return Mathf.RoundToInt(cm * 10f);
-        }
-
-        private static float ToCM(int mm)
-        {
-            return mm / 10f;
-        }
-
-        #endregion
+        #region Mapper functions
 
         private void Display()
         {
@@ -410,6 +387,57 @@ namespace RasHack.GapOverlap.Main.Settings
             BaselineTimes = simulator.Settings.BaselineTimes;
 
             TaskCount = simulator.Settings.TaskCount;
+
+            ShowPointer = simulator.Settings.ShowPointer;
         }
+        
+        public void Hide(bool dontStore = false)
+        {
+            panel.SetActive(false);
+            if (dontStore) return;
+
+            simulator.Settings.SoundVolume = SoundVolume;
+            simulator.Settings.FadeInOut = fadeInOut.Value;
+            simulator.Settings.RotationFactor = RotationFactor;
+
+            simulator.Settings.PauseBeforeTasks = pauseBeforeTasks.Value;
+            simulator.Settings.PauseBetweenTasks = pauseBetweenTasks.Value;
+            simulator.Settings.PauseAfterTasks = pauseAfterTasks.Value;
+
+            simulator.Settings.ReferencePoint = ReferencePoint;
+            simulator.Settings.Background = Background;
+
+            simulator.Settings.DistanceBetweenPeripheralStimuliInDegrees = distanceBetweenPeripheralStimuli.Value;
+            simulator.Settings.CentralStimulusSizeInDegrees = centralStimulusSize.Value;
+            simulator.Settings.PeripheralStimulusSizeInDegrees = peripheralStimulusSize.Value;
+
+            simulator.Settings.GapTimes = GapTimes;
+
+            simulator.Settings.OverlapTimes = OverlapTimes;
+
+            simulator.Settings.BaselineTimes = BaselineTimes;
+
+            simulator.Settings.TaskCount = TaskCount;
+
+            simulator.Settings.ShowPointer = ShowPointer;
+
+            simulator.Settings.Store();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private static int ToMM(float cm)
+        {
+            return Mathf.RoundToInt(cm * 10f);
+        }
+
+        private static float ToCM(int mm)
+        {
+            return mm / 10f;
+        }
+
+        #endregion
     }
 }

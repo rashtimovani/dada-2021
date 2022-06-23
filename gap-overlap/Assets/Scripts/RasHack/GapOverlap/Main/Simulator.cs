@@ -18,8 +18,6 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topLeft;
         [SerializeField] private SpriteRenderer topRight;
 
-        [SerializeField] private bool showPointer;
-
         [SerializeField] private MainSettings settings;
 
         #endregion
@@ -53,6 +51,8 @@ namespace RasHack.GapOverlap.Main
         public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
 
+        private bool ShowPointer => settings.ShowPointer;
+
         public void ReportTaskFinished(Task.Task task, float? measurement)
         {
             if (task != currentTask)
@@ -72,11 +72,11 @@ namespace RasHack.GapOverlap.Main
             background.SetBackground(settings.Background);
         }
 
-        public void StartTests(string name)
+        public void StartTests(string usingName)
         {
-            if (lastEnteredName != name)
+            if (lastEnteredName != usingName)
             {
-                lastEnteredName = name;
+                lastEnteredName = usingName;
                 testId = 1;
             }
 
@@ -86,19 +86,19 @@ namespace RasHack.GapOverlap.Main
             IsActive = true;
 
             string runName;
-            if (string.IsNullOrWhiteSpace(name)) runName = $"Run {testId}";
-            else if (testId > 1) runName = $"{name} - run {testId}";
-            else runName = name;
+            if (string.IsNullOrWhiteSpace(usingName)) runName = $"Run {testId}";
+            else if (testId > 1) runName = $"{usingName} - run {testId}";
+            else runName = usingName;
             testId++;
 
             UpdateBackground();
 
-            settings.LastUsedName = name;
+            settings.LastUsedName = usingName;
             settings.Store();
 
             FlushToDisk();
             AudioListener.volume = settings.SoundVolume;
-            
+
             results.StartTest(runName);
             waitingTime = settings.PauseBeforeTasks;
         }
@@ -114,8 +114,8 @@ namespace RasHack.GapOverlap.Main
 
         private void Awake()
         {
-            var settings = MainSettings.Load();
-            if (settings != null) this.settings = settings;
+            var loadedSettings = MainSettings.Load();
+            if (loadedSettings != null) settings = loadedSettings;
         }
 
         private void Start()
@@ -161,12 +161,12 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdateDebugVisibility()
         {
-            pointer.ShowPointer(showPointer);
+            pointer.ShowPointer(settings.ShowPointer);
 
-            bottomLeft.enabled = showPointer;
-            bottomRight.enabled = showPointer;
-            topLeft.enabled = showPointer;
-            topRight.enabled = showPointer;
+            bottomLeft.enabled = ShowPointer;
+            bottomRight.enabled = ShowPointer;
+            topLeft.enabled = ShowPointer;
+            topRight.enabled = ShowPointer;
         }
 
         private void UpdatePause()
@@ -175,10 +175,10 @@ namespace RasHack.GapOverlap.Main
             waitingTime -= Time.deltaTime;
             if (waitingTime > 0f) return;
             waitingTime = null;
-            newTask();
+            NewTask();
         }
 
-        private void newTask()
+        private void NewTask()
         {
             currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)

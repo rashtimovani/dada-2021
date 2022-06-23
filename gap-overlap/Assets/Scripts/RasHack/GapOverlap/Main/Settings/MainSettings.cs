@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RasHack.GapOverlap.Main.Settings
 {
@@ -17,6 +18,8 @@ namespace RasHack.GapOverlap.Main.Settings
         public float FadeInOut = 0.1f;
         public int RotationFactor = 4;
 
+        [Header("Debug")] public bool ShowPointer;
+        
         [Header("Pauses")] public float PauseBeforeTasks = 1f;
         public float PauseBetweenTasks = 2.7f;
         public float PauseAfterTasks = 1f;
