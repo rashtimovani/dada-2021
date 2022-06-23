@@ -17,15 +17,17 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Simulator owner;
         protected StimuliType stimulusType;
-        protected NextArea area;
+        private NextArea area;
 
         #endregion
 
         #region API
 
-        protected abstract TaskType TaskType { get; }
+        public abstract TaskType TaskType { get; }
 
-        protected Scaler Scaler => owner.Scaler;
+        public StimuliType StimulusType => stimulusType;
+
+        public string Side => area.Side;
 
         public float FadeInOut => owner.Settings.FadeInOut;
 

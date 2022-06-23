@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using RasHack.GapOverlap.Main.Stimuli;
+using RasHack.GapOverlap.Main.Task;
+using UnityEditor;
 
 namespace RasHack.GapOverlap.Main.Result
 {
     public struct TestMeasurement
     {
-        public string TestName;
+        public TaskType TaskType;
+        public StimuliType StimuliType;
+        public string Side;
         public float? ResponseTime;
     }
 
     public struct TestRun
     {
         public string Name;
+        public string Id;
         public List<TestMeasurement> Measurements;
     }
 
@@ -22,8 +28,8 @@ namespace RasHack.GapOverlap.Main.Result
         #region Fields
 
         private string filename;
-        private readonly List<TestRun> Results = new List<TestRun>();
-        private TestRun? ActiveRun;
+        private readonly List<TestRun> results = new List<TestRun>();
+        private TestRun? activeRun;
 
         #endregion
 
@@ -33,42 +39,45 @@ namespace RasHack.GapOverlap.Main.Result
         {
             filename ??= $"{DateTime.Now:yyyy-MM-dd_HH-mm}";
 
-            ActiveRun = new TestRun
+            activeRun = new TestRun
             {
                 Name = name,
+                Id = GUID.Generate().ToString(),
                 Measurements = new List<TestMeasurement>()
             };
         }
 
         public void EndActiveTest()
         {
-            if (!ActiveRun.HasValue) return;
+            if (!activeRun.HasValue) return;
 
-            Results.Add(ActiveRun.Value);
-            ActiveRun = null;
+            results.Add(activeRun.Value);
+            activeRun = null;
 
             FlushToDisk();
         }
 
         public void AbortActiveTest()
         {
-            ActiveRun = null;
-            
+            activeRun = null;
+
             FlushToDisk();
         }
 
-        public void AttachMeasurement(string testName, float? responseTime)
+        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side, float? responseTime)
         {
-            ActiveRun?.Measurements.Add(new TestMeasurement
+            activeRun?.Measurements.Add(new TestMeasurement
             {
-                TestName = testName,
+                TaskType = taskType,
+                StimuliType = stimuliType,
+                Side = side,
                 ResponseTime = responseTime
             });
         }
 
         public void FlushToDisk()
         {
-            if (Results.Count == 0) return;
+            if (results.Count == 0) return;
             var fullFilename = filename + ".csv";
 
             if (!File.Exists(@fullFilename))
@@ -78,16 +87,22 @@ namespace RasHack.GapOverlap.Main.Result
                 File.WriteAllLines(@fullFilename, headerLines);
             }
 
-            var lines = new string[Results.Count];
-
-            for (var i = 0; i < Results.Count; i++)
+            var totalLines = 0;
+            for (var i = 0; i < results.Count; i++)
             {
-                lines[i] = ResultsCsv(i);
+                totalLines += results[i].Measurements.Count;
+            }
+            var lines = new string[totalLines];
+
+            var nextLineIndex = 0;
+            for (var i = 0; i < results.Count; i++)
+            {
+                nextLineIndex =  ResultsCsv(results[i], lines, nextLineIndex);
             }
 
             File.AppendAllLines(@fullFilename, lines);
 
-            Results.Clear();
+            results.Clear();
         }
 
         #endregion
@@ -98,28 +113,35 @@ namespace RasHack.GapOverlap.Main.Result
         {
             var header = new StringBuilder(Quote("name"));
 
-            for (var i = 0; i < Results[0].Measurements.Count; i++)
-            {
-                header.Append(",").Append(Quote(Results[0].Measurements[i].TestName));
-            }
+            header.Append(",").Append(Quote("test_id"));
+            header.Append(",").Append(Quote("task_type"));
+            header.Append(",").Append(Quote("stimuli_type"));
+            header.Append(",").Append(Quote("side"));
+            header.Append(",").Append(Quote("reaction_time"));
 
             return header.ToString();
         }
 
 
-        private string ResultsCsv(int index)
+        private static int ResultsCsv(TestRun results, IList<string> destination, int index)
         {
-            var results = Results[index];
-            var csv = new StringBuilder(Quote(results.Name));
-
-            for (var i = 0; i < Results[0].Measurements.Count; i++)
+            for (var i = 0; i < results.Measurements.Count; i++)
             {
-                var current = results.Measurements[i].ResponseTime;
-                var formatted = current.HasValue ? current.Value.ToString("0.000") : "N/A";
-                csv.Append(",").Append(Quote(formatted));
-            }
+                var csv = new StringBuilder(Quote(results.Name)).Append(",").Append(Quote(results.Id));
 
-            return csv.ToString();
+                var measurement = results.Measurements[i];
+                csv.Append(",").Append(Quote(measurement.TaskType.ToString()));
+                csv.Append(",").Append(Quote(measurement.StimuliType.ToString()));
+                csv.Append(",").Append(Quote(measurement.Side));
+
+                var current = measurement.ResponseTime;
+                var formatted = current.HasValue ? Quote(current.Value.ToString("0.000")) : "null";
+                csv.Append(",").Append(formatted);
+
+                destination[index + i] = csv.ToString();
+            }
+            
+            return index + results.Measurements.Count;
         }
 
         private static string Quote(string text)

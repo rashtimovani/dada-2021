@@ -33,7 +33,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
-        protected override TaskType TaskType => TaskType.Baseline;
+        public override TaskType TaskType => TaskType.Baseline;
 
         private BaselineTimes Times => owner.Settings?.BaselineTimes ?? times;
 

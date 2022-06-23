@@ -35,10 +35,8 @@ namespace RasHack.GapOverlap.Main
         private StimuliArea area;
         private StimuliType nextStimulus;
 
-        private int testId;
         private float? waitingTime;
         private Task.Task currentTask;
-        private string lastEnteredName;
 
         #endregion
 
@@ -62,7 +60,8 @@ namespace RasHack.GapOverlap.Main
                 return;
             }
 
-            results.AttachMeasurement(task.name, measurement);
+
+            results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, measurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
             waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : settings.PauseAfterTasks;
@@ -75,19 +74,12 @@ namespace RasHack.GapOverlap.Main
 
         public void StartTests(string usingName)
         {
-            if (lastEnteredName != usingName)
-            {
-                lastEnteredName = usingName;
-                testId = 1;
-            }
-
             tasks.Reset(settings.TaskCount);
             area.Reset(settings.TaskCount);
             nextStimulus = StimuliTypeExtensions.Next();
             IsActive = true;
 
             var runName = string.IsNullOrWhiteSpace(usingName) ? $"run-{GUID.Generate()}" : usingName;
-            testId++;
 
             UpdateBackground();
 

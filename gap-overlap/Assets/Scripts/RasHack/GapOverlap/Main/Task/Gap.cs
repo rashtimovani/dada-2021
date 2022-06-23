@@ -31,7 +31,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
-        protected override TaskType TaskType => TaskType.Gap;
+        public override TaskType TaskType => TaskType.Gap;
 
         private GapTimes Times => owner.Settings?.GapTimes ?? times;
 
