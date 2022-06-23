@@ -32,11 +32,10 @@ namespace RasHack.GapOverlap.Main.Inputs
         private void Update()
         {
             var position = touch.Position ?? mouse.Position;
-            if (position.HasValue)
-            {
-                transform.position = simulator.Scaler.Point(position.Value);
-                spriteRenderer.transform.position = simulator.DebugScaler.Point(position.Value);
-            }
+            if (!position.HasValue) return;
+
+            transform.position = simulator.Scaler.Point(position.Value);
+            spriteRenderer.transform.position = simulator.DebugScaler.Point(position.Value);
         }
 
         #endregion
