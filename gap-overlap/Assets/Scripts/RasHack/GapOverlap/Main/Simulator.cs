@@ -79,7 +79,7 @@ namespace RasHack.GapOverlap.Main
             nextStimulus = StimuliTypeExtensions.Next();
             IsActive = true;
 
-            var runName = string.IsNullOrWhiteSpace(usingName) ? $"run-{GUID.Generate()}" : usingName;
+            var runName = string.IsNullOrWhiteSpace(usingName) ? $"{GUID.Generate()}" : usingName;
 
             UpdateBackground();
 

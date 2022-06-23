@@ -65,6 +65,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -271,6 +272,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 218156756260876306}
     m_Modifications:
+    - target: {fileID: 643878395156151556, guid: 243aff27c1835dc4fbb315f1a19cb7ad,
+        type: 3}
+      propertyPath: m_ContentType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 643878395156151556, guid: 243aff27c1835dc4fbb315f1a19cb7ad,
+        type: 3}
+      propertyPath: m_KeyboardType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 643878395156151556, guid: 243aff27c1835dc4fbb315f1a19cb7ad,
+        type: 3}
+      propertyPath: m_CharacterValidation
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307411811151381656, guid: 243aff27c1835dc4fbb315f1a19cb7ad,
+        type: 3}
+      propertyPath: m_Text
+      value: Subject code...
+      objectReference: {fileID: 0}
     - target: {fileID: 6196816160841169492, guid: 243aff27c1835dc4fbb315f1a19cb7ad,
         type: 3}
       propertyPath: m_Pivot.x
