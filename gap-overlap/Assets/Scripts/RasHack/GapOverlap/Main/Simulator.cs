@@ -3,6 +3,7 @@ using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
+using UnityEditor;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -85,10 +86,7 @@ namespace RasHack.GapOverlap.Main
             nextStimulus = StimuliTypeExtensions.Next();
             IsActive = true;
 
-            string runName;
-            if (string.IsNullOrWhiteSpace(usingName)) runName = $"Run {testId}";
-            else if (testId > 1) runName = $"{usingName} - run {testId}";
-            else runName = usingName;
+            var runName = string.IsNullOrWhiteSpace(usingName) ? $"run-{GUID.Generate()}" : usingName;
             testId++;
 
             UpdateBackground();
@@ -183,6 +181,7 @@ namespace RasHack.GapOverlap.Main
             currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)
             {
+                results.EndActiveTest();
                 Debug.Log("All tasks finished!");
                 IsActive = false;
                 return;
@@ -204,6 +203,7 @@ namespace RasHack.GapOverlap.Main
                     currentTask = null;
                 }
 
+                results.AbortActiveTest();
                 IsActive = false;
                 waitingTime = 0.01f;
             }

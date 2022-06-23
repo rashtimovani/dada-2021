@@ -62,6 +62,7 @@ namespace RasHack.GapOverlap.Common
 
         public void SetOptions(params RandomOption<T>[] options)
         {
+            initial.Clear();
             foreach (var option in options)
             {
                 initial.Add(new RandomOption<T>(option.Option, option.Count));

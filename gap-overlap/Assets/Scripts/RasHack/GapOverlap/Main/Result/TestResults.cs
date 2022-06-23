@@ -23,6 +23,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         private string filename;
         private readonly List<TestRun> Results = new List<TestRun>();
+        private TestRun? ActiveRun;
 
         #endregion
 
@@ -30,21 +31,35 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void StartTest(string name)
         {
-            if (filename == null)
-            {
-                filename = $"{DateTime.Now:yyyy-MM-dd_HH-mm}";
-            }
+            filename ??= $"{DateTime.Now:yyyy-MM-dd_HH-mm}";
 
-            Results.Add(new TestRun
+            ActiveRun = new TestRun
             {
                 Name = name,
                 Measurements = new List<TestMeasurement>()
-            });
+            };
+        }
+
+        public void EndActiveTest()
+        {
+            if (!ActiveRun.HasValue) return;
+
+            Results.Add(ActiveRun.Value);
+            ActiveRun = null;
+
+            FlushToDisk();
+        }
+
+        public void AbortActiveTest()
+        {
+            ActiveRun = null;
+            
+            FlushToDisk();
         }
 
         public void AttachMeasurement(string testName, float? responseTime)
         {
-            Results[Results.Count - 1].Measurements.Add(new TestMeasurement
+            ActiveRun?.Measurements.Add(new TestMeasurement
             {
                 TestName = testName,
                 ResponseTime = responseTime
@@ -54,18 +69,24 @@ namespace RasHack.GapOverlap.Main.Result
         public void FlushToDisk()
         {
             if (Results.Count == 0) return;
+            var fullFilename = filename + ".csv";
 
-            var lines = new string[Results.Count + 1];
-            lines[0] = Header();
+            if (!File.Exists(@fullFilename))
+            {
+                var headerLines = new string[1];
+                headerLines[0] = Header();
+                File.WriteAllLines(@fullFilename, headerLines);
+            }
+
+            var lines = new string[Results.Count];
 
             for (var i = 0; i < Results.Count; i++)
             {
-                lines[i + 1] = ResultsCsv(i);
+                lines[i] = ResultsCsv(i);
             }
 
-            var fullFilename = filename + ".csv";
-            File.WriteAllLines(@fullFilename, lines);
-            filename = null;
+            File.AppendAllLines(@fullFilename, lines);
+
             Results.Clear();
         }
 
