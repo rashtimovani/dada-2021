@@ -4,6 +4,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class CentralStimulus : ScalableStimulus
     {
+        #region Detection
+
+        [SerializeField] private DetectableArea detectable;
+
+        #endregion
+        
         #region Provided fields from simulator
 
         private Task.Task owner;
@@ -15,6 +21,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime)
         {
+            detectable.RegisterOnDetect(owner.Owner, pointer => { });
+            
             this.owner = owner;
             this.lifetime = lifetime;
 
@@ -23,6 +31,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
         {
+            detectable.RegisterOnDetect(owner.Owner, pointer => { });
+            
             this.owner = owner;
             this.lifetime = lifetime;
 
