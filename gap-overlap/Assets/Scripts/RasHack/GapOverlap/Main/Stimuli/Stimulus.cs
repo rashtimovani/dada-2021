@@ -5,6 +5,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class Stimulus : ScalableStimulus
     {
+        #region Detection
+
+        [SerializeField] private DetectableArea detectable;
+
+        #endregion
+        
         #region Sprites
 
         [SerializeField] private Sprite bee;
@@ -31,7 +37,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private SpriteRenderer sprite;
         private float? spentLifetime;
-        private bool wasFocusedOn;
 
         #endregion
 
@@ -52,6 +57,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         
         public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn) 
         {
+            detectable.RegisterOnDetect(owner.Owner, OnPointerDetection);
+            
             this.type = type;
             this.owner = owner;
 
@@ -108,12 +115,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime = null;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnPointerDetection(Pointer pointer)
         {
-            if (wasFocusedOn || !spentLifetime.HasValue) return;
-            var pointer = other.gameObject.GetComponent<Pointer>();
-            if (pointer == null) return;
-            wasFocusedOn = true;
             owner.ReportFocusedOn(this, spentLifetime.Value);
         }
 

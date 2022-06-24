@@ -33,7 +33,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        public void Scale(Vector3 desiredSize)
+        public virtual void Scale(Vector3 desiredSize)
         {
             var size = Size;
             var desiredFixedZ = new Vector3(desiredSize.x, desiredSize.y, 1);
