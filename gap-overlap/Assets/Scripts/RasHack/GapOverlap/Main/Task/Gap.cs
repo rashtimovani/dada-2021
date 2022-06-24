@@ -24,6 +24,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private float? waitingTime;
         private float? measurement;
+        private float? centralMeasurement;
         private CentralStimulus centralStimulus;
         private Stimulus activeStimulus;
 
@@ -46,6 +47,18 @@ namespace RasHack.GapOverlap.Main.Task
             measurement = after;
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
+        
+        public override void ReportFocusedOnCentral(CentralStimulus stimulus, float after)
+        {
+            if (stimulus != centralStimulus)
+            {
+                Debug.LogError($"{stimulus} is not the central stimulus, don't care if it reported focused!");
+                return;
+            }
+
+            centralMeasurement = after;
+            Debug.Log($"{stimulus} reported focused on central after {after:0.000}s!");
+        }
 
         public override void ReportStimulusDied(Stimulus active)
         {
@@ -58,7 +71,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{activeStimulus} has finished");
             Destroy(activeStimulus.gameObject);
             activeStimulus = null;
-            owner.ReportTaskFinished(this, measurement);
+            owner.ReportTaskFinished(this, measurement, centralMeasurement);
             Destroy(gameObject);
         }
 

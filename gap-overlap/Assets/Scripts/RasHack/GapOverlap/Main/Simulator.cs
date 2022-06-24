@@ -52,7 +52,7 @@ namespace RasHack.GapOverlap.Main
 
         private bool ShowPointer => settings.ShowPointer;
 
-        public void ReportTaskFinished(Task.Task task, float? measurement)
+        public void ReportTaskFinished(Task.Task task, float? measurement, float? centralMeasurement)
         {
             if (task != currentTask)
             {
@@ -61,7 +61,7 @@ namespace RasHack.GapOverlap.Main
             }
 
 
-            results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, measurement);
+            results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, measurement, centralMeasurement);
             Debug.Log($"{currentTask} has finished");
             currentTask = null;
             waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : settings.PauseAfterTasks;

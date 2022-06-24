@@ -14,6 +14,7 @@ namespace RasHack.GapOverlap.Main.Result
         public StimuliType StimuliType;
         public string Side;
         public float? ResponseTime;
+        public float? CentralResponseTime;
     }
 
     public struct TestRun
@@ -64,14 +65,16 @@ namespace RasHack.GapOverlap.Main.Result
             FlushToDisk();
         }
 
-        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side, float? responseTime)
+        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side, float? responseTime,
+            float? centralResponseTime)
         {
             activeRun?.Measurements.Add(new TestMeasurement
             {
                 TaskType = taskType,
                 StimuliType = stimuliType,
                 Side = side,
-                ResponseTime = responseTime
+                ResponseTime = responseTime,
+                CentralResponseTime = centralResponseTime
             });
         }
 
@@ -92,12 +95,13 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 totalLines += results[i].Measurements.Count;
             }
+
             var lines = new string[totalLines];
 
             var nextLineIndex = 0;
             for (var i = 0; i < results.Count; i++)
             {
-                nextLineIndex =  ResultsCsv(results[i], lines, nextLineIndex);
+                nextLineIndex = ResultsCsv(results[i], lines, nextLineIndex);
             }
 
             File.AppendAllLines(@fullFilename, lines);
@@ -118,6 +122,7 @@ namespace RasHack.GapOverlap.Main.Result
             header.Append(",").Append(Quote("stimuli_type"));
             header.Append(",").Append(Quote("side"));
             header.Append(",").Append(Quote("reaction_time"));
+            header.Append(",").Append(Quote("central_noticed_time"));
 
             return header.ToString();
         }
@@ -138,9 +143,13 @@ namespace RasHack.GapOverlap.Main.Result
                 var formatted = current.HasValue ? Quote(current.Value.ToString("0.000")) : "null";
                 csv.Append(",").Append(formatted);
 
+                var central = measurement.CentralResponseTime;
+                var centralFormatted = central.HasValue ? Quote(central.Value.ToString("0.000")) : "null";
+                csv.Append(",").Append(centralFormatted);
+                
                 destination[index + i] = csv.ToString();
             }
-            
+
             return index + results.Measurements.Count;
         }
 

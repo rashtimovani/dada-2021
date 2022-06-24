@@ -46,6 +46,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         public abstract void ReportFocusedOn(Stimulus stimulus, float after);
 
+        public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, float after);
+
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 
         public abstract void ReportStimulusDied(Stimulus active);

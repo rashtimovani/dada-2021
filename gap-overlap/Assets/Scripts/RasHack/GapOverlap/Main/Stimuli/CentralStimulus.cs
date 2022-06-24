@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RasHack.GapOverlap.Main.Inputs;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -9,7 +10,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private DetectableArea detectable;
 
         #endregion
-        
+
         #region Provided fields from simulator
 
         private Task.Task owner;
@@ -21,8 +22,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime)
         {
-            detectable.RegisterOnDetect(owner.Owner, pointer => { });
-            
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
+
             this.owner = owner;
             this.lifetime = lifetime;
 
@@ -31,8 +32,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
         {
-            detectable.RegisterOnDetect(owner.Owner, pointer => { });
-            
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
+
             this.owner = owner;
             this.lifetime = lifetime;
 
@@ -46,6 +47,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Start()
         {
             GetComponent<AudioSource>().Play();
+        }
+
+        private void OnCentralPointerDetection(Pointer pointer)
+        {
+            owner.ReportFocusedOnCentral(this, lifetime.Value);
         }
 
         private void Update()
