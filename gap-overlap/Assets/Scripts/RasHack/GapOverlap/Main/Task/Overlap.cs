@@ -27,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Task
         private float? measurement;
         private float? centralMeasurement;
         private CentralStimulus centralStimulus;
-        private Stimulus activeStimulus;
+        private PeripheralStimulus activeStimulus;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private OverlapTimes Times => owner.Settings?.OverlapTimes ?? times;
 
-        public override void ReportFocusedOn(Stimulus stimulus, float after)
+        public override void ReportFocusedOn(PeripheralStimulus stimulus, float after)
         {
             if (stimulus != activeStimulus)
             {
@@ -69,7 +69,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{stimulus} reported focused on central after {after:0.000}s!");
         }
 
-        public override void ReportStimulusDied(Stimulus active)
+        public override void ReportStimulusDied(PeripheralStimulus active)
         {
             if (active != activeStimulus)
             {

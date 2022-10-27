@@ -39,7 +39,7 @@ namespace RasHack.GapOverlap.Main.Settings
             { Gaps = 18, LeftGaps = 9, Overlaps = 18, LeftOverlaps = 9, Baselines = 18, LeftBaselines = 9 };
 
         [Header("Task times")] public GapTimes GapTimes = new()
-            { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f };
+            { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         public OverlapTimes OverlapTimes = new() { CentralTime = 5.0f, BothStimuli = 5.0f, ShortenOnFocusTime = 0.2f };
 

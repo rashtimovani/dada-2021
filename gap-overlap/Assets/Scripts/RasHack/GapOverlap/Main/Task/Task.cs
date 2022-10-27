@@ -44,13 +44,13 @@ namespace RasHack.GapOverlap.Main.Task
             gameObject.name = gameObject.name + "_" + area.Side;
         }
 
-        public abstract void ReportFocusedOn(Stimulus stimulus, float after);
+        public abstract void ReportFocusedOn(PeripheralStimulus stimulus, float after);
 
         public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, float after);
 
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 
-        public abstract void ReportStimulusDied(Stimulus active);
+        public abstract void ReportStimulusDied(PeripheralStimulus active);
 
         #endregion
 
@@ -78,13 +78,13 @@ namespace RasHack.GapOverlap.Main.Task
             return stimulus;
         }
 
-        protected Stimulus NewStimulus()
+        protected PeripheralStimulus NewStimulus()
         {
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
             newOne.name = name + "_" + stimulusType + "_" + area.Side + "_stimulus";
 
-            var stimulus = newOne.GetComponent<Stimulus>();
+            var stimulus = newOne.GetComponent<PeripheralStimulus>();
             var sizeInDegrees = owner.Settings.PeripheralStimulusSizeInDegrees;
             var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
             stimulus.Scale(desiredSize);

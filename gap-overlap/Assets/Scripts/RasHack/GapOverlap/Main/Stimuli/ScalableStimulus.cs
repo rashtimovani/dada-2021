@@ -44,7 +44,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
                 originalScale.z * scaleChange.z);
         }
 
-        public void ShortenAnimation(float shorterLifetime, bool keepIdling)
+        public virtual float ShortenAnimation(float shorterLifetime, bool keepIdling)
         {
             switch (currentAnimation)
             {
@@ -54,10 +54,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     if (!keepIdling)
                     {
                         idleDuration = 0;
-                        fadeOut = Mathf.Min(fadeOut, remainingFadeIn);
+                        fadeOut = Mathf.Min(fadeOut, Mathf.Max(0f, shorterLifetime - remainingFadeIn));
                     }
 
-                    break;
+                    return remainingFadeIn + fadeOut;
                 }
                 case Idle:
                     if (!keepIdling)
@@ -66,11 +66,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
                         idleDuration = currentAnimation.ShortenAnimation(Mathf.Max(0f, shorterLifetime - fadeOut));
                     }
 
-                    break;
+                    return fadeOut + idleDuration;
                 case FadeOut:
                     if (!keepIdling) fadeOut = currentAnimation.ShortenAnimation(shorterLifetime);
-                    break;
+                    return fadeOut;
             }
+
+            return shorterLifetime;
         }
 
         #endregion

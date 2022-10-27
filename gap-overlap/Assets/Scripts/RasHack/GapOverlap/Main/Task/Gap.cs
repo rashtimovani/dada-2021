@@ -10,13 +10,15 @@ namespace RasHack.GapOverlap.Main.Task
         public float CentralTime;
         public float PauseTime;
         public float StimulusTime;
+        public float ShortenOnFocusTime;
     }
 
     public class Gap : Task
     {
         #region Serialized fields
 
-        [SerializeField] private GapTimes times = new() { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f };
+        [SerializeField] private GapTimes times = new()
+            { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         #endregion
 
@@ -26,7 +28,7 @@ namespace RasHack.GapOverlap.Main.Task
         private float? measurement;
         private float? centralMeasurement;
         private CentralStimulus centralStimulus;
-        private Stimulus activeStimulus;
+        private PeripheralStimulus activeStimulus;
 
         #endregion
 
@@ -36,7 +38,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private GapTimes Times => owner.Settings?.GapTimes ?? times;
 
-        public override void ReportFocusedOn(Stimulus stimulus, float after)
+        public override void ReportFocusedOn(PeripheralStimulus stimulus, float after)
         {
             if (stimulus != activeStimulus)
             {
@@ -45,9 +47,10 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             measurement = after;
+            stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
-        
+
         public override void ReportFocusedOnCentral(CentralStimulus stimulus, float after)
         {
             if (stimulus != centralStimulus)
@@ -57,10 +60,11 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             centralMeasurement = after;
+            stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
             Debug.Log($"{stimulus} reported focused on central after {after:0.000}s!");
         }
 
-        public override void ReportStimulusDied(Stimulus active)
+        public override void ReportStimulusDied(PeripheralStimulus active)
         {
             if (active != activeStimulus)
             {

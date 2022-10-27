@@ -1,7 +1,6 @@
 ﻿using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main.Settings
@@ -121,14 +120,16 @@ namespace RasHack.GapOverlap.Main.Settings
         [SerializeField] private FloatInput gapPeripheralStimulusTime;
         [SerializeField] private IntInput gapTaskCount;
         [SerializeField] private AreaRatio gapSides;
+        [SerializeField] private FloatInput gapShortenOnFocusTime;
 
         private GapTimes GapTimes
         {
-            get => new GapTimes
+            get => new()
             {
                 CentralTime = gapCentralStimulusTime.Value,
                 PauseTime = gapPauseBetweenStimuli.Value,
-                StimulusTime = gapPeripheralStimulusTime.Value
+                StimulusTime = gapPeripheralStimulusTime.Value,
+                ShortenOnFocusTime = gapShortenOnFocusTime.Value
             };
 
             set
@@ -136,6 +137,7 @@ namespace RasHack.GapOverlap.Main.Settings
                 gapCentralStimulusTime.Value = value.CentralTime;
                 gapPauseBetweenStimuli.Value = value.PauseTime;
                 gapPeripheralStimulusTime.Value = value.StimulusTime;
+                gapShortenOnFocusTime.Value = value.ShortenOnFocusTime;
             }
         }
 
@@ -144,6 +146,7 @@ namespace RasHack.GapOverlap.Main.Settings
             gapCentralStimulusTime.Reset();
             gapPauseBetweenStimuli.Reset();
             gapPeripheralStimulusTime.Reset();
+            gapShortenOnFocusTime.Reset();
             return GapTimes;
         }
 
@@ -161,7 +164,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
         private OverlapTimes OverlapTimes
         {
-            get => new ()
+            get => new()
             {
                 CentralTime = overlapCentralStimulusTime.Value,
                 BothStimuli = overlapBothStimuliTime.Value,
@@ -263,8 +266,8 @@ namespace RasHack.GapOverlap.Main.Settings
 
         #region Debug
 
-        [Header("Debug settings")] 
-        [SerializeField] private Toggle showPointer;
+        [Header("Debug settings")] [SerializeField]
+        private Toggle showPointer;
 
         public bool ShowPointer
         {
@@ -292,7 +295,7 @@ namespace RasHack.GapOverlap.Main.Settings
         #endregion
 
         #region Unity methods
-        
+
         public void OnClose()
         {
             Hide();
@@ -321,6 +324,7 @@ namespace RasHack.GapOverlap.Main.Settings
             gapCentralStimulusTime.SetDefault(() => defaults.GapTimes.CentralTime);
             gapPauseBetweenStimuli.SetDefault(() => defaults.GapTimes.PauseTime);
             gapPeripheralStimulusTime.SetDefault(() => defaults.GapTimes.StimulusTime);
+            gapShortenOnFocusTime.SetDefault(() => defaults.GapTimes.ShortenOnFocusTime);
 
             overlapCentralStimulusTime.SetDefault(() => defaults.OverlapTimes.CentralTime);
             overlapBothStimuliTime.SetDefault(() => defaults.OverlapTimes.BothStimuli);
@@ -396,7 +400,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
             ShowPointer = simulator.Settings.ShowPointer;
         }
-        
+
         public void Hide(bool dontStore = false)
         {
             panel.SetActive(false);

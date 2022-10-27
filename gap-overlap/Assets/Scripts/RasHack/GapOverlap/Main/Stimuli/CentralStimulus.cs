@@ -11,10 +11,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #endregion
 
+        #region Internal fields
+
+        private float? spentLifetime;
+
+        #endregion
+
         #region Provided fields from simulator
 
         private Task.Task owner;
-        private float? lifetime;
+        private float lifetime;
 
         #endregion
 
@@ -26,6 +32,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
             this.owner = owner;
             this.lifetime = lifetime;
+            spentLifetime = 0;
 
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
@@ -40,6 +47,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
             DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);
         }
 
+        public override float ShortenAnimation(float shorterLifetime, bool keepIdling)
+        {
+            var newLifetime = base.ShortenAnimation(shorterLifetime, keepIdling);
+            lifetime = newLifetime;
+            return lifetime;
+        }
+
         #endregion
 
         #region Mono methods
@@ -51,17 +65,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnCentralPointerDetection(Pointer pointer)
         {
-            owner.ReportFocusedOnCentral(this, lifetime.Value);
+            owner.ReportFocusedOnCentral(this, spentLifetime.Value);
         }
 
         private void Update()
         {
-            if (!lifetime.HasValue) return;
+            if (!spentLifetime.HasValue) return;
 
-            lifetime -= Time.deltaTime;
-            if (lifetime > 0f) return;
+            spentLifetime += Time.deltaTime;
+            if (spentLifetime < lifetime) return;
 
-            lifetime = null;
+            spentLifetime = null;
             owner.ReportCentralStimulusDied(this);
         }
 

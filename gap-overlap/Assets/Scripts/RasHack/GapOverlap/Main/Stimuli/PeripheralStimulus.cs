@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
-    public class Stimulus : ScalableStimulus
+    public class PeripheralStimulus : ScalableStimulus
     {
         #region Detection
 
         [SerializeField] private DetectableArea detectable;
 
         #endregion
-        
+
         #region Sprites
 
         [SerializeField] private Sprite bee;
@@ -54,11 +54,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             StartSimulating(type, owner, lifetime, owner.FadeInOut);
         }
-        
-        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn) 
+
+        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn)
         {
             detectable.RegisterOnDetect(owner.Owner, OnPointerDetection);
-            
+
             this.type = type;
             this.owner = owner;
 
@@ -67,6 +67,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (sprite != null) SetUpSprite();
 
             DoFadeIn(lifetime, fadeIn, owner.FadeInOut, owner.RotationFactor);
+        }
+
+        public override float ShortenAnimation(float shorterLifetime, bool keepIdling)
+        {
+            var newLifetime = base.ShortenAnimation(shorterLifetime, keepIdling);
+            lifetime = newLifetime;
+            return lifetime;
         }
 
         #endregion
