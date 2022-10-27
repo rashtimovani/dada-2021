@@ -84,7 +84,6 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             Debug.Log($"Only {centralStimulus} has finished");
-            StartWithStimulus();
         }
 
         #endregion
@@ -93,7 +92,17 @@ namespace RasHack.GapOverlap.Main.Task
 
         private void Start()
         {
+            waitingTime = times.CentralTime;
             StartWithCentralStimulus();
+        }
+
+        private void Update()
+        {
+            if (!waitingTime.HasValue) return;
+            waitingTime -= Time.deltaTime;
+            if (waitingTime > 0f) return;
+            waitingTime = null;
+            StartWithStimulus();
         }
 
         protected override void OnDestroy()
