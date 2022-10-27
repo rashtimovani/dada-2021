@@ -15,7 +15,7 @@ namespace RasHack.GapOverlap.Main.Task
     {
         #region Serialized fields
 
-        [SerializeField] private OverlapTimes times = new OverlapTimes { CentralTime = 1f, BothStimuli = 2.5f };
+        [SerializeField] private OverlapTimes times = new() { CentralTime = 5.0f, BothStimuli = 5.0f };
 
         #endregion
 

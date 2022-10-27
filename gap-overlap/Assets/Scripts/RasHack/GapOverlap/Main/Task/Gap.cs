@@ -16,7 +16,7 @@ namespace RasHack.GapOverlap.Main.Task
     {
         #region Serialized fields
 
-        [SerializeField] private GapTimes times = new GapTimes {CentralTime = 1f, PauseTime = 0.5f, StimulusTime = 2f};
+        [SerializeField] private GapTimes times = new() { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f };
 
         #endregion
 
