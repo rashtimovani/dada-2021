@@ -30,7 +30,7 @@
     },
     "OverlapTimes": {
         "CentralTime": 5.0,
-        "BothStimuli": 2.0
+        "BothStimuli": 5.0
     },
     "BaselineTimes": {
         "CentralTime": 5.0,
