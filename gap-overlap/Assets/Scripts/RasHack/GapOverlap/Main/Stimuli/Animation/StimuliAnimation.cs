@@ -17,12 +17,20 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animation
         #region API
 
         protected float Spent => spentLife;
-        
+
         private bool HasEnded => spentLife >= totalLife;
+
+        private float Remaining => Mathf.Max(0f, totalLife - spentLife);
 
         protected float Clamp => Mathf.Clamp01(spentLife / totalLife);
 
         protected abstract void Animate();
+
+        public float ShortenAnimation(float shorterLifetime)
+        {
+            totalLife = spentLife + Math.Min(shorterLifetime, Remaining);
+            return Remaining;
+        }
 
         #endregion
 

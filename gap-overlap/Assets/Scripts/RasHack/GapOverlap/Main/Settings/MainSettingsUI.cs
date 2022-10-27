@@ -1,6 +1,7 @@
 ﻿using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main.Settings
@@ -156,19 +157,22 @@ namespace RasHack.GapOverlap.Main.Settings
         [SerializeField] private FloatInput overlapBothStimuliTime;
         [SerializeField] private IntInput overlapTaskCount;
         [SerializeField] private AreaRatio overlapSides;
+        [SerializeField] private FloatInput overlapShortenOnFocusTime;
 
         private OverlapTimes OverlapTimes
         {
-            get => new OverlapTimes
+            get => new ()
             {
                 CentralTime = overlapCentralStimulusTime.Value,
-                BothStimuli = overlapBothStimuliTime.Value
+                BothStimuli = overlapBothStimuliTime.Value,
+                ShortenOnFocusTime = overlapShortenOnFocusTime.Value
             };
 
             set
             {
                 overlapCentralStimulusTime.Value = value.CentralTime;
                 overlapBothStimuliTime.Value = value.BothStimuli;
+                overlapShortenOnFocusTime.Value = value.ShortenOnFocusTime;
             }
         }
 
@@ -176,6 +180,7 @@ namespace RasHack.GapOverlap.Main.Settings
         {
             overlapCentralStimulusTime.Reset();
             overlapBothStimuliTime.Reset();
+            overlapShortenOnFocusTime.Reset();
             return OverlapTimes;
         }
 
@@ -319,6 +324,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
             overlapCentralStimulusTime.SetDefault(() => defaults.OverlapTimes.CentralTime);
             overlapBothStimuliTime.SetDefault(() => defaults.OverlapTimes.BothStimuli);
+            overlapShortenOnFocusTime.SetDefault(() => defaults.OverlapTimes.ShortenOnFocusTime);
 
             baselineCentralStimulusTime.SetDefault(() => defaults.BaselineTimes.CentralTime);
             baselineCentralOutStimulusInTime.SetDefault(() => defaults.BaselineTimes.CentralOutStimulusIn);

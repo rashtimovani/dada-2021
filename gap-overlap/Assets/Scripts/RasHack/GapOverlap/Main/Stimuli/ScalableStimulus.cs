@@ -33,7 +33,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        public virtual void Scale(Vector3 desiredSize)
+        public void Scale(Vector3 desiredSize)
         {
             var size = Size;
             var desiredFixedZ = new Vector3(desiredSize.x, desiredSize.y, 1);
@@ -42,6 +42,35 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var originalScale = transform.localScale;
             transform.localScale = new Vector3(originalScale.x * scaleChange.x, originalScale.y * scaleChange.y,
                 originalScale.z * scaleChange.z);
+        }
+
+        public void ShortenAnimation(float shorterLifetime, bool keepIdling)
+        {
+            switch (currentAnimation)
+            {
+                case FadeIn:
+                {
+                    var remainingFadeIn = currentAnimation.ShortenAnimation(shorterLifetime);
+                    if (!keepIdling)
+                    {
+                        idleDuration = 0;
+                        fadeOut = Mathf.Min(fadeOut, remainingFadeIn);
+                    }
+
+                    break;
+                }
+                case Idle:
+                    if (!keepIdling)
+                    {
+                        fadeOut = Mathf.Min(fadeOut, shorterLifetime);
+                        idleDuration = currentAnimation.ShortenAnimation(Mathf.Max(0f, shorterLifetime - fadeOut));
+                    }
+
+                    break;
+                case FadeOut:
+                    if (!keepIdling) fadeOut = currentAnimation.ShortenAnimation(shorterLifetime);
+                    break;
+            }
         }
 
         #endregion
