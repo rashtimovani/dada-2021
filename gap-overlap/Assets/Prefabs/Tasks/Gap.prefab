@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -48,6 +49,6 @@ MonoBehaviour:
   stimulusPrefab: {fileID: 2794739829063479718, guid: 6af6b7a6ead1a724c9bd3a6681aa21f0,
     type: 3}
   times:
-    CentralTime: 1
-    PauseTime: 0.5
-    StimulusTime: 2
+    CentralTime: 5
+    PauseTime: 0
+    StimulusTime: 5
