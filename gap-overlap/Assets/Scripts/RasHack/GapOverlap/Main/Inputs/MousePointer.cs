@@ -2,8 +2,10 @@
 
 namespace RasHack.GapOverlap.Main.Inputs
 {
-    public class MousePointer : PointerDevice
+    public class MousePointer : Pointer
     {
-        public Vector3? Position => Input.mousePresent ? Input.mousePosition : (Vector3?) null;
+        public override Vector3 Position => Input.mousePresent ? Input.mousePosition : NotDetected;
+
+        public override Eye Eye => Eye.Right;
     }
 }

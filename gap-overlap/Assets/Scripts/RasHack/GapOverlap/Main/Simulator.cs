@@ -12,7 +12,7 @@ namespace RasHack.GapOverlap.Main
     {
         #region Serialized fields
 
-        [SerializeField] private Pointer pointer;
+        [SerializeField] private Pointer[] pointers;
 
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -151,7 +151,10 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdateDebugVisibility()
         {
-            pointer.ShowPointer(settings.ShowPointer);
+            foreach (var pointer in pointers)
+            {
+                pointer.ShowPointer(settings.ShowPointer);
+            }
 
             bottomLeft.enabled = ShowPointer;
             bottomRight.enabled = ShowPointer;

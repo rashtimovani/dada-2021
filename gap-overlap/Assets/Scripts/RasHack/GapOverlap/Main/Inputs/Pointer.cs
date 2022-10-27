@@ -2,8 +2,14 @@
 
 namespace RasHack.GapOverlap.Main.Inputs
 {
-    public class Pointer : MonoBehaviour
+    public abstract class Pointer : MonoBehaviour
     {
+        #region Constants
+
+        protected readonly Vector3 NotDetected = new Vector3(-20000, -20000, 0);
+
+        #endregion
+
         #region Serialized fields
 
         [SerializeField] private Simulator simulator;
@@ -11,14 +17,11 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         #endregion
 
-        #region Internals
-
-        private readonly TouchPointer touch = new TouchPointer();
-        private readonly MousePointer mouse = new MousePointer();
-
-        #endregion
-
         #region API
+
+        public abstract Vector3 Position { get; }
+
+        public abstract Eye Eye { get; }
 
         public void ShowPointer(bool show)
         {
@@ -31,11 +34,9 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         private void Update()
         {
-            var position = touch.Position ?? mouse.Position;
-            if (!position.HasValue) return;
-
-            transform.position = simulator.Scaler.Point(position.Value);
-            spriteRenderer.transform.position = simulator.DebugScaler.Point(position.Value);
+            var position = Position;
+            transform.position = simulator.Scaler.Point(position);
+            spriteRenderer.transform.position = simulator.DebugScaler.Point(position);
         }
 
         #endregion
