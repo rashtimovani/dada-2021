@@ -50,11 +50,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             {
                 case FadeIn:
                 {
-                    var remainingFadeIn = currentAnimation.ShortenAnimation(shorterLifetime);
+                    var halfShorterTime = keepIdling ? shorterLifetime : shorterLifetime / 2.0f;
+                    var remainingFadeIn = currentAnimation.ShortenAnimation(halfShorterTime);
                     if (!keepIdling)
                     {
                         idleDuration = 0;
-                        fadeOut = Mathf.Min(fadeOut, Mathf.Max(0f, shorterLifetime - remainingFadeIn));
+                        fadeOut = halfShorterTime;
                     }
 
                     return remainingFadeIn + fadeOut;

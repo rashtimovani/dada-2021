@@ -48,8 +48,8 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             measurement = after;
-            stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
-            centralStimulus?.ShortenAnimation(Times.ShortenOnFocusTime, false);
+            var remaining = stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
+            centralStimulus?.ShortenAnimation(remaining, false);
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
 

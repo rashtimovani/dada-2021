@@ -48,9 +48,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public override float ShortenAnimation(float shorterLifetime, bool keepIdling)
         {
-            var newLifetime = base.ShortenAnimation(shorterLifetime, keepIdling);
-            lifetime = newLifetime;
-            return lifetime;
+            if (!spentLifetime.HasValue) return 0f;
+            var remaining = base.ShortenAnimation(shorterLifetime, keepIdling);
+            lifetime = spentLifetime.Value + remaining;
+            return remaining;
         }
 
         public override float ShortenIdleAnimationOnly(float shorterLifetime)
