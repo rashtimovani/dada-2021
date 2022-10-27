@@ -1,0 +1,40 @@
+﻿{
+    "LastUsedName": "0001",
+    "SoundVolume": 1.0,
+    "FadeInOut": 0.10000000149011612,
+    "RotationFactor": 4,
+    "ShowPointer": true,
+    "PauseBeforeTasks": 1.0,
+    "PauseBetweenTasks": 1.0,
+    "PauseAfterTasks": 1.0,
+    "ReferencePoint": {
+        "DistanceFromEyesInCM": 60.0,
+        "ScreenDiagonalInInches": 15.600000381469727
+    },
+    "Background": 0,
+    "DistanceBetweenPeripheralStimuliInDegrees": 20.0,
+    "CentralStimulusSizeInDegrees": 3.5,
+    "PeripheralStimulusSizeInDegrees": 3.0,
+    "TaskCount": {
+        "Gaps": 1,
+        "LeftGaps": 0,
+        "Overlaps": 1,
+        "LeftOverlaps": 0,
+        "Baselines": 1,
+        "LeftBaselines": 0
+    },
+    "GapTimes": {
+        "CentralTime": 5.0,
+        "PauseTime": 0.0,
+        "StimulusTime": 5.0
+    },
+    "OverlapTimes": {
+        "CentralTime": 5.0,
+        "BothStimuli": 2.0
+    },
+    "BaselineTimes": {
+        "CentralTime": 5.0,
+        "CentralOutStimulusIn": 5.0,
+        "StimulusTime": 5.0
+    }
+}
