@@ -28,28 +28,34 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime)
         {
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
-
             this.owner = owner;
-            this.lifetime = lifetime;
             spentLifetime = 0;
+            this.lifetime = lifetime;
 
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
 
         public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
         {
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
-
             this.owner = owner;
+            spentLifetime = 0;
             this.lifetime = lifetime;
 
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
             DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);
         }
 
         public override float ShortenAnimation(float shorterLifetime, bool keepIdling)
         {
             var newLifetime = base.ShortenAnimation(shorterLifetime, keepIdling);
+            lifetime = newLifetime;
+            return lifetime;
+        }
+
+        public override float ShortenIdleAnimationOnly(float shorterLifetime)
+        {
+            var newLifetime = base.ShortenIdleAnimationOnly(shorterLifetime);
             lifetime = newLifetime;
             return lifetime;
         }
@@ -65,7 +71,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnCentralPointerDetection(Pointer pointer)
         {
-            owner.ReportFocusedOnCentral(this, spentLifetime.Value);
+            owner.ReportFocusedOnCentral(this, spentLifetime.GetValueOrDefault(lifetime));
         }
 
         private void Update()

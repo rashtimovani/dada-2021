@@ -75,6 +75,25 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return shorterLifetime;
         }
 
+        public virtual float ShortenIdleAnimationOnly(float shorterLifetime)
+        {
+            switch (currentAnimation)
+            {
+                case FadeIn:
+                {
+                    idleDuration = shorterLifetime;
+                    return idleDuration + fadeOut;
+                }
+                case Idle:
+                    idleDuration = currentAnimation.ShortenAnimation(shorterLifetime);
+                    return fadeOut + idleDuration;
+                case FadeOut:
+                    return fadeOut;
+            }
+
+            return shorterLifetime;
+        }
+
         #endregion
 
         #region Helpers

@@ -57,15 +57,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn)
         {
-            detectable.RegisterOnDetect(owner.Owner, OnPointerDetection);
-
             this.type = type;
             this.owner = owner;
 
-            this.lifetime = lifetime;
             spentLifetime = 0;
+            this.lifetime = lifetime;
             if (sprite != null) SetUpSprite();
 
+            detectable.RegisterOnDetect(owner.Owner, OnPointerDetection);
             DoFadeIn(lifetime, fadeIn, owner.FadeInOut, owner.RotationFactor);
         }
 
@@ -124,7 +123,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnPointerDetection(Pointer pointer)
         {
-            owner.ReportFocusedOn(this, spentLifetime.Value);
+            owner.ReportFocusedOn(this, spentLifetime.GetValueOrDefault(lifetime));
         }
 
         #endregion

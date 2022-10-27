@@ -198,6 +198,7 @@ namespace RasHack.GapOverlap.Main.Settings
         [SerializeField] private FloatInput baselineStimulusTime;
         [SerializeField] private IntInput baselineTaskCount;
         [SerializeField] private AreaRatio baselineSides;
+        [SerializeField] private FloatInput baselineShortenOnFocusTime;
 
         private BaselineTimes BaselineTimes
         {
@@ -205,7 +206,8 @@ namespace RasHack.GapOverlap.Main.Settings
             {
                 CentralTime = baselineCentralStimulusTime.Value,
                 CentralOutStimulusIn = baselineCentralOutStimulusInTime.Value,
-                StimulusTime = baselineStimulusTime.Value
+                StimulusTime = baselineStimulusTime.Value,
+                ShortenOnFocusTime = baselineShortenOnFocusTime.Value
             };
 
             set
@@ -213,6 +215,7 @@ namespace RasHack.GapOverlap.Main.Settings
                 baselineCentralStimulusTime.Value = value.CentralTime;
                 baselineCentralOutStimulusInTime.Value = value.CentralOutStimulusIn;
                 baselineStimulusTime.Value = value.StimulusTime;
+                baselineShortenOnFocusTime.Value = value.ShortenOnFocusTime;
             }
         }
 
@@ -221,6 +224,7 @@ namespace RasHack.GapOverlap.Main.Settings
             baselineCentralStimulusTime.Reset();
             baselineCentralOutStimulusInTime.Reset();
             baselineStimulusTime.Reset();
+            baselineShortenOnFocusTime.Reset();
             return BaselineTimes;
         }
 
@@ -333,6 +337,7 @@ namespace RasHack.GapOverlap.Main.Settings
             baselineCentralStimulusTime.SetDefault(() => defaults.BaselineTimes.CentralTime);
             baselineCentralOutStimulusInTime.SetDefault(() => defaults.BaselineTimes.CentralOutStimulusIn);
             baselineStimulusTime.SetDefault(() => defaults.BaselineTimes.StimulusTime);
+            baselineShortenOnFocusTime.SetDefault(() => defaults.BaselineTimes.ShortenOnFocusTime);
 
             gapTaskCount.SetDefault(() => defaults.TaskCount.Gaps);
             overlapTaskCount.SetDefault(() => defaults.TaskCount.Overlaps);

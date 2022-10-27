@@ -44,7 +44,7 @@ namespace RasHack.GapOverlap.Main.Settings
         public OverlapTimes OverlapTimes = new() { CentralTime = 5.0f, BothStimuli = 5.0f, ShortenOnFocusTime = 0.2f };
 
         public BaselineTimes BaselineTimes = new()
-            { CentralTime = 5.0f, CentralOutStimulusIn = 5.0f, StimulusTime = 5.0f };
+            { CentralTime = 5.0f, CentralOutStimulusIn = 5.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         #endregion
 

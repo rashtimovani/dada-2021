@@ -28,7 +28,7 @@ namespace RasHack.GapOverlap.Main.Stimuli.Animation
 
         public float ShortenAnimation(float shorterLifetime)
         {
-            totalLife = spentLife + Math.Min(shorterLifetime, Remaining);
+            totalLife = spentLife + Math.Min(Mathf.Max(0.0f, shorterLifetime), Remaining);
             return Remaining;
         }
 

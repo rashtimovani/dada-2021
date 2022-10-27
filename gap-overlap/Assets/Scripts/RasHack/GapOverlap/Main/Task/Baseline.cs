@@ -10,6 +10,7 @@ namespace RasHack.GapOverlap.Main.Task
         public float CentralTime;
         public float CentralOutStimulusIn;
         public float StimulusTime;
+        public float ShortenOnFocusTime;
     }
 
     public class Baseline : Task
@@ -17,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Task
         #region Serialized fields
 
         [SerializeField] private BaselineTimes times = new()
-            { CentralTime = 5.0f, CentralOutStimulusIn = 0.0f, StimulusTime = 5.0f };
+            { CentralTime = 5.0f, CentralOutStimulusIn = 0.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         #endregion
 
@@ -47,6 +48,8 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             measurement = after;
+            stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
+            centralStimulus?.ShortenAnimation(Times.ShortenOnFocusTime, false);
             Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
         }
 
@@ -59,6 +62,12 @@ namespace RasHack.GapOverlap.Main.Task
             }
 
             centralMeasurement = after;
+            stimulus.ShortenIdleAnimationOnly(Times.ShortenOnFocusTime);
+            if (centralTimeOnly.HasValue)
+            {
+                centralTimeOnly = Mathf.Min(centralTimeOnly.Value, Times.ShortenOnFocusTime);
+            }
+
             Debug.Log($"{stimulus} reported focused on central after {after:0.000}s!");
         }
 
