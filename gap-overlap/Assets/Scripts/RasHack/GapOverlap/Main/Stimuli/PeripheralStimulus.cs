@@ -118,7 +118,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime += Time.deltaTime;
             if (spentLifetime < lifetime) return;
 
-            owner.ReportStimulusDied(this);
+            owner.ReportPeripheralStimulusDied(this);
             spentLifetime = null;
         }
 

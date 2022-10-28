@@ -53,7 +53,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 
-        public abstract void ReportStimulusDied(PeripheralStimulus active);
+        public abstract void ReportPeripheralStimulusDied(PeripheralStimulus active);
 
         #endregion
 

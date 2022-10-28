@@ -77,7 +77,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
         }
 
-        public override void ReportStimulusDied(PeripheralStimulus active)
+        public override void ReportPeripheralStimulusDied(PeripheralStimulus active)
         {
             if (active != activeStimulus)
             {
