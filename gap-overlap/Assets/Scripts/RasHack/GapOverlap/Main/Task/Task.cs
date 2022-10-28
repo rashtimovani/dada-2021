@@ -1,4 +1,6 @@
-﻿using RasHack.GapOverlap.Main.Stimuli;
+﻿using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Result;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Task
@@ -17,6 +19,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Simulator owner;
         protected StimuliType stimulusType;
+        protected AllResponseTimes responses = new AllResponseTimes();
         private NextArea area;
 
         #endregion
@@ -24,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Task
         #region API
 
         public Simulator Owner => owner;
-        
+
         public abstract TaskType TaskType { get; }
 
         public StimuliType StimulusType => stimulusType;
@@ -44,9 +47,9 @@ namespace RasHack.GapOverlap.Main.Task
             gameObject.name = gameObject.name + "_" + area.Side;
         }
 
-        public abstract void ReportFocusedOn(PeripheralStimulus stimulus, float after);
+        public abstract void ReportFocusedOn(PeripheralStimulus stimulus, Eye eye, float after);
 
-        public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, float after);
+        public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, Eye eye, float after);
 
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 

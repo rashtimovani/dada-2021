@@ -87,6 +87,7 @@ crashlytics-build.properties
 
 # Result files
 /gap-overlap/*.csv
+/gap-overlap/Results/*.csv
 
 gap-overlap/settings.json
 build-gap-overlap/

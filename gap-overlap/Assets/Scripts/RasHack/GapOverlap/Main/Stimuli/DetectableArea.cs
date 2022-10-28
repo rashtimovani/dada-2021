@@ -11,8 +11,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
     {
         #region Internal fields
 
-        [SerializeField] private BoxCollider2D collider;
-
         [SerializeField] private SpriteRenderer debugArea;
 
         #endregion

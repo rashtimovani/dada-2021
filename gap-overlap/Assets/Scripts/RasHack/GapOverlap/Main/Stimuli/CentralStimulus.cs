@@ -72,7 +72,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnCentralPointerDetection(Pointer pointer)
         {
-            owner.ReportFocusedOnCentral(this, spentLifetime.GetValueOrDefault(lifetime));
+            owner.ReportFocusedOnCentral(this, pointer.Eye, spentLifetime.GetValueOrDefault(lifetime));
         }
 
         private void Update()

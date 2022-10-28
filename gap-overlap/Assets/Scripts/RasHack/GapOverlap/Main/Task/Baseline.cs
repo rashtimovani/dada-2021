@@ -1,4 +1,5 @@
 ﻿using System;
+using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
@@ -26,8 +27,6 @@ namespace RasHack.GapOverlap.Main.Task
 
         private float? centralTimeOnly;
         private float? outInTime;
-        private float? measurement;
-        private float? centralMeasurement;
         private CentralStimulus centralStimulus;
         private PeripheralStimulus activeStimulus;
 
@@ -39,7 +38,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private BaselineTimes Times => owner.Settings?.BaselineTimes ?? times;
 
-        public override void ReportFocusedOn(PeripheralStimulus stimulus, float after)
+        public override void ReportFocusedOn(PeripheralStimulus stimulus, Eye eye, float after)
         {
             if (stimulus != activeStimulus)
             {
@@ -47,13 +46,17 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
-            measurement = after;
-            var remaining = stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
-            centralStimulus?.ShortenAnimation(remaining, false);
-            Debug.Log($"{stimulus} reported focused after {after:0.000}s!");
+            responses = responses.PeripheralMeasured(eye, after);
+            if (responses.AllPeripheralMeasured)
+            {
+                var remaining = stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
+                centralStimulus?.ShortenAnimation(remaining, false);
+            }
+
+            Debug.Log($"{stimulus} reported {eye} eye focused after {after:0.000}s!");
         }
 
-        public override void ReportFocusedOnCentral(CentralStimulus stimulus, float after)
+        public override void ReportFocusedOnCentral(CentralStimulus stimulus, Eye eye, float after)
         {
             if (stimulus != centralStimulus)
             {
@@ -61,14 +64,17 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
-            centralMeasurement = after;
-            stimulus.ShortenIdleAnimationOnly(Times.ShortenOnFocusTime);
-            if (centralTimeOnly.HasValue)
+            responses = responses.CentralMeasured(eye, after);
+            if (responses.AllCentralMeasured)
             {
-                centralTimeOnly = Mathf.Min(centralTimeOnly.Value, Times.ShortenOnFocusTime);
+                stimulus.ShortenIdleAnimationOnly(Times.ShortenOnFocusTime);
+                if (centralTimeOnly.HasValue)
+                {
+                    centralTimeOnly = Mathf.Min(centralTimeOnly.Value, Times.ShortenOnFocusTime);
+                }
             }
 
-            Debug.Log($"{stimulus} reported focused on central after {after:0.000}s!");
+            Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
         }
 
         public override void ReportStimulusDied(PeripheralStimulus active)
@@ -82,7 +88,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{activeStimulus} has finished");
             Destroy(activeStimulus.gameObject);
             activeStimulus = null;
-            owner.ReportTaskFinished(this, measurement, centralMeasurement);
+            owner.ReportTaskFinished(this, responses);
             Destroy(gameObject);
         }
 

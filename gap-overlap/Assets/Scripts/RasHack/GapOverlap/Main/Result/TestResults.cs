@@ -13,8 +13,7 @@ namespace RasHack.GapOverlap.Main.Result
         public TaskType TaskType;
         public StimuliType StimuliType;
         public string Side;
-        public float? ResponseTime;
-        public float? CentralResponseTime;
+        public AllResponseTimes Responses;
     }
 
     public struct TestRun
@@ -28,8 +27,10 @@ namespace RasHack.GapOverlap.Main.Result
     {
         #region Fields
 
+        private const string ResultsDirectory = "Results";
+        
         private string filename;
-        private readonly List<TestRun> results = new List<TestRun>();
+        private readonly List<TestRun> results = new();
         private TestRun? activeRun;
 
         #endregion
@@ -65,24 +66,25 @@ namespace RasHack.GapOverlap.Main.Result
             FlushToDisk();
         }
 
-        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side, float? responseTime,
-            float? centralResponseTime)
+        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side,
+            AllResponseTimes responses)
         {
             activeRun?.Measurements.Add(new TestMeasurement
             {
                 TaskType = taskType,
                 StimuliType = stimuliType,
                 Side = side,
-                ResponseTime = responseTime,
-                CentralResponseTime = centralResponseTime
+                Responses = responses
             });
         }
 
         public void FlushToDisk()
         {
             if (results.Count == 0) return;
-            var fullFilename = filename + ".csv";
+            var fullFilename = ResultsDirectory + "/" + filename + ".csv";
 
+            Directory.CreateDirectory(ResultsDirectory);
+            
             if (!File.Exists(@fullFilename))
             {
                 var headerLines = new string[1];
@@ -103,7 +105,7 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 nextLineIndex = ResultsCsv(results[i], lines, nextLineIndex);
             }
-
+            
             File.AppendAllLines(@fullFilename, lines);
 
             results.Clear();
@@ -121,8 +123,10 @@ namespace RasHack.GapOverlap.Main.Result
             header.Append(",").Append(Quote("task_type"));
             header.Append(",").Append(Quote("stimuli_type"));
             header.Append(",").Append(Quote("side"));
-            header.Append(",").Append(Quote("reaction_time"));
-            header.Append(",").Append(Quote("central_noticed_time"));
+            header.Append(",").Append(Quote("left_eye_central_noticed_seconds"));
+            header.Append(",").Append(Quote("left_eye_peripheral_noticed_seconds"));
+            header.Append(",").Append(Quote("right_eye_central_noticed_seconds"));
+            header.Append(",").Append(Quote("right_eye_peripheral_noticed_seconds"));
 
             return header.ToString();
         }
@@ -139,14 +143,11 @@ namespace RasHack.GapOverlap.Main.Result
                 csv.Append(",").Append(Quote(measurement.StimuliType.ToString()));
                 csv.Append(",").Append(Quote(measurement.Side));
 
-                var current = measurement.ResponseTime;
-                var formatted = current.HasValue ? Quote(current.Value.ToString("0.000")) : "null";
-                csv.Append(",").Append(formatted);
+                csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.CentralResponse));
+                csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.PeripheralResponse));
+                csv.Append(",").Append(FormatNullable(measurement.Responses.RightEye.CentralResponse));
+                csv.Append(",").Append(FormatNullable(measurement.Responses.RightEye.PeripheralResponse));
 
-                var central = measurement.CentralResponseTime;
-                var centralFormatted = central.HasValue ? Quote(central.Value.ToString("0.000")) : "null";
-                csv.Append(",").Append(centralFormatted);
-                
                 destination[index + i] = csv.ToString();
             }
 
@@ -156,6 +157,11 @@ namespace RasHack.GapOverlap.Main.Result
         private static string Quote(string text)
         {
             return $"\"{text}\"";
+        }
+
+        private static string FormatNullable(float? value)
+        {
+            return value.HasValue ? Quote(value.Value.ToString("0.000")) : "null";
         }
 
         #endregion
