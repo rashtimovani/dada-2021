@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace RasHack.GapOverlap.Main.Settings
 {
