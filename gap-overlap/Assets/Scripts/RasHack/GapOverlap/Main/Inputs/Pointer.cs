@@ -6,7 +6,7 @@ namespace RasHack.GapOverlap.Main.Inputs
     {
         #region Constants
 
-        protected readonly Vector3 NotDetected = new Vector3(-20000, -20000, 0);
+        protected readonly Vector3 NOT_DETECTED = new(-20000, -20000, 0);
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         #region API
 
-        public abstract Vector3 Position { get; }
+        protected abstract Vector3 Position { get; }
 
         public abstract Eye Eye { get; }
 
@@ -32,11 +32,19 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         #region Mono methods
 
-        private void Update()
+        protected virtual void Start()
+        {
+        }
+
+        protected virtual void Update()
         {
             var position = Position;
             transform.position = simulator.Scaler.Point(position);
             spriteRenderer.transform.position = simulator.DebugScaler.Point(position);
+        }
+
+        protected virtual void OnDestroy()
+        {
         }
 
         #endregion
