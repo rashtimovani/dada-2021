@@ -36,7 +36,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         private OverlapTimes Times => owner.Settings?.OverlapTimes ?? times;
 
-        public override void ReportFocusedOn(PeripheralStimulus stimulus, Eye eye, float after)
+        public override void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after)
         {
             if (stimulus != activeStimulus)
             {

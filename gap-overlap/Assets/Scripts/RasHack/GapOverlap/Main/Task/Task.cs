@@ -47,7 +47,7 @@ namespace RasHack.GapOverlap.Main.Task
             gameObject.name = gameObject.name + "_" + area.Side;
         }
 
-        public abstract void ReportFocusedOn(PeripheralStimulus stimulus, Eye eye, float after);
+        public abstract void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after);
 
         public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, Eye eye, float after);
 
