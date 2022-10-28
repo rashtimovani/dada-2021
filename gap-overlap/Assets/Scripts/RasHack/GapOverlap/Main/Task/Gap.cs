@@ -1,5 +1,4 @@
 ﻿using System;
-using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
@@ -26,8 +25,6 @@ namespace RasHack.GapOverlap.Main.Task
         #region Fields
 
         private float? waitingTime;
-        private CentralStimulus centralStimulus;
-        private PeripheralStimulus activeStimulus;
 
         #endregion
 
@@ -37,53 +34,14 @@ namespace RasHack.GapOverlap.Main.Task
 
         private GapTimes Times => owner.Settings?.GapTimes ?? times;
 
-        public override void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after)
+        protected override void OnSuccessfulCentralFocus()
         {
-            if (stimulus != activeStimulus)
-            {
-                Debug.LogError($"{stimulus} stimulus is not the active one, don't care if it reported focused!");
-                return;
-            }
-
-            responses = responses.PeripheralMeasured(eye, after);
-            if (responses.AllPeripheralMeasured)
-            {
-                stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
-            }
-
-            Debug.Log($"{stimulus} reported {eye} eye focused after {after:0.000}s!");
+            centralStimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
         }
 
-        public override void ReportFocusedOnCentral(CentralStimulus stimulus, Eye eye, float after)
+        protected override void OnSuccessfulPeripheralFocus()
         {
-            if (stimulus != centralStimulus)
-            {
-                Debug.LogError($"{stimulus} is not the central stimulus, don't care if it reported focused!");
-                return;
-            }
-
-            responses = responses.CentralMeasured(eye, after);
-            if (responses.AllCentralMeasured)
-            {
-                stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
-            }
-
-            Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
-        }
-
-        public override void ReportPeripheralStimulusDied(PeripheralStimulus active)
-        {
-            if (active != activeStimulus)
-            {
-                Debug.LogError($"{active} stimulus is not the active one, don't care if it died!");
-                return;
-            }
-
-            Debug.Log($"{activeStimulus} has finished");
-            Destroy(activeStimulus.gameObject);
-            activeStimulus = null;
-            owner.ReportTaskFinished(this, responses);
-            Destroy(gameObject);
+            peripheralStimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
         }
 
         public override void ReportCentralStimulusDied(CentralStimulus central)
@@ -98,6 +56,21 @@ namespace RasHack.GapOverlap.Main.Task
             Destroy(centralStimulus.gameObject);
             centralStimulus = null;
             waitingTime = Times.PauseTime;
+        }
+
+        public override void ReportPeripheralStimulusDied(PeripheralStimulus active)
+        {
+            if (active != peripheralStimulus)
+            {
+                Debug.LogError($"{active} stimulus is not the active one, don't care if it died!");
+                return;
+            }
+
+            Debug.Log($"{peripheralStimulus} has finished");
+            Destroy(peripheralStimulus.gameObject);
+            peripheralStimulus = null;
+            owner.ReportTaskFinished(this, responses);
+            Destroy(gameObject);
         }
 
         #endregion
@@ -121,7 +94,7 @@ namespace RasHack.GapOverlap.Main.Task
         protected override void OnDestroy()
         {
             if (centralStimulus != null) Destroy(centralStimulus.gameObject);
-            if (activeStimulus != null) Destroy(activeStimulus.gameObject);
+            if (peripheralStimulus != null) Destroy(peripheralStimulus.gameObject);
         }
 
         #endregion
@@ -136,8 +109,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         private void StartWithStimulus()
         {
-            activeStimulus = NewStimulus();
-            activeStimulus.StartSimulating(stimulusType, this, Times.StimulusTime);
+            peripheralStimulus = NewPeripheralStimulus();
+            peripheralStimulus.StartSimulating(stimulusType, this, Times.StimulusTime);
         }
 
         #endregion

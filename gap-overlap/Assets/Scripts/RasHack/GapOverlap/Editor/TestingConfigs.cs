@@ -26,13 +26,13 @@ namespace RasHack.GapOverlap.Editor
         {
             BackUpSettings();
 
-            MainSettings mainSettings = new()
+            new MainSettings
             {
                 LastUsedName = "GapTester",
                 ShowPointer = true,
                 TaskCount = new TaskCount
                     { Gaps = 3, LeftGaps = 2, Overlaps = 0, LeftOverlaps = 0, Baselines = 0, LeftBaselines = 0 }
-            };
+            }.Store();
             Debug.Log("Testing only gaps!");
         }
 
@@ -41,14 +41,13 @@ namespace RasHack.GapOverlap.Editor
         {
             BackUpSettings();
 
-            MainSettings mainSettings = new()
+            new MainSettings
             {
                 LastUsedName = "OverlapTester",
                 ShowPointer = true,
                 TaskCount = new TaskCount
                     { Gaps = 0, LeftGaps = 0, Overlaps = 3, LeftOverlaps = 2, Baselines = 0, LeftBaselines = 0 }
-            };
-            mainSettings.Store();
+            }.Store();
             Debug.Log("Testing only overlaps!");
         }
 
@@ -57,14 +56,13 @@ namespace RasHack.GapOverlap.Editor
         {
             BackUpSettings();
 
-            MainSettings mainSettings = new()
+            new MainSettings
             {
                 LastUsedName = "BaselineTester",
                 ShowPointer = true,
                 TaskCount = new TaskCount
                     { Gaps = 0, LeftGaps = 0, Overlaps = 0, LeftOverlaps = 0, Baselines = 3, LeftBaselines = 2 }
-            };
-            mainSettings.Store();
+            }.Store();
             Debug.Log("Testing only baselines!");
         }
 

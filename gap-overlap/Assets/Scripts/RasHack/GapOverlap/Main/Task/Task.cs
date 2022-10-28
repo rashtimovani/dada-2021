@@ -19,8 +19,10 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Simulator owner;
         protected StimuliType stimulusType;
-        protected AllResponseTimes responses = new AllResponseTimes();
+        protected AllResponseTimes responses;
         private NextArea area;
+        protected CentralStimulus centralStimulus;
+        protected PeripheralStimulus peripheralStimulus;
 
         #endregion
 
@@ -47,9 +49,36 @@ namespace RasHack.GapOverlap.Main.Task
             gameObject.name = gameObject.name + "_" + area.Side;
         }
 
-        public abstract void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after);
+        public void ReportFocusedOnCentral(CentralStimulus stimulus, Eye eye, float after)
+        {
+            if (stimulus != centralStimulus)
+            {
+                Debug.LogError($"{stimulus} is not the central stimulus, don't care if it reported focused!");
+                return;
+            }
 
-        public abstract void ReportFocusedOnCentral(CentralStimulus centralStimulus, Eye eye, float after);
+            responses = responses.CentralMeasured(eye, after);
+            if (responses.AllCentralMeasured) OnSuccessfulCentralFocus();
+
+            Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
+        }
+
+        public void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after)
+        {
+            if (stimulus != peripheralStimulus)
+            {
+                Debug.LogError($"{stimulus} stimulus is not the active one, don't care if it reported focused!");
+                return;
+            }
+
+            responses = responses.PeripheralMeasured(eye, after);
+            if (responses.AllPeripheralMeasured) OnSuccessfulPeripheralFocus();
+            Debug.Log($"{stimulus} reported focused {eye} eye after {after:0.000}s!");
+        }
+
+        protected abstract void OnSuccessfulCentralFocus();
+
+        protected abstract void OnSuccessfulPeripheralFocus();
 
         public abstract void ReportCentralStimulusDied(CentralStimulus central);
 
@@ -81,7 +110,7 @@ namespace RasHack.GapOverlap.Main.Task
             return stimulus;
         }
 
-        protected PeripheralStimulus NewStimulus()
+        protected PeripheralStimulus NewPeripheralStimulus()
         {
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);

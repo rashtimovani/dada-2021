@@ -1,5 +1,4 @@
 ﻿using System;
-using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
@@ -25,8 +24,6 @@ namespace RasHack.GapOverlap.Main.Task
         #region Fields
 
         private float? waitingTime;
-        private CentralStimulus centralStimulus;
-        private PeripheralStimulus activeStimulus;
 
         #endregion
 
@@ -36,70 +33,43 @@ namespace RasHack.GapOverlap.Main.Task
 
         private OverlapTimes Times => owner.Settings?.OverlapTimes ?? times;
 
-        public override void ReportFocusedOnPeripheral(PeripheralStimulus stimulus, Eye eye, float after)
+        protected override void OnSuccessfulCentralFocus()
         {
-            if (stimulus != activeStimulus)
-            {
-                Debug.LogError($"{stimulus} stimulus is not the active one, don't care if it reported focused!");
-                return;
-            }
-
-            responses = responses.PeripheralMeasured(eye, after);
-            if (responses.AllPeripheralMeasured)
-            {
-                var remaining = stimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
-                centralStimulus?.ShortenAnimation(remaining, false);
-            }
-
-            Debug.Log($"{stimulus} reported focused {eye} eye after {after:0.000}s!");
+            centralStimulus.ShortenAnimation(Times.ShortenOnFocusTime, true);
+            if (waitingTime.HasValue) waitingTime = Mathf.Min(Times.ShortenOnFocusTime, waitingTime.Value);
         }
 
-        public override void ReportFocusedOnCentral(CentralStimulus stimulus, Eye eye, float after)
+        protected override void OnSuccessfulPeripheralFocus()
+        {
+            var remaining = peripheralStimulus.ShortenAnimation(Times.ShortenOnFocusTime, false);
+            if (centralStimulus != null) centralStimulus.ShortenAnimation(remaining, false);
+        }
+
+        public override void ReportCentralStimulusDied(CentralStimulus stimulus)
         {
             if (stimulus != centralStimulus)
             {
-                Debug.LogError($"{stimulus} is not the central stimulus, don't care if it reported focused!");
-                return;
-            }
-
-            responses = responses.CentralMeasured(eye, after);
-            if (responses.AllCentralMeasured)
-            {
-                stimulus.ShortenAnimation(Times.ShortenOnFocusTime, true);
-                if (waitingTime.HasValue)
-                {
-                    waitingTime = Mathf.Min(Times.ShortenOnFocusTime, waitingTime.Value);
-                }
-            }
-
-            Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
-        }
-
-        public override void ReportPeripheralStimulusDied(PeripheralStimulus active)
-        {
-            if (active != activeStimulus)
-            {
-                Debug.LogError($"{active} stimulus is not the active one, don't care if it died!");
-                return;
-            }
-
-            Debug.Log($"{activeStimulus} has finished");
-            Destroy(activeStimulus.gameObject);
-            Destroy(centralStimulus.gameObject);
-            activeStimulus = null;
-            owner.ReportTaskFinished(this, responses);
-            Destroy(gameObject);
-        }
-
-        public override void ReportCentralStimulusDied(CentralStimulus central)
-        {
-            if (central != centralStimulus)
-            {
-                Debug.LogError($"{central} stimulus is not the central one, don't care if it died!");
+                Debug.LogError($"{stimulus} stimulus is not the central one, don't care if it died!");
                 return;
             }
 
             Debug.Log($"Only {centralStimulus} has finished");
+        }
+
+        public override void ReportPeripheralStimulusDied(PeripheralStimulus stimulus)
+        {
+            if (stimulus != peripheralStimulus)
+            {
+                Debug.LogError($"{stimulus} stimulus is not the active one, don't care if it died!");
+                return;
+            }
+
+            Debug.Log($"{peripheralStimulus} has finished");
+            Destroy(peripheralStimulus.gameObject);
+            Destroy(centralStimulus.gameObject);
+            peripheralStimulus = null;
+            owner.ReportTaskFinished(this, responses);
+            Destroy(gameObject);
         }
 
         #endregion
@@ -124,7 +94,7 @@ namespace RasHack.GapOverlap.Main.Task
         protected override void OnDestroy()
         {
             if (centralStimulus != null) Destroy(centralStimulus.gameObject);
-            if (activeStimulus != null) Destroy(activeStimulus.gameObject);
+            if (peripheralStimulus != null) Destroy(peripheralStimulus.gameObject);
         }
 
         #endregion
@@ -139,8 +109,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         private void StartWithStimulus()
         {
-            activeStimulus = NewStimulus();
-            activeStimulus.StartSimulating(stimulusType, this, Times.BothStimuli);
+            peripheralStimulus = NewPeripheralStimulus();
+            peripheralStimulus.StartSimulating(stimulusType, this, Times.BothStimuli);
         }
 
         #endregion
