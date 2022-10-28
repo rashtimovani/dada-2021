@@ -27,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Result
     {
         #region Fields
 
-        private const string ResultsDirectory = "Results";
+        public const string RESULTS_DIRECTORY = "Results";
         
         private string filename;
         private readonly List<TestRun> results = new();
@@ -81,9 +81,9 @@ namespace RasHack.GapOverlap.Main.Result
         public void FlushToDisk()
         {
             if (results.Count == 0) return;
-            var fullFilename = ResultsDirectory + "/" + filename + ".csv";
+            var fullFilename = RESULTS_DIRECTORY + "/" + filename + ".csv";
 
-            Directory.CreateDirectory(ResultsDirectory);
+            Directory.CreateDirectory(RESULTS_DIRECTORY);
             
             if (!File.Exists(@fullFilename))
             {

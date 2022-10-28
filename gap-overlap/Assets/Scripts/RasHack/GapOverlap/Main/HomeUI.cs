@@ -1,5 +1,6 @@
-﻿using RasHack.GapOverlap.Main.Settings;
-using RasHack.GapOverlap.Main.Stimuli;
+﻿using System.Diagnostics;
+using RasHack.GapOverlap.Main.Result;
+using RasHack.GapOverlap.Main.Settings;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,12 +18,12 @@ namespace RasHack.GapOverlap.Main
         #endregion
 
         #region Fields
-        
+
         private Simulator simulator;
         private MainSettingsUI mainSettings;
 
         private bool hidden;
-        
+
         #endregion
 
         #region API
@@ -70,6 +71,13 @@ namespace RasHack.GapOverlap.Main
             mainSettings.Show();
             hidden = true;
             panel.SetActive(false);
+        }
+
+        public void OnResults()
+        {
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo("explorer.exe", TestResults.RESULTS_DIRECTORY);
+            p.Start();
         }
 
         #endregion
