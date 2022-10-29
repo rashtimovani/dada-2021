@@ -20,11 +20,11 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topLeft;
         [SerializeField] private SpriteRenderer topRight;
 
-        [SerializeField] private MainSettings settings;
-
         #endregion
 
         #region Fields
+
+        private MainSettings settings = new MainSettings();
 
         private Scaler scaler;
         private Scaler debugScaler;
