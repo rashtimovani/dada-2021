@@ -27,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Result
         #region Fields
 
         public static readonly string RESULTS_DIRECTORY =
-            Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gap-Overlap Results";
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{Path.DirectorySeparatorChar}GapOverlap{Path.DirectorySeparatorChar}Results";
 
         private string filename;
         private readonly List<TestRun> results = new();
@@ -81,7 +81,7 @@ namespace RasHack.GapOverlap.Main.Result
         public void FlushToDisk()
         {
             if (results.Count == 0) return;
-            var fullFilename = RESULTS_DIRECTORY + "/" + filename + ".csv";
+            var fullFilename = $"{RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{filename}.csv";
 
             Directory.CreateDirectory(RESULTS_DIRECTORY);
 

@@ -49,7 +49,10 @@ namespace RasHack.GapOverlap.Main.Settings
 
         #region API
 
-        public const string FILENAME = "settings.json";
+        public static readonly string DIRECTORY =
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{Path.DirectorySeparatorChar}GapOverlap";
+
+        public static readonly string FILENAME = $"{DIRECTORY}{Path.DirectorySeparatorChar}settings.json";
 
         public static MainSettings Load()
         {
@@ -61,6 +64,7 @@ namespace RasHack.GapOverlap.Main.Settings
         public void Store()
         {
             var json = JsonUtility.ToJson(this, true);
+            Directory.CreateDirectory(DIRECTORY);
             File.WriteAllText(FILENAME, json, Encoding.UTF8);
         }
 

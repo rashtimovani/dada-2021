@@ -70,7 +70,7 @@ namespace RasHack.GapOverlap.Editor
 
         #region Helpers
 
-        private const string BACK_UP_FILENAME = MainSettings.FILENAME + ".back-up";
+        private static readonly string BACK_UP_FILENAME = MainSettings.FILENAME + ".back-up";
 
         private static void BackUpSettings()
         {
