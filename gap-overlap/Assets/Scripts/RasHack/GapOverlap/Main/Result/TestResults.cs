@@ -27,7 +27,8 @@ namespace RasHack.GapOverlap.Main.Result
     {
         #region Fields
 
-        public const string RESULTS_DIRECTORY = "Results";
+        public static readonly string RESULTS_DIRECTORY =
+            Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/Gap-Overlap Results";
 
         private string filename;
         private readonly List<TestRun> results = new();
