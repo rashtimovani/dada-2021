@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
-using UnityEditor;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -45,7 +44,7 @@ namespace RasHack.GapOverlap.Main.Result
             activeRun = new TestRun
             {
                 Name = name,
-                Id = GUID.Generate().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 Measurements = new List<TestMeasurement>()
             };
         }
