@@ -124,9 +124,13 @@ namespace RasHack.GapOverlap.Main.Result
             header.Append(",").Append(Quote("stimuli_type"));
             header.Append(",").Append(Quote("side"));
             header.Append(",").Append(Quote("left_eye_central_noticed_seconds"));
+            header.Append(",").Append(Quote("left_eye_central_distance_cm"));
             header.Append(",").Append(Quote("left_eye_peripheral_noticed_seconds"));
+            header.Append(",").Append(Quote("left_eye_peripheral_distance_cm"));
             header.Append(",").Append(Quote("right_eye_central_noticed_seconds"));
+            header.Append(",").Append(Quote("right_eye_central_distance_cm"));
             header.Append(",").Append(Quote("right_eye_peripheral_noticed_seconds"));
+            header.Append(",").Append(Quote("right_eye_peripheral_distance_cm"));
 
             return header.ToString();
         }
@@ -143,10 +147,14 @@ namespace RasHack.GapOverlap.Main.Result
                 csv.Append(",").Append(Quote(measurement.StimuliType.ToString()));
                 csv.Append(",").Append(Quote(measurement.Side.ToString()));
 
-                csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.CentralResponse));
-                csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.PeripheralResponse));
-                csv.Append(",").Append(FormatNullable(measurement.Responses.RightEye.CentralResponse));
-                csv.Append(",").Append(FormatNullable(measurement.Responses.RightEye.PeripheralResponse));
+                csv.Append(",").Append(FormatNullablePrecision3(measurement.Responses.LeftEye.CentralResponse));
+                csv.Append(",").Append(FormatNullablePrecision1(measurement.Responses.LeftEye.CentralDistance));
+                csv.Append(",").Append(FormatNullablePrecision3(measurement.Responses.LeftEye.PeripheralResponse));
+                csv.Append(",").Append(FormatNullablePrecision1(measurement.Responses.LeftEye.PeripheralDistance));
+                csv.Append(",").Append(FormatNullablePrecision3(measurement.Responses.RightEye.CentralResponse));
+                csv.Append(",").Append(FormatNullablePrecision1(measurement.Responses.RightEye.CentralDistance));
+                csv.Append(",").Append(FormatNullablePrecision3(measurement.Responses.RightEye.PeripheralResponse));
+                csv.Append(",").Append(FormatNullablePrecision1(measurement.Responses.RightEye.PeripheralDistance));
 
                 destination[index + i] = csv.ToString();
             }
@@ -159,9 +167,19 @@ namespace RasHack.GapOverlap.Main.Result
             return $"\"{text}\"";
         }
 
-        private static string FormatNullable(float? value)
+        private static string FormatNullablePrecision3(float? value)
         {
-            return value.HasValue ? Quote(value.Value.ToString("0.000")) : "null";
+            return FormatNullable(value, "0.000");
+        }
+
+        private static string FormatNullablePrecision1(float? value)
+        {
+            return FormatNullable(value, "0.0");
+        }
+
+        private static string FormatNullable(float? value, string format)
+        {
+            return value.HasValue ? Quote(value.Value.ToString(format)) : "null";
         }
 
         #endregion
