@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
-using UnityEditor;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -110,7 +110,7 @@ namespace RasHack.GapOverlap.Main
             nextStimulus = StimuliTypeExtensions.Next();
             IsActive = true;
 
-            var runName = string.IsNullOrWhiteSpace(usingName) ? $"{GUID.Generate()}" : usingName;
+            var runName = string.IsNullOrWhiteSpace(usingName) ? $"{Guid.NewGuid()}" : usingName;
 
             UpdateBackground();
 
