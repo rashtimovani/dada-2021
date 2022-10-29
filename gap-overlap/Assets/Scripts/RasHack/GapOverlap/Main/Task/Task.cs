@@ -34,7 +34,7 @@ namespace RasHack.GapOverlap.Main.Task
 
         public StimuliType StimulusType => stimulusType;
 
-        public string Side => area.Side;
+        public StimulusSide Side => area.Side;
 
         public float FadeInOut => owner.Settings.FadeInOut;
 

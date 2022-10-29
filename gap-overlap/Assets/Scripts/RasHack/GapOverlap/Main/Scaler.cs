@@ -15,9 +15,6 @@ namespace RasHack.GapOverlap.Main
     {
         #region Internal fields
 
-        private const float TARGET_WIDTH = 1920;
-        private const float TARGET_HEIGHT = 1080;
-
         private readonly Camera mainCamera;
         private readonly float depth;
         private readonly MainSettings settings;
@@ -37,7 +34,7 @@ namespace RasHack.GapOverlap.Main
         {
             get
             {
-                var ratio = (float) Screen.height / Screen.width;
+                var ratio = (float)Screen.height / Screen.width;
                 var sizeInCM = settings.ReferencePoint.ScreenDiagonalInInches * 2.54f;
 
                 var width = Mathf.Sqrt(sizeInCM * sizeInCM / (1 + ratio * ratio));
@@ -56,6 +53,14 @@ namespace RasHack.GapOverlap.Main
         public Vector3 TopRight => Point(new Vector3(Screen.width, Screen.height));
 
         public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
+
+        public Vector3 CenterLeftThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.35f), BottomLeft.y, BottomLeft.z);
+
+        public Vector3 CenterRightThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.65f), TopRight.y, TopRight.z);
+        
+        public Vector3 LeftThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.3f), TopRight.y, TopRight.z);
+
+        public Vector3 RightThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.7f), BottomRight.y, BottomRight.z);
 
         public static Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
 

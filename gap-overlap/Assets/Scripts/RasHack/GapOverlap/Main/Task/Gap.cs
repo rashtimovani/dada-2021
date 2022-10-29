@@ -110,7 +110,7 @@ namespace RasHack.GapOverlap.Main.Task
         private void StartWithStimulus()
         {
             peripheralStimulus = NewPeripheralStimulus();
-            peripheralStimulus.StartSimulating(stimulusType, this, Times.StimulusTime);
+            peripheralStimulus.StartSimulating(stimulusType, Side, this, Times.StimulusTime);
         }
 
         #endregion

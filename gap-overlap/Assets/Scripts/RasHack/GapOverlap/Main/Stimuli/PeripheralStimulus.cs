@@ -50,15 +50,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region API
 
-        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime)
+        public void StartSimulating(StimuliType type, StimulusSide side, Task.Task owner, float lifetime)
         {
-            StartSimulating(type, owner, lifetime, owner.FadeInOut);
+            StartSimulating(type, side, owner, lifetime, owner.FadeInOut);
         }
 
-        public void StartSimulating(StimuliType type, Task.Task owner, float lifetime, float fadeIn)
+        public void StartSimulating(StimuliType type, StimulusSide side, Task.Task owner, float lifetime, float fadeIn)
         {
             this.type = type;
             this.owner = owner;
+            detectable.AreaScreenSide = side;
 
             spentLifetime = 0;
             this.lifetime = lifetime;

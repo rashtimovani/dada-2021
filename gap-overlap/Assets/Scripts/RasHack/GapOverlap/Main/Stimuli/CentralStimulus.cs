@@ -28,9 +28,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime)
         {
+            detectable.AreaScreenSide = StimulusSide.Center;
             this.owner = owner;
-            spentLifetime = 0;
             this.lifetime = lifetime;
+            spentLifetime = 0;
 
             detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
@@ -38,9 +39,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
         {
+            detectable.AreaScreenSide = StimulusSide.Center;
             this.owner = owner;
-            spentLifetime = 0;
             this.lifetime = lifetime;
+            spentLifetime = 0;
 
             detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
             DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);

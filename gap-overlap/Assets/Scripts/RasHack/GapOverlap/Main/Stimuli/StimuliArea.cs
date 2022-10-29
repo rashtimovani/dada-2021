@@ -9,7 +9,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
     {
         public Vector3 Position;
         public float OffsetInDegrees;
-        public string Side;
+        public StimulusSide Side;
     }
 
     public class Side
@@ -61,7 +61,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         }
 
         public NextArea CenterInWorld =>
-            new NextArea { Position = Scaler.Center, OffsetInDegrees = 0f, Side = "central" };
+            new() { Position = Scaler.Center, OffsetInDegrees = 0f, Side = StimulusSide.Center };
 
         public NextArea NextInWorld(TaskType taskType)
         {
@@ -116,7 +116,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             var position = Scaler.Point(Scaler.ScreenPosition(Center, Degrees, direction));
             var offsetInDegrees = direction.x * Degrees;
-            var side = direction.x > 0 ? "right" : "left";
+            var side = direction.x > 0 ? StimulusSide.Right : StimulusSide.Left;
             return new NextArea { Position = position, OffsetInDegrees = offsetInDegrees, Side = side };
         }
 

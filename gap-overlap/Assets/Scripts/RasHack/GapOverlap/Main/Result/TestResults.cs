@@ -12,7 +12,7 @@ namespace RasHack.GapOverlap.Main.Result
     {
         public TaskType TaskType;
         public StimuliType StimuliType;
-        public string Side;
+        public StimulusSide Side;
         public AllResponseTimes Responses;
     }
 
@@ -28,7 +28,7 @@ namespace RasHack.GapOverlap.Main.Result
         #region Fields
 
         public const string RESULTS_DIRECTORY = "Results";
-        
+
         private string filename;
         private readonly List<TestRun> results = new();
         private TestRun? activeRun;
@@ -66,7 +66,7 @@ namespace RasHack.GapOverlap.Main.Result
             FlushToDisk();
         }
 
-        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, string side,
+        public void AttachMeasurement(TaskType taskType, StimuliType stimuliType, StimulusSide side,
             AllResponseTimes responses)
         {
             activeRun?.Measurements.Add(new TestMeasurement
@@ -84,7 +84,7 @@ namespace RasHack.GapOverlap.Main.Result
             var fullFilename = RESULTS_DIRECTORY + "/" + filename + ".csv";
 
             Directory.CreateDirectory(RESULTS_DIRECTORY);
-            
+
             if (!File.Exists(@fullFilename))
             {
                 var headerLines = new string[1];
@@ -105,7 +105,7 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 nextLineIndex = ResultsCsv(results[i], lines, nextLineIndex);
             }
-            
+
             File.AppendAllLines(@fullFilename, lines);
 
             results.Clear();
@@ -141,7 +141,7 @@ namespace RasHack.GapOverlap.Main.Result
                 var measurement = results.Measurements[i];
                 csv.Append(",").Append(Quote(measurement.TaskType.ToString()));
                 csv.Append(",").Append(Quote(measurement.StimuliType.ToString()));
-                csv.Append(",").Append(Quote(measurement.Side));
+                csv.Append(",").Append(Quote(measurement.Side.ToString()));
 
                 csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.CentralResponse));
                 csv.Append(",").Append(FormatNullable(measurement.Responses.LeftEye.PeripheralResponse));

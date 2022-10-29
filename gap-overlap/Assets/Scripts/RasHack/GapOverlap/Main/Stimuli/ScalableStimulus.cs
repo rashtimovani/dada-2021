@@ -104,7 +104,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.fadeOut = fadeOut;
             idleDuration = totalDuration - fadeIn - fadeOut;
             StartAnimation(FadeIn.ForStimuli(gameObject, fadeIn, WaitToFadeOut));
-            StartRotation(Rotate.ForStimuli(gameObject, totalDuration, rotationFactor, () => { }));
+            // StartRotation(Rotate.ForStimuli(gameObject, totalDuration, rotationFactor, () => { }));
         }
 
         protected void DoFadeIn(float totalDuration, float fadeInOut, int rotationFactor)
