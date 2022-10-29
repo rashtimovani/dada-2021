@@ -5,12 +5,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class PeripheralStimulus : ScalableStimulus
     {
-        #region Detection
-
-        [SerializeField] private DetectableArea detectable;
-
-        #endregion
-
         #region Sprites
 
         [SerializeField] private Sprite bee;
@@ -83,7 +77,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Start()
         {
-            sprite = GetComponent<SpriteRenderer>();
+            sprite = imageToRotate.GetComponent<SpriteRenderer>();
             SetUpSprite();
 
             var audioSource = GetComponent<AudioSource>();

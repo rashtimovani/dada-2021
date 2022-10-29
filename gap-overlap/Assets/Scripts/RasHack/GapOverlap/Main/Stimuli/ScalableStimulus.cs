@@ -9,6 +9,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private Transform bottomLeft;
         [SerializeField] private Transform topRight;
+        [SerializeField] protected DetectableArea detectable;
+        [SerializeField] protected GameObject imageToRotate;
 
         #endregion
 
@@ -103,8 +105,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             this.fadeOut = fadeOut;
             idleDuration = totalDuration - fadeIn - fadeOut;
-            StartAnimation(FadeIn.ForStimuli(gameObject, fadeIn, WaitToFadeOut));
-            // StartRotation(Rotate.ForStimuli(gameObject, totalDuration, rotationFactor, () => { }));
+            StartAnimation(FadeIn.ForStimuli(imageToRotate, fadeIn, WaitToFadeOut));
+            StartRotation(Rotate.ForStimuli(imageToRotate, totalDuration, rotationFactor, () => { }));
         }
 
         protected void DoFadeIn(float totalDuration, float fadeInOut, int rotationFactor)
@@ -114,12 +116,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void WaitToFadeOut()
         {
-            StartAnimation(Idle.ForStimuli(gameObject, idleDuration, DoFadeOut));
+            StartAnimation(Idle.ForStimuli(imageToRotate, idleDuration, DoFadeOut));
         }
 
         private void DoFadeOut()
         {
-            StartAnimation(FadeOut.ForStimuli(gameObject, fadeOut));
+            StartAnimation(FadeOut.ForStimuli(imageToRotate, fadeOut));
         }
 
         private void StartAnimation(StimuliAnimation animation)

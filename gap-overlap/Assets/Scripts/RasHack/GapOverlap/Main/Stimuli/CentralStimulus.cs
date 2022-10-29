@@ -5,12 +5,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public class CentralStimulus : ScalableStimulus
     {
-        #region Detection
-
-        [SerializeField] private DetectableArea detectable;
-
-        #endregion
-
         #region Internal fields
 
         private float? spentLifetime;
