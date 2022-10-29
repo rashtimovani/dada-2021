@@ -8,7 +8,7 @@ namespace RasHack.GapOverlap.Main.Inputs
         #region Fields
 
         [SerializeField] private Eye gazeEye;
-        [SerializeField] private float acceptableLastValidReadingTimeout = 10f;
+        [SerializeField] private float acceptableLastValidReadingTimeout = 25f;
 
         private Vector3 lastDetectedPosition = NOT_DETECTED;
         private float timeSinceLastValidReading;
@@ -60,6 +60,8 @@ namespace RasHack.GapOverlap.Main.Inputs
         protected override void Update()
         {
             base.Update();
+            if (!PointerEnabled) return;
+
             timeSinceLastValidReading += Time.deltaTime;
 
             if (subscribedTo != null) return;
@@ -78,7 +80,6 @@ namespace RasHack.GapOverlap.Main.Inputs
         {
             base.OnDestroy();
             if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
-            PointerEnabled = false;
         }
 
         #endregion

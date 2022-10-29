@@ -49,17 +49,19 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         protected virtual void Start()
         {
+            PointerEnabled = true;
         }
 
         protected virtual void Update()
         {
-            var position = Position;
+            var position = PointerEnabled ? Position : NOT_DETECTED;
             transform.position = simulator.Scaler.Point(position);
             spriteRenderer.transform.position = simulator.DebugScaler.Point(position);
         }
 
         protected virtual void OnDestroy()
         {
+            PointerEnabled = false;
         }
 
         #endregion

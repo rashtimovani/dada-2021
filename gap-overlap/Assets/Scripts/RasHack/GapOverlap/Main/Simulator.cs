@@ -60,6 +60,21 @@ namespace RasHack.GapOverlap.Main
             }
         }
 
+        private List<Pointer> NonTobiiPointers
+        {
+            get
+            {
+                var nonTobiiPointers = new List<Pointer>();
+                foreach (var pointer in pointers)
+                {
+                    var tobiiPointer = pointer as TobiiEyePointer;
+                    if (pointer != null && tobiiPointer == null) nonTobiiPointers.Add(pointer);
+                }
+
+                return nonTobiiPointers;
+            }
+        }
+
         public MainSettings Settings => settings;
 
         public Scaler Scaler => scaler;
@@ -146,6 +161,7 @@ namespace RasHack.GapOverlap.Main
             UpdateDebugVisibility();
             UpdatePause();
             DetectInterruptedTest();
+            UpdatePointers();
         }
 
         private void OnApplicationQuit()
@@ -217,6 +233,20 @@ namespace RasHack.GapOverlap.Main
                 results.AbortActiveTest();
                 IsActive = false;
                 waitingTime = 0.01f;
+            }
+        }
+
+        private void UpdatePointers()
+        {
+            var tobiiWorking = true;
+            foreach (var tobiiPointer in TobiiPointers)
+            {
+                tobiiWorking &= tobiiPointer.Status.Enabled;
+            }
+
+            foreach (var pointer in NonTobiiPointers)
+            {
+                pointer.PointerEnabled = !tobiiWorking;
             }
         }
 
