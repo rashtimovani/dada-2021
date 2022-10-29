@@ -1,4 +1,5 @@
-﻿using RasHack.GapOverlap.Main.Inputs;
+﻿using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
@@ -43,6 +44,21 @@ namespace RasHack.GapOverlap.Main
         #region API
 
         public bool IsActive { get; private set; }
+
+        public List<TobiiEyePointer> TobiiPointers
+        {
+            get
+            {
+                var tobiiPointers = new List<TobiiEyePointer>();
+                foreach (var pointer in pointers)
+                {
+                    var tobiiPointer = pointer as TobiiEyePointer;
+                    if (tobiiPointer != null) tobiiPointers.Add(tobiiPointer);
+                }
+
+                return tobiiPointers;
+            }
+        }
 
         public MainSettings Settings => settings;
 

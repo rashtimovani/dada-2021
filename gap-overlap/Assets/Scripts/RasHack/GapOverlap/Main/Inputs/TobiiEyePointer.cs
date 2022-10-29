@@ -18,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Inputs
 
         #region API
 
-        private PointerStatus Status
+        public override PointerStatus Status
         {
             get
             {
@@ -54,6 +54,7 @@ namespace RasHack.GapOverlap.Main.Inputs
         {
             base.Start();
             subscribedTo = null;
+            PointerEnabled = true;
         }
 
         protected override void Update()
@@ -77,6 +78,7 @@ namespace RasHack.GapOverlap.Main.Inputs
         {
             base.OnDestroy();
             if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
+            PointerEnabled = false;
         }
 
         #endregion
