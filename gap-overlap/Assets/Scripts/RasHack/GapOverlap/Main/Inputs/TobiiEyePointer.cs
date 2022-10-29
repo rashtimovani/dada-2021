@@ -8,19 +8,41 @@ namespace RasHack.GapOverlap.Main.Inputs
         #region Fields
 
         [SerializeField] private Eye gazeEye;
+        [SerializeField] private float acceptableLastValidReadingTimeout = 10f;
 
+        private Vector3 lastDetectedPosition = NOT_DETECTED;
+        private float timeSinceLastValidReading;
         private IEyeTracker subscribedTo;
 
         #endregion
 
         #region API
 
-        private string Status =>
-            subscribedTo == null
-                ? $"No eye tracker detected for {Eye} eye."
-                : $"Using {subscribedTo.Model}({subscribedTo.DeviceName}) on address {subscribedTo.Address} for {Eye} eye.";
+        private PointerStatus Status
+        {
+            get
+            {
+                if (!PointerEnabled) return new() { Enabled = false, Message = $"Tracker for {Eye} is disabled!" };
 
-        protected override Vector3 Position { get; }
+                if (subscribedTo == null)
+                    return new() { Enabled = false, Message = $"No eye tracker detected for {Eye} eye." };
+
+                if (timeSinceLastValidReading > acceptableLastValidReadingTimeout)
+                    return new()
+                    {
+                        Enabled = false, Message =
+                            $"No valid gaze points from {subscribedTo.Model}({subscribedTo.DeviceName}) on address {subscribedTo.Address} for {Eye} eye."
+                    };
+
+                return new()
+                {
+                    Enabled = true, Message =
+                        $"Using {subscribedTo.Model}({subscribedTo.DeviceName}) on address {subscribedTo.Address} for {Eye} eye."
+                };
+            }
+        }
+
+        protected override Vector3 Position => lastDetectedPosition;
 
         public override Eye Eye => gazeEye;
 
@@ -37,6 +59,7 @@ namespace RasHack.GapOverlap.Main.Inputs
         protected override void Update()
         {
             base.Update();
+            timeSinceLastValidReading += Time.deltaTime;
 
             if (subscribedTo != null) return;
 
@@ -63,6 +86,13 @@ namespace RasHack.GapOverlap.Main.Inputs
         private void GazeDataReceived(object sender, GazeDataEventArgs gazeEvent)
         {
             var eye = GetEye(gazeEvent);
+
+            if (eye.GazePoint.Validity == Validity.Invalid) lastDetectedPosition = NOT_DETECTED;
+
+            timeSinceLastValidReading = 0.0f;
+            var x = eye.GazePoint.PositionOnDisplayArea.X * Screen.width;
+            var y = (1 - eye.GazePoint.PositionOnDisplayArea.Y) * Screen.height;
+            lastDetectedPosition = new Vector2(x, y);
         }
 
         private EyeData GetEye(GazeDataEventArgs gazeEvent)

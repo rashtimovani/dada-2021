@@ -2,11 +2,21 @@
 
 namespace RasHack.GapOverlap.Main.Inputs
 {
+    #region Helper structures
+
+    public struct PointerStatus
+    {
+        public bool Enabled;
+        public string Message;
+    }
+
+    #endregion
+
     public abstract class Pointer : MonoBehaviour
     {
         #region Constants
 
-        protected readonly Vector3 NOT_DETECTED = new(-20000, -20000, 0);
+        protected static readonly Vector3 NOT_DETECTED = new(-20000, -20000, 0);
 
         #endregion
 
@@ -18,6 +28,11 @@ namespace RasHack.GapOverlap.Main.Inputs
         #endregion
 
         #region API
+
+        public bool PointerEnabled { get; set; }
+
+        public virtual PointerStatus Status => new()
+            { Enabled = PointerEnabled, Message = PointerEnabled ? "Enabled" : "Disabled" };
 
         protected abstract Vector3 Position { get; }
 
