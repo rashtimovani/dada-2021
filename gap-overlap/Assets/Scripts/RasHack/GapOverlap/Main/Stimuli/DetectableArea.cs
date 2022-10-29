@@ -20,6 +20,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private Action<Pointer> onDetected;
 
+        private Action<Pointer> onGettingCloser;
+
         #endregion
 
         #region API
@@ -28,10 +30,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private Scaler Scaler => owner.Scaler;
 
-        public void RegisterOnDetect(Simulator whoDetects, Action<Pointer> onDetectedAction)
+        public void RegisterOnDetect(Simulator whoDetects, Action<Pointer> onDetectedAction,
+            Action<Pointer> onGettingCloserAction)
         {
             owner = whoDetects;
             onDetected = onDetectedAction;
+            onGettingCloser = onGettingCloserAction;
             wasFocusedOn = false;
         }
 
@@ -65,11 +69,21 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (pointer == null) return;
             wasFocusedOn = true;
             onDetected.Invoke(pointer);
+            onGettingCloser.Invoke(pointer);
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (!wasFocusedOn) return;
+            var pointer = other.gameObject.GetComponent<Pointer>();
+            if (pointer == null) return;
+            onGettingCloser.Invoke(pointer);
         }
 
         private void OnDestroy()
         {
             onDetected = null;
+            onGettingCloser = null;
         }
 
         #endregion

@@ -101,6 +101,16 @@ namespace RasHack.GapOverlap.Main
             return anchor + distance;
         }
 
+        public float DistanceInRealWorldToCM(Vector3 firstPosition, Vector2 secondPosition)
+        {
+            var firstScreenPosition = mainCamera.WorldToScreenPoint(firstPosition);
+            var secondScreenPosition = mainCamera.WorldToScreenPoint(secondPosition);
+            var distanceOnScreen =  Vector3.Distance(firstScreenPosition, secondScreenPosition);
+
+            var cmPerPixel = ScreenInCM.x / Screen.width;
+            return distanceOnScreen * cmPerPixel;
+        }
+
         #endregion
 
         #region Helpers

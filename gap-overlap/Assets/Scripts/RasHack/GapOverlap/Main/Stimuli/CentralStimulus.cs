@@ -27,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.lifetime = lifetime;
             spentLifetime = 0;
 
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection, OnCentralPointerGettingCloser);
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
 
@@ -38,7 +38,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             this.lifetime = lifetime;
             spentLifetime = 0;
 
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection);
+            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection, OnCentralPointerGettingCloser);
             DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);
         }
 
@@ -69,6 +69,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void OnCentralPointerDetection(Pointer pointer)
         {
             owner.ReportFocusedOnCentral(this, pointer.Eye, spentLifetime.GetValueOrDefault(lifetime));
+        }
+        
+        private void OnCentralPointerGettingCloser(Pointer pointer)
+        {
+            owner.ReportCentralGotCloser(this, pointer.Eye, pointer);
         }
 
         private void Update()

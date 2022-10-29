@@ -39,5 +39,35 @@ namespace RasHack.GapOverlap.Main.Result
                     return this;
             }
         }
+
+        public AllResponseTimes CentralGotCloser(Eye eye, float distance)
+        {
+            switch (eye)
+            {
+                case Eye.Left:
+                    return new AllResponseTimes()
+                        { LeftEye = LeftEye.CentralGotCloser(distance), RightEye = RightEye };
+                case Eye.Right:
+                    return new AllResponseTimes()
+                        { LeftEye = LeftEye, RightEye = RightEye.CentralGotCloser(distance) };
+                default:
+                    return this;
+            }
+        }
+
+        public AllResponseTimes PeripheralGotCloser(Eye eye, float distance)
+        {
+            switch (eye)
+            {
+                case Eye.Left:
+                    return new AllResponseTimes()
+                        { LeftEye = LeftEye.PeripheralGotCloser(distance), RightEye = RightEye };
+                case Eye.Right:
+                    return new AllResponseTimes()
+                        { LeftEye = LeftEye, RightEye = RightEye.PeripheralGotCloser(distance) };
+                default:
+                    return this;
+            }
+        }
     }
 }
