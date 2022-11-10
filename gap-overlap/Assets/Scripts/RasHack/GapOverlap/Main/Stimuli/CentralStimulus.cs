@@ -63,7 +63,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Start()
         {
-            GetComponent<AudioSource>().Play();
+            if (owner.Owner.Settings.SoundEnabled) GetComponent<AudioSource>().Play();
         }
 
         private void OnCentralPointerDetection(Pointer pointer)

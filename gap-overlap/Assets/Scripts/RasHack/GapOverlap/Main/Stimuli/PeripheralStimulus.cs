@@ -103,7 +103,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     break;
             }
 
-            audioSource.Play();
+            if (owner.Owner.Settings.SoundEnabled) audioSource.Play();
         }
 
         private void Update()

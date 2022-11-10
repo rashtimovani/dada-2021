@@ -270,8 +270,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
         #region Debug
 
-        [Header("Debug settings")] [SerializeField]
-        private Toggle showPointer;
+        [Header("Debug settings")] [SerializeField] private Toggle showPointer;
 
         public bool ShowPointer
         {
@@ -285,6 +284,24 @@ namespace RasHack.GapOverlap.Main.Settings
             return defaults.ShowPointer;
         }
 
+        #endregion
+
+        #region Sound
+
+        [Header("Sound settings")] [SerializeField] private Toggle soundEnabled;
+
+        public bool SoundEnabled
+        {
+            get => soundEnabled.isOn;
+            set => soundEnabled.isOn = value;
+        }
+
+        private bool ResetSoundEnabled()
+        {
+            soundEnabled.isOn = defaults.SoundEnabled;
+            return defaults.SoundEnabled;
+        }
+        
         #endregion
 
         #region API
@@ -370,6 +387,7 @@ namespace RasHack.GapOverlap.Main.Settings
             simulator.Settings.TaskCount = ResetTaskCount();
 
             simulator.Settings.ShowPointer = ResetShowPointer();
+            simulator.Settings.SoundEnabled = ResetSoundEnabled();
 
             Display();
         }
@@ -404,6 +422,7 @@ namespace RasHack.GapOverlap.Main.Settings
             TaskCount = simulator.Settings.TaskCount;
 
             ShowPointer = simulator.Settings.ShowPointer;
+            SoundEnabled = simulator.Settings.SoundEnabled;
         }
 
         public void Hide(bool dontStore = false)
@@ -435,6 +454,7 @@ namespace RasHack.GapOverlap.Main.Settings
             simulator.Settings.TaskCount = TaskCount;
 
             simulator.Settings.ShowPointer = ShowPointer;
+            simulator.Settings.SoundEnabled = SoundEnabled;
 
             simulator.Settings.Store();
         }

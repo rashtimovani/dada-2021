@@ -45,6 +45,9 @@ namespace RasHack.GapOverlap.Main.Settings
         public BaselineTimes BaselineTimes = new()
             { CentralTime = 5.0f, CentralOutStimulusIn = 5.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
+        [Header("Sound")]
+        public bool SoundEnabled;
+
         #endregion
 
         #region API
