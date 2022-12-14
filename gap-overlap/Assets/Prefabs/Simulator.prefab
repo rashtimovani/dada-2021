@@ -87,6 +87,7 @@ MonoBehaviour:
   simulator: {fileID: 6232430714456115892}
   spriteRenderer: {fileID: 388354803533973988}
   gazeEye: 1
+  acceptableLastValidReadingTimeout: 25
 --- !u!1 &1214063865978585052
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,6 +431,7 @@ MonoBehaviour:
   simulator: {fileID: 6232430714456115892}
   spriteRenderer: {fileID: 7347319994291106727}
   gazeEye: 0
+  acceptableLastValidReadingTimeout: 25
 --- !u!1 &5437879310479564058
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,6 +528,7 @@ GameObject:
   - component: {fileID: 6232430714456115892}
   - component: {fileID: 8111807920774638880}
   - component: {fileID: 3700890592413371578}
+  - component: {fileID: 4225343252999125548}
   m_Layer: 8
   m_Name: Simulator
   m_TagString: focusable
@@ -577,43 +580,7 @@ MonoBehaviour:
   bottomRight: {fileID: 5230554403686800800}
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
-  settings:
-    LastUsedName: 
-    SoundVolume: 1
-    FadeInOut: 0.1
-    RotationFactor: 4
-    ShowPointer: 0
-    PauseBeforeTasks: 1
-    PauseBetweenTasks: 2.7
-    PauseAfterTasks: 1
-    ReferencePoint:
-      DistanceFromEyesInCM: 60
-      ScreenDiagonalInInches: 15.6
-    Background: 0
-    DistanceBetweenPeripheralStimuliInDegrees: 20
-    CentralStimulusSizeInDegrees: 3.5
-    PeripheralStimulusSizeInDegrees: 3
-    TaskCount:
-      Gaps: 20
-      LeftGaps: 10
-      Overlaps: 20
-      LeftOverlaps: 10
-      Baselines: 20
-      LeftBaselines: 10
-    GapTimes:
-      CentralTime: 1
-      PauseTime: 0.2
-      StimulusTime: 1.5
-      ShortenOnFocusTime: 0.2
-    OverlapTimes:
-      CentralTime: 1.2
-      BothStimuli: 1.5
-      ShortenOnFocusTime: 0.2
-    BaselineTimes:
-      CentralTime: 1
-      CentralOutStimulusIn: 1
-      StimulusTime: 1
-      ShortenOnFocusTime: 0.2
+  collector: {fileID: 4225343252999125548}
 --- !u!114 &8111807920774638880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,6 +611,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5265d45f1c60e7a4bb38e48ec035a2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4225343252999125548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6232430714456115890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3eceb716a140f5439d3c5d10cb18cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  samplesPerSecond: 60
+  simulator: {fileID: 6232430714456115892}
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0

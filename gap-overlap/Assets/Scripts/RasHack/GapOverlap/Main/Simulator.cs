@@ -20,6 +20,8 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topLeft;
         [SerializeField] private SpriteRenderer topRight;
 
+        [SerializeField] private RawDataCollector collector;
+
         #endregion
 
         #region Fields
@@ -121,6 +123,7 @@ namespace RasHack.GapOverlap.Main
             AudioListener.volume = settings.SoundVolume;
 
             results.StartTest(runName);
+            collector.TasksStarted(settings.SamplesPerSecond);
             waitingTime = settings.PauseBeforeTasks;
         }
 
@@ -209,6 +212,7 @@ namespace RasHack.GapOverlap.Main
             if (currentTask == null)
             {
                 results.EndActiveTest();
+                collector.TasksCompleted();
                 Debug.Log("All tasks finished!");
                 IsActive = false;
                 return;
@@ -231,6 +235,7 @@ namespace RasHack.GapOverlap.Main
                 }
 
                 results.AbortActiveTest();
+                collector.TasksCompleted();
                 IsActive = false;
                 waitingTime = 0.01f;
             }

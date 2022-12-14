@@ -48,6 +48,9 @@ namespace RasHack.GapOverlap.Main.Settings
         [Header("Sound")]
         public bool SoundEnabled;
 
+        [Header("Results")]
+        public float SamplesPerSecond = 60f;
+
         #endregion
 
         #region API
