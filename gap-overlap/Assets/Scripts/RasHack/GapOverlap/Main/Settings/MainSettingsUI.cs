@@ -304,6 +304,24 @@ namespace RasHack.GapOverlap.Main.Settings
         
         #endregion
 
+        #region Samples
+
+        [Header("Sample settings")] [SerializeField] private FloatInput samplesPerSecond;
+
+        public float SamplesPerSecond
+        {
+            get => samplesPerSecond.Value;
+            set => samplesPerSecond.Value = value;
+        }
+
+        private float ResetSamplesPerSecond()
+        {
+            samplesPerSecond.Value = defaults.SamplesPerSecond;
+            return defaults.SamplesPerSecond;
+        }
+
+        #endregion
+
         #region API
 
         public void Show()
@@ -388,6 +406,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
             simulator.Settings.ShowPointer = ResetShowPointer();
             simulator.Settings.SoundEnabled = ResetSoundEnabled();
+            simulator.Settings.SamplesPerSecond = ResetSamplesPerSecond();
 
             Display();
         }
@@ -423,6 +442,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
             ShowPointer = simulator.Settings.ShowPointer;
             SoundEnabled = simulator.Settings.SoundEnabled;
+            SamplesPerSecond = simulator.Settings.SamplesPerSecond;
         }
 
         public void Hide(bool dontStore = false)
@@ -455,6 +475,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
             simulator.Settings.ShowPointer = ShowPointer;
             simulator.Settings.SoundEnabled = SoundEnabled;
+            simulator.Settings.SamplesPerSecond = SamplesPerSecond;
 
             simulator.Settings.Store();
         }
