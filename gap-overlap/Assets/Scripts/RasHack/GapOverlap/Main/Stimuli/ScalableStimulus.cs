@@ -35,6 +35,19 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
+
+        public RawPosition RawPosition
+        {
+            get {
+                var rawCenter = AsRaw(transform.position);
+                var rawBottomLeft = AsRaw(bottomLeft.position);
+                var rawBottomRight = AsRaw(new Vector2(topRight.position.x, bottomLeft.position.y));
+                var rawTopLeft = AsRaw(new Vector2(bottomLeft.position.x, topRight.position.y));
+                var rawTopRight = AsRaw(topRight.position);
+                return new RawPosition();
+            }
+        }
+
         public void Scale(Vector3 desiredSize)
         {
             var size = Size;
@@ -51,17 +64,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
             switch (currentAnimation)
             {
                 case FadeIn:
-                {
-                    var halfShorterTime = keepIdling ? shorterLifetime : shorterLifetime / 2.0f;
-                    var remainingFadeIn = currentAnimation.ShortenAnimation(halfShorterTime);
-                    if (!keepIdling)
                     {
-                        idleDuration = 0;
-                        fadeOut = halfShorterTime;
-                    }
+                        var halfShorterTime = keepIdling ? shorterLifetime : shorterLifetime / 2.0f;
+                        var remainingFadeIn = currentAnimation.ShortenAnimation(halfShorterTime);
+                        if (!keepIdling)
+                        {
+                            idleDuration = 0;
+                            fadeOut = halfShorterTime;
+                        }
 
-                    return remainingFadeIn + fadeOut;
-                }
+                        return remainingFadeIn + fadeOut;
+                    }
                 case Idle:
                     if (!keepIdling)
                     {
@@ -83,10 +96,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
             switch (currentAnimation)
             {
                 case FadeIn:
-                {
-                    idleDuration = shorterLifetime;
-                    return idleDuration + fadeOut;
-                }
+                    {
+                        idleDuration = shorterLifetime;
+                        return idleDuration + fadeOut;
+                    }
                 case Idle:
                     idleDuration = currentAnimation.ShortenAnimation(shorterLifetime);
                     return fadeOut + idleDuration;
@@ -134,6 +147,13 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             Destroy(rotation);
             rotation = animation;
+        }
+
+        private Vector2 AsRaw(Vector2 inPixels)
+        {
+            var rawX = inPixels.x / Screen.width;
+            var rawY = (Screen.height - inPixels.y) / Screen.height;
+            return new Vector2(rawX, rawY);
         }
 
         #endregion
