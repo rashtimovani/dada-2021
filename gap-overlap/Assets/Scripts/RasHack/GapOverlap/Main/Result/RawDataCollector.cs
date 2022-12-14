@@ -19,6 +19,8 @@ namespace RasHack.GapOverlap.Main.Result
 
         private bool doCollecting;
 
+        private IEyeTracker subscribedTo;
+
 
         #endregion
 
@@ -31,16 +33,34 @@ namespace RasHack.GapOverlap.Main.Result
 
             sampleTime = 1f / sampleRate;
             sampleTimePassed = 0;
+
+            var eyeTrackers = EyeTrackingOperations.FindAllEyeTrackers();
+            foreach (IEyeTracker eyeTracker in eyeTrackers)
+            {
+                subscribedTo = eyeTracker;
+                subscribedTo.GazeDataReceived += GazeDataReceived;
+                Debug.Log($"Subscribed to using {subscribedTo.Model}({subscribedTo.DeviceName}) on address {subscribedTo.Address}, started to receive gaze events from it");
+                break;
+            }
         }
 
         public void TasksCompleted()
         {
+            if (!doCollecting) return;
+
             doCollecting = false;
+
+            if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
         }
 
         #endregion
 
         #region Mono methods
+
+        private void OnDestroy()
+        {
+            TasksCompleted();
+        }
 
 
         private void FixedUpdate()
@@ -65,6 +85,11 @@ namespace RasHack.GapOverlap.Main.Result
         private void DoSampling()
         {
             Debug.Log($"Sampling done at {referenceTime}s");
+        }
+
+        private void GazeDataReceived(object sender, GazeDataEventArgs gazeEvent)
+        {
+
         }
 
         #endregion
