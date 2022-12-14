@@ -17,6 +17,8 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region Internals
 
+        protected int taskOrder;
+
         protected Simulator owner;
         protected StimuliType stimulusType;
         protected AllResponseTimes responses;
@@ -36,14 +38,17 @@ namespace RasHack.GapOverlap.Main.Task
 
         public StimulusSide Side => area.Side;
 
+        public int TaskOrder => taskOrder;
+
         public float FadeInOut => owner.Settings.FadeInOut;
 
         public int RotationFactor => owner.Settings.RotationFactor;
 
-        public void StartTask(Simulator owner, StimuliType stimulusType)
+        public void StartTask(Simulator owner, StimuliType stimulusType, int taskOrder)
         {
             this.owner = owner;
             this.stimulusType = stimulusType;
+            this.taskOrder = taskOrder;
 
             area = owner.Area.NextInWorld(TaskType);
             gameObject.name = gameObject.name + "_" + area.Side;

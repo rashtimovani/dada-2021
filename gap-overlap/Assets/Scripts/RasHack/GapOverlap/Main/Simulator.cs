@@ -96,6 +96,7 @@ namespace RasHack.GapOverlap.Main
 
             results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, responses);
             Debug.Log($"{currentTask} has finished");
+            collector.TaskCompleted(currentTask);
             currentTask = null;
             waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : settings.PauseAfterTasks;
         }
@@ -122,8 +123,9 @@ namespace RasHack.GapOverlap.Main
             FlushToDisk();
             AudioListener.volume = settings.SoundVolume;
 
-            results.StartTest(runName);
-            collector.TasksStarted(settings.SamplesPerSecond);
+            var testId = Guid.NewGuid().ToString();
+            results.StartTest(runName, testId);
+            collector.TasksStarted(runName, testId, settings.SamplesPerSecond);
             waitingTime = settings.PauseBeforeTasks;
         }
 
@@ -208,6 +210,7 @@ namespace RasHack.GapOverlap.Main
 
         private void NewTask()
         {
+            var taskOrder = tasks.CurrentTaskOrder;
             currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)
             {
@@ -218,7 +221,8 @@ namespace RasHack.GapOverlap.Main
                 return;
             }
 
-            currentTask.StartTask(this, nextStimulus);
+            currentTask.StartTask(this, nextStimulus, taskOrder);
+            collector.TaskStarted(currentTask);
             nextStimulus = StimuliTypeExtensions.Next();
         }
 

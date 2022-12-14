@@ -37,14 +37,14 @@ namespace RasHack.GapOverlap.Main.Result
 
         #region API
 
-        public void StartTest(string name)
+        public void StartTest(string name, string testId)
         {
             filename ??= $"{DateTime.Now:yyyy-MM-dd_HH-mm}";
 
             activeRun = new TestRun
             {
                 Name = name,
-                Id = Guid.NewGuid().ToString(),
+                Id = testId,
                 Measurements = new List<TestMeasurement>()
             };
         }

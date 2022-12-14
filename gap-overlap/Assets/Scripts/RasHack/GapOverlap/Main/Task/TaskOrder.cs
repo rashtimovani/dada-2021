@@ -43,11 +43,14 @@ namespace RasHack.GapOverlap.Main.Task
 
         #region API
 
+        public int CurrentTaskOrder { get; private set;}
+
         public bool HasNext => randomTasks.HasNext;
 
         public void Reset(TaskCount taskCount)
         {
             currentIndex = 0;
+            CurrentTaskOrder = 0;
             randomTasks.SetOptions(new RandomOption<TaskType>(TaskType.Gap, taskCount.Gaps),
                 new RandomOption<TaskType>(TaskType.Overlap, taskCount.Overlaps),
                 new RandomOption<TaskType>(TaskType.Baseline, taskCount.Baselines));
@@ -63,6 +66,7 @@ namespace RasHack.GapOverlap.Main.Task
             if (!HasNext) return null;
 
             currentIndex++;
+            CurrentTaskOrder++;
             var next = randomTasks.Next();
 
             switch (next)

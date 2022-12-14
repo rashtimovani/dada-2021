@@ -1,7 +1,9 @@
 using Tobii.Research;
-using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
-using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Task;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -21,18 +23,23 @@ namespace RasHack.GapOverlap.Main.Result
 
         private IEyeTracker subscribedTo;
 
+        private RawTestResult result;
+
+        private float currentTaskStartedAt;
 
         #endregion
 
         #region API
 
-        public void TasksStarted(float sampleRate)
+        public void TasksStarted(string name, string testId, float sampleRate)
         {
             doCollecting = true;
             referenceTime = 0;
 
             sampleTime = 1f / sampleRate;
             sampleTimePassed = 0;
+
+            result = new RawTestResult { Name = name, TestId = testId, Tasks = new RawTestTasks { List = new List<RawTaskTimes>() } };
 
             var eyeTrackers = EyeTrackingOperations.FindAllEyeTrackers();
             foreach (IEyeTracker eyeTracker in eyeTrackers)
@@ -51,6 +58,38 @@ namespace RasHack.GapOverlap.Main.Result
             doCollecting = false;
 
             if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
+
+            Store();
+
+            result = new RawTestResult();
+        }
+
+        public void TaskStarted(Task.Task task)
+        {
+            currentTaskStartedAt = referenceTime;
+        }
+
+        public void TaskCompleted(Task.Task task)
+        {
+            result.Tasks.List.Add(new RawTaskTimes
+            {
+                EndTime = referenceTime,
+                StartTime = currentTaskStartedAt,
+                TaskOrder = task.TaskOrder,
+                Side = task.Side.ToString(),
+                StimulusType = task.StimulusType.ToString(),
+                TaskType = task.TaskType.ToString()
+            });
+            Store();
+        }
+
+        public void Store()
+        {
+            var json = JsonUtility.ToJson(result, true);
+            Directory.CreateDirectory(TestResults.RESULTS_DIRECTORY);
+            var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{result.Name}_{result.TestId}.json";
+            File.WriteAllText(filename, json, Encoding.UTF8);
+            Debug.Log($"Stored {filename}");
         }
 
         #endregion
@@ -84,7 +123,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         private void DoSampling()
         {
-            Debug.Log($"Sampling done at {referenceTime}s");
+
         }
 
         private void GazeDataReceived(object sender, GazeDataEventArgs gazeEvent)
