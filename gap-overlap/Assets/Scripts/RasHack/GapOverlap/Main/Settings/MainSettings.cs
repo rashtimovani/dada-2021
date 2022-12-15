@@ -49,7 +49,7 @@ namespace RasHack.GapOverlap.Main.Settings
         public bool SoundEnabled;
 
         [Header("Results")]
-        public float SamplesPerSecond = 60f;
+        public float SamplesPerSecond = 25f;
 
         #endregion
 
