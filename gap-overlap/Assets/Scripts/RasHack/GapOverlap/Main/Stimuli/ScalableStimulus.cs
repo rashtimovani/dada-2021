@@ -157,12 +157,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             rotation = animation;
         }
 
-        private Vector2 AsRaw(Vector3 inWorld)
+        private RawPoint AsRaw(Vector3 inWorld)
         {
             var inScreen = Camera.main.WorldToScreenPoint(inWorld);
             var rawX = inScreen.x / Screen.width;
             var rawY = (Screen.height - inScreen.y) / Screen.height;
-            return new Vector2(rawX, rawY);
+            return new RawPoint { X = rawX, Y = rawY };
         }
 
         #endregion

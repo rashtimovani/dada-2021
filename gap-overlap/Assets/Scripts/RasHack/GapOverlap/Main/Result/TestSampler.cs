@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Stimuli;
 using Tobii.Research;
 using UnityEngine;
@@ -107,10 +108,17 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void Store()
         {
-            var json = JsonUtility.ToJson(sampled, true);
             Directory.CreateDirectory(TestResults.RESULTS_DIRECTORY);
             var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
-            File.WriteAllText(filename, json, Encoding.UTF8);
+
+            var serializer = JsonSerializer.CreateDefault();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+
+            using (StreamWriter sw = new StreamWriter(@filename))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, sampled);
+            }
             Debug.Log($"Stored {filename}");
         }
 

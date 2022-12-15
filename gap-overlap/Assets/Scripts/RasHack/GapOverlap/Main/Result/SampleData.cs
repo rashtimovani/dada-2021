@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using Mono.Cecil;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Numerics;
 using RasHack.GapOverlap.Main.Stimuli;
-using RasHack.GapOverlap.Main.Task;
 using Tobii.Research;
 using UnityEngine;
 
@@ -33,9 +30,9 @@ namespace RasHack.GapOverlap.Main.Result
     public class Sample
     {
         public float Time;
-        
+
         public SampledTask Task;
-        
+
         public SampledTracker Tracker;
     }
 
@@ -69,11 +66,11 @@ namespace RasHack.GapOverlap.Main.Result
     {
         public string Validity;
 
-        public Vector2 PositionOnDisplayArea;
+        public RawPoint PositionOnDisplayArea;
 
         public SampledGaze(GazePoint point)
         {
-            PositionOnDisplayArea = new Vector2(point.PositionOnDisplayArea.X, point.PositionOnDisplayArea.Y);
+            PositionOnDisplayArea = new RawPoint { X = point.PositionOnDisplayArea.X, Y = point.PositionOnDisplayArea.Y };
             Validity = point.Validity.ToString();
         }
 
