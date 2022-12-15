@@ -136,11 +136,11 @@ namespace RasHack.GapOverlap.Main.Result
         {
             if (!doCollecting) return;
 
-            referenceTime += Time.fixedDeltaTime;
             sampleTimePassed += Time.fixedDeltaTime;
 
             while (sampleTimePassed >= sampleTime)
             {
+                referenceTime += sampleTime;
                 sampleTimePassed -= sampleTime;
                 DoSampling();
             }
