@@ -82,6 +82,7 @@ namespace RasHack.GapOverlap.Main
         public Scaler Scaler => scaler;
         public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
+        public RawDataCollector Collector => collector;
 
         private bool ShowPointer => settings.ShowPointer;
 
@@ -210,18 +211,17 @@ namespace RasHack.GapOverlap.Main
 
         private void NewTask()
         {
-            var taskOrder = tasks.CurrentTaskOrder;
             currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)
             {
                 results.EndActiveTest();
-                collector.TasksCompleted();
+                collector.TasksCompleted(true);
                 Debug.Log("All tasks finished!");
                 IsActive = false;
                 return;
             }
 
-            currentTask.StartTask(this, nextStimulus, taskOrder);
+            currentTask.StartTask(this, nextStimulus, tasks.CurrentTaskOrder);
             collector.TaskStarted(currentTask);
             nextStimulus = StimuliTypeExtensions.Next();
         }
@@ -239,7 +239,7 @@ namespace RasHack.GapOverlap.Main
                 }
 
                 results.AbortActiveTest();
-                collector.TasksCompleted();
+                collector.TasksCompleted(false);
                 IsActive = false;
                 waitingTime = 0.01f;
             }

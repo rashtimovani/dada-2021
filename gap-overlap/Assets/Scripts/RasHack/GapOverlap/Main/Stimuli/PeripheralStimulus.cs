@@ -44,6 +44,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region API
 
+        public int TaskOrder => owner.TaskOrder;
+
         public void StartSimulating(StimuliType type, StimulusSide side, Task.Task owner, float lifetime)
         {
             StartSimulating(type, side, owner, lifetime, owner.FadeInOut);
@@ -104,6 +106,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
 
             if (owner.Owner.Settings.SoundEnabled) audioSource.Play();
+            owner.Owner.Collector.StartPeripheral(this);
         }
 
         private void Update()
@@ -113,6 +116,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime += Time.deltaTime;
             if (spentLifetime < lifetime) return;
 
+            owner.Owner.Collector.CompletePeripheral();
             owner.ReportPeripheralStimulusDied(this);
             spentLifetime = null;
         }

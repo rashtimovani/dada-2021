@@ -4,6 +4,7 @@ using RasHack.GapOverlap.Main.Task;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using RasHack.GapOverlap.Main.Stimuli;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -27,19 +28,24 @@ namespace RasHack.GapOverlap.Main.Result
 
         private float currentTaskStartedAt;
 
+        private CentralStimulus currentCentral;
+
+        private PeripheralStimulus currentPeripheral;
+
         #endregion
 
         #region API
 
         public void TasksStarted(string name, string testId, float sampleRate)
         {
+            result = new RawTestResult { Name = name, TestId = testId };
             doCollecting = true;
             referenceTime = 0;
 
             sampleTime = 1f / sampleRate;
             sampleTimePassed = 0;
 
-            result = new RawTestResult { Name = name, TestId = testId, Tasks = new RawTestTasks { List = new List<RawTaskTimes>() } };
+            currentTaskStartedAt = 0f;
 
             var eyeTrackers = EyeTrackingOperations.FindAllEyeTrackers();
             foreach (IEyeTracker eyeTracker in eyeTrackers)
@@ -51,10 +57,11 @@ namespace RasHack.GapOverlap.Main.Result
             }
         }
 
-        public void TasksCompleted()
+        public void TasksCompleted(bool allCompleted)
         {
             if (!doCollecting) return;
 
+            result.TestCompleted = allCompleted;
             doCollecting = false;
 
             if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
@@ -83,6 +90,26 @@ namespace RasHack.GapOverlap.Main.Result
             Store();
         }
 
+        public void StartCentral(CentralStimulus centralStimulus)
+        {
+            currentCentral = centralStimulus;
+        }
+
+        public void CompleteCentral()
+        {
+            currentCentral = null;
+        }
+
+        public void StartPeripheral(PeripheralStimulus peripheralStimulus)
+        {
+            currentPeripheral = peripheralStimulus;
+        }
+
+        public void CompletePeripheral()
+        {
+            currentPeripheral = null;
+        }
+
         public void Store()
         {
             var json = JsonUtility.ToJson(result, true);
@@ -98,13 +125,12 @@ namespace RasHack.GapOverlap.Main.Result
 
         private void OnDestroy()
         {
-            TasksCompleted();
+            TasksCompleted(false);
         }
 
 
         private void FixedUpdate()
         {
-
             if (!doCollecting) return;
 
             referenceTime += Time.fixedDeltaTime;
@@ -123,6 +149,12 @@ namespace RasHack.GapOverlap.Main.Result
 
         private void DoSampling()
         {
+            if (currentCentral != null)
+                result.CentralStimuli.List.Add(new RawStimulus { Time = referenceTime, TaskOrder = currentCentral.TaskOrder, Position = currentCentral.RawPosition });
+
+
+            if (currentPeripheral != null)
+                result.PeripheralStimuli.List.Add(new RawStimulus { Time = referenceTime, TaskOrder = currentPeripheral.TaskOrder, Position = currentPeripheral.RawPosition });
 
         }
 

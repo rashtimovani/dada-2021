@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
+    [System.Serializable]
     public struct RawPosition
     {
         public Vector2 Center;
