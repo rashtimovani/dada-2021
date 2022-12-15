@@ -171,15 +171,15 @@ namespace RasHack.GapOverlap.Main.Result
             if (currentGaze != null)
                 sample.Tracker = new SampledTracker { LeftEye = new SampledGaze(currentGaze.LeftEye.GazePoint), RightEye = new SampledGaze(currentGaze.RightEye.GazePoint) };
 
-            if (Input.mousePresent)
-            {
-                var mouse = Input.mousePosition;
+            // if (Input.mousePresent)
+            // {
+            //     var mouse = Input.mousePosition;
 
-                var leftEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
-                var rightEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+            //     var leftEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+            //     var rightEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
 
-                sample.Tracker = new SampledTracker { LeftEye = leftEye, RightEye = rightEye };
-            }
+            //     sample.Tracker = new SampledTracker { LeftEye = leftEye, RightEye = rightEye };
+            // }
 
             sampled.Samples.AllSamples.Add(sample);
         }

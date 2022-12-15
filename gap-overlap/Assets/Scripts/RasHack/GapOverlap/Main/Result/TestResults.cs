@@ -89,7 +89,9 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 var headerLines = new string[1];
                 headerLines[0] = Header();
-                File.WriteAllLines(@fullFilename, headerLines);
+                // TODO: This is turned of to have only one results file generated after test ends
+                // in the long run, this entire mechanism for tracking resuts should be removed
+                // File.WriteAllLines(@fullFilename, headerLines);
             }
 
             var totalLines = 0;
@@ -106,7 +108,9 @@ namespace RasHack.GapOverlap.Main.Result
                 nextLineIndex = ResultsCsv(results[i], lines, nextLineIndex);
             }
 
-            File.AppendAllLines(@fullFilename, lines);
+            // TODO: This is turned of to have only one results file generated after test ends
+            // in the long run, this entire mechanism for tracking resuts should be removed
+            // File.AppendAllLines(@fullFilename, lines);
 
             results.Clear();
         }
