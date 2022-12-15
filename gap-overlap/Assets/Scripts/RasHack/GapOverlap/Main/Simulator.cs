@@ -20,7 +20,7 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topLeft;
         [SerializeField] private SpriteRenderer topRight;
 
-        [SerializeField] private RawDataCollector collector;
+        [SerializeField] private TestSampler sampler;
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace RasHack.GapOverlap.Main
         public Scaler Scaler => scaler;
         public Scaler DebugScaler => debugScaler;
         public StimuliArea Area => area;
-        public RawDataCollector Collector => collector;
+        public TestSampler Sampler => sampler;
 
         private bool ShowPointer => settings.ShowPointer;
 
@@ -97,7 +97,7 @@ namespace RasHack.GapOverlap.Main
 
             results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, responses);
             Debug.Log($"{currentTask} has finished");
-            collector.TaskCompleted(currentTask);
+            sampler.CompleteTask(currentTask);
             currentTask = null;
             waitingTime = tasks.HasNext ? settings.PauseBetweenTasks : settings.PauseAfterTasks;
         }
@@ -126,7 +126,7 @@ namespace RasHack.GapOverlap.Main
 
             var testId = Guid.NewGuid().ToString();
             results.StartTest(runName, testId);
-            collector.TasksStarted(runName, testId, settings.SamplesPerSecond);
+            sampler.StartTest(runName, testId, settings.SamplesPerSecond);
             waitingTime = settings.PauseBeforeTasks;
         }
 
@@ -215,14 +215,14 @@ namespace RasHack.GapOverlap.Main
             if (currentTask == null)
             {
                 results.EndActiveTest();
-                collector.TasksCompleted(true);
+                sampler.CompleteTest(true);
                 Debug.Log("All tasks finished!");
                 IsActive = false;
                 return;
             }
 
             currentTask.StartTask(this, nextStimulus, tasks.CurrentTaskOrder);
-            collector.TaskStarted(currentTask);
+            sampler.StartTask(currentTask);
             nextStimulus = StimuliTypeExtensions.Next();
         }
 
@@ -239,7 +239,7 @@ namespace RasHack.GapOverlap.Main
                 }
 
                 results.AbortActiveTest();
-                collector.TasksCompleted(false);
+                sampler.CompleteTest(false);
                 IsActive = false;
                 waitingTime = 0.01f;
             }

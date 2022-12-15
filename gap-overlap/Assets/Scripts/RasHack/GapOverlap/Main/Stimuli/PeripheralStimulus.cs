@@ -106,7 +106,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
 
             if (owner.Owner.Settings.SoundEnabled) audioSource.Play();
-            owner.Owner.Collector.StartPeripheral(this);
+            owner.Owner.Sampler.StartPeripheral(this);
         }
 
         private void Update()
@@ -116,7 +116,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             spentLifetime += Time.deltaTime;
             if (spentLifetime < lifetime) return;
 
-            owner.Owner.Collector.CompletePeripheral();
+            owner.Owner.Sampler.CompletePeripheral();
             owner.ReportPeripheralStimulusDied(this);
             spentLifetime = null;
         }

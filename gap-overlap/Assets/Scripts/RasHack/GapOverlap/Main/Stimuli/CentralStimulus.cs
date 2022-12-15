@@ -66,7 +66,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void Start()
         {
             if (owner.Owner.Settings.SoundEnabled) GetComponent<AudioSource>().Play();
-            owner.Owner.Collector.StartCentral(this);
+            owner.Owner.Sampler.StartCentral(this);
         }
 
         private void OnCentralPointerDetection(Pointer pointer)
@@ -87,7 +87,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (spentLifetime < lifetime) return;
 
             spentLifetime = null;
-            owner.Owner.Collector.CompleteCentral();
+            owner.Owner.Sampler.CompleteCentral();
             owner.ReportCentralStimulusDied(this);
         }
 

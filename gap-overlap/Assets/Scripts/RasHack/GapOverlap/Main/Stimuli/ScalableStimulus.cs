@@ -41,11 +41,18 @@ namespace RasHack.GapOverlap.Main.Stimuli
             get
             {
                 var rawCenter = AsRaw(transform.position);
-                var rawBottomLeft = AsRaw(bottomLeft.position);
-                var rawBottomRight = AsRaw(new Vector2(topRight.position.x, bottomLeft.position.y));
-                var rawTopLeft = AsRaw(new Vector2(bottomLeft.position.x, topRight.position.y));
-                var rawTopRight = AsRaw(topRight.position);
-                return new RawPosition { Center = rawCenter, BottomLeft = rawBottomLeft, BottomRight = rawBottomRight, TopLeft = rawTopLeft, TopRight = rawTopRight };
+                // var rawBottomLeft = AsRaw(bottomLeft.position);
+                // var rawBottomRight = AsRaw(new Vector2(topRight.position.x, bottomLeft.position.y));
+                // var rawTopLeft = AsRaw(new Vector2(bottomLeft.position.x, topRight.position.y));
+                // var rawTopRight = AsRaw(topRight.position);
+                return new RawPosition
+                {
+                    Center = rawCenter,
+                    // BottomLeft = rawBottomLeft,
+                    // BottomRight = rawBottomRight,
+                    // TopLeft = rawTopLeft,
+                    // TopRight = rawTopRight
+                };
             }
         }
 

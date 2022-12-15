@@ -1,14 +1,13 @@
-using Tobii.Research;
-using UnityEngine;
-using RasHack.GapOverlap.Main.Task;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using RasHack.GapOverlap.Main.Stimuli;
+using Tobii.Research;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
 {
-    public class RawDataCollector : MonoBehaviour
+    public class TestSampler : MonoBehaviour
     {
         #region Fields
 
@@ -24,28 +23,33 @@ namespace RasHack.GapOverlap.Main.Result
 
         private IEyeTracker subscribedTo;
 
-        private RawTestResult result;
+        private SampledTest sampled;
 
-        private float currentTaskStartedAt;
+        private Task.Task currentTask;
 
         private CentralStimulus currentCentral;
 
         private PeripheralStimulus currentPeripheral;
 
+        private GazeDataEventArgs currentGaze;
+
         #endregion
 
         #region API
 
-        public void TasksStarted(string name, string testId, float sampleRate)
+        public void StartTest(string name, string testId, float sampleRate)
         {
-            result = new RawTestResult { Name = name, TestId = testId };
+            sampled = new SampledTest { Name = name, TestId = testId };
             doCollecting = true;
             referenceTime = 0;
 
             sampleTime = 1f / sampleRate;
             sampleTimePassed = 0;
 
-            currentTaskStartedAt = 0f;
+            currentTask = null;
+            currentCentral = null;
+            currentPeripheral = null;
+            currentGaze = null;
 
             var eyeTrackers = EyeTrackingOperations.FindAllEyeTrackers();
             foreach (IEyeTracker eyeTracker in eyeTrackers)
@@ -57,37 +61,28 @@ namespace RasHack.GapOverlap.Main.Result
             }
         }
 
-        public void TasksCompleted(bool allCompleted)
+        public void CompleteTest(bool allCompleted)
         {
             if (!doCollecting) return;
 
-            result.TestCompleted = allCompleted;
+            sampled.TestCompleted = allCompleted;
             doCollecting = false;
 
             if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
 
             Store();
 
-            result = new RawTestResult();
+            sampled = null;
         }
 
-        public void TaskStarted(Task.Task task)
+        public void StartTask(Task.Task task)
         {
-            currentTaskStartedAt = referenceTime;
+            currentTask = task;
         }
 
-        public void TaskCompleted(Task.Task task)
+        public void CompleteTask(Task.Task task)
         {
-            result.Tasks.List.Add(new RawTaskTimes
-            {
-                EndTime = referenceTime,
-                StartTime = currentTaskStartedAt,
-                TaskOrder = task.TaskOrder,
-                Side = task.Side.ToString(),
-                StimulusType = task.StimulusType.ToString(),
-                TaskType = task.TaskType.ToString()
-            });
-            Store();
+            currentTask = null;
         }
 
         public void StartCentral(CentralStimulus centralStimulus)
@@ -112,9 +107,9 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void Store()
         {
-            var json = JsonUtility.ToJson(result, true);
+            var json = JsonUtility.ToJson(sampled, true);
             Directory.CreateDirectory(TestResults.RESULTS_DIRECTORY);
-            var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{result.Name}_{result.TestId}.json";
+            var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
             File.WriteAllText(filename, json, Encoding.UTF8);
             Debug.Log($"Stored {filename}");
         }
@@ -125,7 +120,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         private void OnDestroy()
         {
-            TasksCompleted(false);
+            CompleteTest(false);
         }
 
 
@@ -149,18 +144,41 @@ namespace RasHack.GapOverlap.Main.Result
 
         private void DoSampling()
         {
-            if (currentCentral != null)
-                result.CentralStimuli.List.Add(new RawStimulus { Time = referenceTime, TaskOrder = currentCentral.TaskOrder, Position = currentCentral.RawPosition });
+            var sample = new Sample() { Time = referenceTime };
 
+            if (currentTask != null)
+            {
+                sample.Task = new SampledTask
+                {
+                    TaskOrder = currentTask.TaskOrder,
+                    TaskType = currentTask.TaskType.ToString(),
+                    Side = currentTask.Side.ToString(),
+                    StimulusType = currentTask.StimulusType.ToString(),
+                    CenterStimulus = currentCentral?.RawPosition,
+                    PeripheralStimulus = currentPeripheral?.RawPosition
 
-            if (currentPeripheral != null)
-                result.PeripheralStimuli.List.Add(new RawStimulus { Time = referenceTime, TaskOrder = currentPeripheral.TaskOrder, Position = currentPeripheral.RawPosition });
+                };
+            }
 
+            if (currentGaze != null)
+                sample.Tracker = new SampledTracker { LeftEye = new SampledGaze(currentGaze.LeftEye.GazePoint), RightEye = new SampledGaze(currentGaze.RightEye.GazePoint) };
+
+            if (Input.mousePresent)
+            {
+                var mouse = Input.mousePosition;
+
+                var leftEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+                var rightEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+
+                sample.Tracker = new SampledTracker { LeftEye = leftEye, RightEye = rightEye };
+            }
+
+            sampled.Samples.AllSamples.Add(sample);
         }
 
         private void GazeDataReceived(object sender, GazeDataEventArgs gazeEvent)
         {
-
+            currentGaze = gazeEvent;
         }
 
         #endregion
