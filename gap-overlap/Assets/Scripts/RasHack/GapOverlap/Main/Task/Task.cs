@@ -21,7 +21,6 @@ namespace RasHack.GapOverlap.Main.Task
 
         protected Simulator owner;
         protected StimuliType stimulusType;
-        protected AllResponseTimes responses;
         private NextArea area;
         protected CentralStimulus centralStimulus;
         protected PeripheralStimulus peripheralStimulus;
@@ -62,9 +61,6 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
-            responses = responses.CentralMeasured(eye, after);
-            if (responses.AllCentralMeasured) OnSuccessfulCentralFocus();
-
             Debug.Log($"{stimulus} reported {eye} eye focused on central after {after:0.000}s!");
         }
 
@@ -76,8 +72,6 @@ namespace RasHack.GapOverlap.Main.Task
                 return;
             }
 
-            responses = responses.PeripheralMeasured(eye, after);
-            if (responses.AllPeripheralMeasured) OnSuccessfulPeripheralFocus();
             Debug.Log($"{stimulus} reported focused {eye} eye after {after:0.000}s!");
         }
 
@@ -87,8 +81,6 @@ namespace RasHack.GapOverlap.Main.Task
 
             var distance =
                 owner.Scaler.DistanceInRealWorldToCM(stimulus.transform.position, pointer.transform.position);
-
-            responses = responses.CentralGotCloser(eye, distance);
         }
 
         public void ReportPeripheralGotCloser(PeripheralStimulus stimulus, Eye eye, Pointer pointer)
@@ -97,8 +89,6 @@ namespace RasHack.GapOverlap.Main.Task
 
             var distance =
                 owner.Scaler.DistanceInRealWorldToCM(stimulus.transform.position, pointer.transform.position);
-
-            responses = responses.PeripheralGotCloser(eye, distance);
         }
 
         protected abstract void OnSuccessfulCentralFocus();

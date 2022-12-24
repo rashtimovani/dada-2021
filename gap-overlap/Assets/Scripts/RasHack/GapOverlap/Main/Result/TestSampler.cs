@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -11,6 +12,8 @@ namespace RasHack.GapOverlap.Main.Result
     public class TestSampler : MonoBehaviour
     {
         #region Fields
+        public static readonly string RESULTS_DIRECTORY =
+            $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{Path.DirectorySeparatorChar}GapOverlap{Path.DirectorySeparatorChar}Results";
 
         [SerializeField] private Simulator simulator;
 
@@ -108,8 +111,8 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void Store()
         {
-            Directory.CreateDirectory(TestResults.RESULTS_DIRECTORY);
-            var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
+            Directory.CreateDirectory(RESULTS_DIRECTORY);
+            var filename = $"{RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
 
             var serializer = JsonSerializer.CreateDefault();
             serializer.NullValueHandling = NullValueHandling.Ignore;
