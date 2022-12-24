@@ -30,7 +30,16 @@ namespace RasHack.GapOverlap.Main
         private GameObject messageObject;
 
         [SerializeField]
+        private Color okColor = Color.white;
+
+        [SerializeField]
+        private Color errorColor = Color.red;
+
+
+        [SerializeField]
         private float messageDuration = 5f;
+
+        private Vector2[] points = new Vector2[] { new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f) };
 
         private CalibrationState state = CalibrationState.Initialized;
         private float messageRemaining;
@@ -49,12 +58,16 @@ namespace RasHack.GapOverlap.Main
             switch (state)
             {
                 case CalibrationState.Initialized:
-                    if (tracker.EyeTrackerInterface == null) DisplayMessage("No eye tracker detected!");
+                    if (tracker.EyeTrackerInterface == null) DisplayMessage("No eye tracker detected!", errorColor);
                     else if (calibration.StartCalibration()) state = CalibrationState.Running;
-                    else DisplayMessage("Calibration is already running");
+                    else DisplayMessage("Calibration is already running", errorColor);
                     break;
                 case CalibrationState.Running:
-                    if (!calibration.CalibrationInProgress) DisplayMessage(calibration.LatestCalibrationSuccessful ? "Calibration was succcessful" : "Calibration failed!");
+                    if (!calibration.CalibrationInProgress)
+                    {
+                        if (calibration.LatestCalibrationSuccessful) DisplayMessage("Calibration was succcessful", okColor);
+                        else DisplayMessage("Calibration failed!", errorColor);
+                    }
                     break;
                 case CalibrationState.Message:
                     messageRemaining -= Time.deltaTime;
@@ -81,12 +94,13 @@ namespace RasHack.GapOverlap.Main
             messageObject.SetActive(false);
         }
 
-        private void DisplayMessage(string message)
+        private void DisplayMessage(string message, Color color)
         {
             state = CalibrationState.Message;
             messageRemaining = messageDuration;
             Debug.Log(message);
             messageText.text = message;
+            messageText.color = color;
             messageObject.SetActive(true);
         }
 

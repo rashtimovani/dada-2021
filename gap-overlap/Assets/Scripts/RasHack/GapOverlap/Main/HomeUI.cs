@@ -3,6 +3,7 @@ using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main
@@ -78,6 +79,11 @@ namespace RasHack.GapOverlap.Main
             var p = new Process();
             p.StartInfo = new ProcessStartInfo("explorer.exe", TestResults.RESULTS_DIRECTORY);
             p.Start();
+        }
+
+        public void OnStartCalibration()
+        {
+            SceneManager.LoadScene(1); // Calibration scene;
         }
 
         #endregion

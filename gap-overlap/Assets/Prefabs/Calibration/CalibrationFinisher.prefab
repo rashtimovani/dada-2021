@@ -195,6 +195,8 @@ MonoBehaviour:
   tracker: {fileID: 0}
   messageText: {fileID: 5850601050687524771}
   messageObject: {fileID: 6592778509438074930}
+  okColor: {r: 1, g: 1, b: 1, a: 1}
+  errorColor: {r: 0.5764706, g: 0.09411765, b: 0.09411765, a: 1}
   messageDuration: 5
 --- !u!1 &6592778509438074930
 GameObject:
