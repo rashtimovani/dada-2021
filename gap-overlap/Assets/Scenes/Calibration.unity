@@ -178,6 +178,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114755321991383954, guid: 0ef5890d7b8749c40bb0d46198e8ddba,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114755321991383954, guid: 0ef5890d7b8749c40bb0d46198e8ddba,
+        type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114755321991383954, guid: 0ef5890d7b8749c40bb0d46198e8ddba,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 114755321991383954, guid: 0ef5890d7b8749c40bb0d46198e8ddba,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 600
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ef5890d7b8749c40bb0d46198e8ddba, type: 3}
 --- !u!114 &551974808 stripped
@@ -529,6 +549,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CalibrationFinisher
+      objectReference: {fileID: 0}
+    - target: {fileID: 5847655693667131246, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5847655693667131246, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5847655693667131246, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850601050687524771, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
+        type: 3}
+      propertyPath: m_Text
+      value: Eye tracker status
       objectReference: {fileID: 0}
     - target: {fileID: 6208284277709856428, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
         type: 3}

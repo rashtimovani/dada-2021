@@ -1,6 +1,7 @@
 using Tobii.Research.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main
 {
@@ -21,6 +22,12 @@ namespace RasHack.GapOverlap.Main
 
         [SerializeField]
         private EyeTracker tracker;
+
+        [SerializeField]
+        private Text messageText;
+
+        [SerializeField]
+        private GameObject messageObject;
 
         [SerializeField]
         private float messageDuration = 5f;
@@ -70,6 +77,8 @@ namespace RasHack.GapOverlap.Main
         private void HideMessage()
         {
             messageRemaining = 0f;
+            messageText.text = "";
+            messageObject.SetActive(false);
         }
 
         private void DisplayMessage(string message)
@@ -77,6 +86,8 @@ namespace RasHack.GapOverlap.Main
             state = CalibrationState.Message;
             messageRemaining = messageDuration;
             Debug.Log(message);
+            messageText.text = message;
+            messageObject.SetActive(true);
         }
 
         #endregion
