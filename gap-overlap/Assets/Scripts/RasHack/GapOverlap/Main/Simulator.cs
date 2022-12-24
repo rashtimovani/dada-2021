@@ -44,6 +44,20 @@ namespace RasHack.GapOverlap.Main
 
         #region API
 
+        public bool TobiiWorking
+        {
+            get
+            {
+                var pointers = TobiiPointers;
+                var tobiiWorking = pointers.Count > 0;
+                foreach (var tobiiPointer in pointers)
+                {
+                    tobiiWorking &= tobiiPointer.Status.Enabled;
+                }
+                return tobiiWorking;
+            }
+        }
+
         public bool IsActive { get; private set; }
 
         public List<TobiiEyePointer> TobiiPointers
@@ -230,12 +244,7 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdatePointers()
         {
-            var tobiiWorking = true;
-            foreach (var tobiiPointer in TobiiPointers)
-            {
-                tobiiWorking &= tobiiPointer.Status.Enabled;
-            }
-
+            var tobiiWorking = TobiiWorking;
             foreach (var pointer in NonTobiiPointers)
             {
                 pointer.PointerEnabled = !tobiiWorking;

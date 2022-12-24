@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using RasHack.GapOverlap.Main.Stimuli;
 using Tobii.Research;
+using Tobii.Research.Unity;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
@@ -72,6 +73,12 @@ namespace RasHack.GapOverlap.Main.Result
         {
             PositionOnDisplayArea = new RawPoint { X = point.PositionOnDisplayArea.X, Y = point.PositionOnDisplayArea.Y };
             Validity = point.Validity.ToString();
+        }
+
+        public SampledGaze(IGazeDataEye eye)
+        {
+            PositionOnDisplayArea = new RawPoint { X = eye.GazePointOnDisplayArea.x, Y = eye.GazePointOnDisplayArea.y };
+            Validity = eye.GazePointValid ? "Valid" : "Invalid";
         }
 
         public SampledGaze()

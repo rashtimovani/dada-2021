@@ -482,6 +482,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -65335
       objectReference: {fileID: 0}
+    - target: {fileID: 5496180002377592361, guid: fc11263f9a312b44db71de367945cc7d,
+        type: 3}
+      propertyPath: eyeTracker
+      value: 
+      objectReference: {fileID: 1571420541}
     - target: {fileID: 5860199554502784486, guid: fc11263f9a312b44db71de367945cc7d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -562,6 +567,11 @@ PrefabInstance:
       propertyPath: showPointer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7069314961898067320, guid: fc11263f9a312b44db71de367945cc7d,
+        type: 3}
+      propertyPath: eyeTracker
+      value: 
+      objectReference: {fileID: 1571420541}
     - target: {fileID: 8111807920774638880, guid: fc11263f9a312b44db71de367945cc7d,
         type: 3}
       propertyPath: randomTaskOrder
@@ -587,6 +597,11 @@ PrefabInstance:
       propertyPath: tasks.Array.data[5]
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8602848545489269055, guid: fc11263f9a312b44db71de367945cc7d,
+        type: 3}
+      propertyPath: eyeTracker
+      value: 
+      objectReference: {fileID: 1571420541}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc11263f9a312b44db71de367945cc7d, type: 3}
 --- !u!114 &722375585 stripped

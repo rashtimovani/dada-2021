@@ -5,6 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Stimuli;
 using Tobii.Research;
+using Tobii.Research.Unity;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
@@ -17,6 +18,8 @@ namespace RasHack.GapOverlap.Main.Result
 
         [SerializeField] private Simulator simulator;
 
+        [SerializeField] private EyeTracker eyeTracker;
+
         private float sampleTime;
 
         private float sampleTimePassed;
@@ -25,8 +28,6 @@ namespace RasHack.GapOverlap.Main.Result
 
         private bool doCollecting;
 
-        private IEyeTracker subscribedTo;
-
         private SampledTest sampled;
 
         private Task.Task currentTask;
@@ -34,8 +35,6 @@ namespace RasHack.GapOverlap.Main.Result
         private CentralStimulus currentCentral;
 
         private PeripheralStimulus currentPeripheral;
-
-        private GazeDataEventArgs currentGaze;
 
         #endregion
 
@@ -53,16 +52,6 @@ namespace RasHack.GapOverlap.Main.Result
             currentTask = null;
             currentCentral = null;
             currentPeripheral = null;
-            currentGaze = null;
-
-            var eyeTrackers = EyeTrackingOperations.FindAllEyeTrackers();
-            foreach (IEyeTracker eyeTracker in eyeTrackers)
-            {
-                subscribedTo = eyeTracker;
-                subscribedTo.GazeDataReceived += GazeDataReceived;
-                Debug.Log($"Subscribed to using {subscribedTo.Model}({subscribedTo.DeviceName}) on address {subscribedTo.Address}, started to receive gaze events from it");
-                break;
-            }
         }
 
         public void CompleteTest(bool allCompleted)
@@ -71,8 +60,6 @@ namespace RasHack.GapOverlap.Main.Result
 
             sampled.TestCompleted = allCompleted;
             doCollecting = false;
-
-            if (subscribedTo != null) subscribedTo.GazeDataReceived -= GazeDataReceived;
 
             Store();
 
@@ -171,25 +158,20 @@ namespace RasHack.GapOverlap.Main.Result
                 };
             }
 
-            if (currentGaze != null)
-                sample.Tracker = new SampledTracker { LeftEye = new SampledGaze(currentGaze.LeftEye.GazePoint), RightEye = new SampledGaze(currentGaze.RightEye.GazePoint) };
+            if (eyeTracker != null && eyeTracker.GazeDataCount > 0)
+                sample.Tracker = new SampledTracker { LeftEye = new SampledGaze(eyeTracker.LatestGazeData.Left), RightEye = new SampledGaze(eyeTracker.LatestGazeData.Right) };
 
-            // if (Input.mousePresent)
-            // {
-            //     var mouse = Input.mousePosition;
+            if (!simulator.TobiiWorking)
+            {
+                var mouse = Input.mousePosition;
 
-            //     var leftEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
-            //     var rightEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+                var leftEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
+                var rightEye = new SampledGaze(new GazePoint(new NormalizedPoint2D(mouse.x / Screen.width, mouse.y / Screen.height), new Point3D(1, 1, 1), Validity.Valid));
 
-            //     sample.Tracker = new SampledTracker { LeftEye = leftEye, RightEye = rightEye };
-            // }
+                sample.Tracker = new SampledTracker { LeftEye = leftEye, RightEye = rightEye };
+            }
 
             sampled.Samples.AllSamples.Add(sample);
-        }
-
-        private void GazeDataReceived(object sender, GazeDataEventArgs gazeEvent)
-        {
-            currentGaze = gazeEvent;
         }
 
         #endregion
