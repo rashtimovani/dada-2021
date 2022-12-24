@@ -54,13 +54,13 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 Center => Vector3.Lerp(BottomLeft, TopRight, 0.5f);
 
-        public Vector3 CenterLeftThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.35f), BottomLeft.y, BottomLeft.z);
+        public Vector3 CenterLeftThird => Point(new Vector3(ScreenCenter.x - ScreenSizeFromDegrees(settings.DistanceBetweenPeripheralStimuliInDegrees / 4, 0).x + 2, 0));
 
-        public Vector3 CenterRightThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.65f), TopRight.y, TopRight.z);
+        public Vector3 CenterRightThird => Point(new Vector3(ScreenCenter.x + ScreenSizeFromDegrees(settings.DistanceBetweenPeripheralStimuliInDegrees / 4, 0).x - 2, Screen.height));        
         
-        public Vector3 LeftThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.3f), TopRight.y, TopRight.z);
+        public Vector3 LeftThird => Point(new Vector3(ScreenCenter.x - ScreenSizeFromDegrees(settings.DistanceBetweenPeripheralStimuliInDegrees / 4, 0).x - 2, Screen.height));
 
-        public Vector3 RightThird => new(Mathf.Lerp(BottomLeft.x, TopRight.x, 0.7f), BottomRight.y, BottomRight.z);
+        public Vector3 RightThird => Point(new Vector3(ScreenCenter.x + ScreenSizeFromDegrees(settings.DistanceBetweenPeripheralStimuliInDegrees / 4, 0).x + 2, 0));
 
         public static Vector3 ScreenCenter => new Vector3(Screen.width / 2, Screen.height / 2, 0f);
 
@@ -105,7 +105,7 @@ namespace RasHack.GapOverlap.Main
         {
             var firstScreenPosition = mainCamera.WorldToScreenPoint(firstPosition);
             var secondScreenPosition = mainCamera.WorldToScreenPoint(secondPosition);
-            var distanceOnScreen =  Vector3.Distance(firstScreenPosition, secondScreenPosition);
+            var distanceOnScreen = Vector3.Distance(firstScreenPosition, secondScreenPosition);
 
             var cmPerPixel = ScreenInCM.x / Screen.width;
             return distanceOnScreen * cmPerPixel;
