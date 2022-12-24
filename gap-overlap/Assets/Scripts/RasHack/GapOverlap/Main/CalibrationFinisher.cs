@@ -39,7 +39,12 @@ namespace RasHack.GapOverlap.Main
         [SerializeField]
         private float messageDuration = 5f;
 
-        private Vector2[] points = new Vector2[] { new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f), new Vector2(0.1f, 0.1f) };
+        private Vector2[] points = new Vector2[]
+        {
+            new Vector2(0.1f, 0.1f), new Vector2(0.5f, 0.1f), new Vector2(0.9f, 0.1f),
+            new Vector2(0.1f, 0.5f), new Vector2(0.5f, 0.5f),new Vector2(0.9f, 0.5f),
+            new Vector2(0.1f, 0.9f),new Vector2(0.5f, 0.9f), new Vector2(0.9f, 0.9f),
+        };
 
         private CalibrationState state = CalibrationState.Initialized;
         private float messageRemaining;
@@ -59,7 +64,7 @@ namespace RasHack.GapOverlap.Main
             {
                 case CalibrationState.Initialized:
                     if (tracker.EyeTrackerInterface == null) DisplayMessage("No eye tracker detected!", errorColor);
-                    else if (calibration.StartCalibration()) state = CalibrationState.Running;
+                    else if (calibration.StartCalibration(points)) state = CalibrationState.Running;
                     else DisplayMessage("Calibration is already running", errorColor);
                     break;
                 case CalibrationState.Running:
