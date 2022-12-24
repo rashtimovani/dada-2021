@@ -1,4 +1,6 @@
 using System;
+using Tobii.Research;
+using Tobii.Research.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +10,7 @@ namespace RasHack.GapOverlap.Main
     {
         #region Fields
 
-        [SerializeField] private Simulator simulator;
+        [SerializeField] private EyeTracker eyeTracker;
         [SerializeField] private Text text;
         [SerializeField] private Image image;
 
@@ -18,22 +20,49 @@ namespace RasHack.GapOverlap.Main
 
         private void Update()
         {
-            var fullStatus = "";
-            var show = false;
-            var separator = "";
-
-            foreach (var pointer in simulator.TobiiPointers)
+            if (eyeTracker == null)
             {
-                var status = pointer.Status;
-                fullStatus += separator;
-                fullStatus += status.Message;
-                show |= !status.Enabled;
-                separator = Environment.NewLine;
+                ShowMessage("No eye tracker prefab detected!");
+                return;
             }
 
-            text.text = fullStatus;
-            text.enabled = show;
-            image.enabled = show;
+            if (eyeTracker.EyeTrackerInterface == null)
+            {
+                ShowMessage("No eyetrackers detected!");
+                return;
+            }
+
+            if (!eyeTracker.SubscribeToGazeData)
+            {
+                ShowMessage("Eye tracker is not subscribet to getting gaze data1");
+                return;
+            }
+
+            if (eyeTracker.GazeDataCount == 0)
+            {
+                ShowMessage("Eye tracker is not receiving gaze data!");
+                return;
+            }
+
+            HideMessage();
+        }
+
+        #endregion
+
+        #region Helper methods
+
+        private void HideMessage()
+        {
+            text.text = "";
+            text.enabled = false;
+            image.enabled = false;
+        }
+
+        private void ShowMessage(string message)
+        {
+            text.text = message;
+            text.enabled = true;
+            image.enabled = true;
         }
 
         #endregion
