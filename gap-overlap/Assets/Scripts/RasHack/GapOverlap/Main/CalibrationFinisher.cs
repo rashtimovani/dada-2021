@@ -9,8 +9,8 @@ namespace RasHack.GapOverlap.Main
     {
         Initialized,
         Running,
-        Message,
-        Done
+        Stopping,
+        Stopped
     }
 
     public class CalibrationFinisher : MonoBehaviour
@@ -37,7 +37,10 @@ namespace RasHack.GapOverlap.Main
 
 
         [SerializeField]
-        private float messageDuration = 5f;
+        private float warmUpDuration = 5f;
+
+        [SerializeField]
+        private float stoppingDuration = 5f;
 
         private Vector2[] points = new Vector2[]
         {
@@ -47,7 +50,9 @@ namespace RasHack.GapOverlap.Main
         };
 
         private CalibrationState state = CalibrationState.Initialized;
-        private float messageRemaining;
+
+        private float? stoppingRemaining;
+        private float? warmUpRemaining;
 
         #endregion
 
@@ -63,22 +68,32 @@ namespace RasHack.GapOverlap.Main
             switch (state)
             {
                 case CalibrationState.Initialized:
-                    if (tracker.EyeTrackerInterface == null) DisplayMessage("No eye tracker detected!", errorColor);
+                    if (tracker.EyeTrackerInterface == null)
+                    {
+                        if (warmUpRemaining == null)
+                        {
+                            warmUpRemaining = warmUpDuration;
+                            DisplayMessage("Waiting to connect to eye tracker", errorColor);
+                        }
+                        
+                        warmUpRemaining -= Time.deltaTime;
+                        if (warmUpRemaining <= 0) DisplayMessageAndStop("No eye tracker detected!", errorColor);
+                    }
                     else if (calibration.StartCalibration(points)) state = CalibrationState.Running;
-                    else DisplayMessage("Calibration is already running", errorColor);
+                    else DisplayMessageAndStop("Calibration is already running", errorColor);
                     break;
                 case CalibrationState.Running:
                     if (!calibration.CalibrationInProgress)
                     {
-                        if (calibration.LatestCalibrationSuccessful) DisplayMessage("Calibration was succcessful", okColor);
-                        else DisplayMessage("Calibration failed!", errorColor);
+                        if (calibration.LatestCalibrationSuccessful) DisplayMessageAndStop("Calibration was succcessful", okColor);
+                        else DisplayMessageAndStop("Calibration failed!", errorColor);
                     }
                     break;
-                case CalibrationState.Message:
-                    messageRemaining -= Time.deltaTime;
-                    if (messageRemaining <= 0)
+                case CalibrationState.Stopping:
+                    stoppingRemaining -= Time.deltaTime;
+                    if (stoppingRemaining <= 0)
                     {
-                        state = CalibrationState.Done;
+                        state = CalibrationState.Stopped;
                         HideMessage();
                     }
                     break;
@@ -94,15 +109,20 @@ namespace RasHack.GapOverlap.Main
 
         private void HideMessage()
         {
-            messageRemaining = 0f;
+            stoppingRemaining = null;
             messageText.text = "";
             messageObject.SetActive(false);
         }
 
+        private void DisplayMessageAndStop(string message, Color color)
+        {
+            state = CalibrationState.Stopping;
+            stoppingRemaining = stoppingDuration;
+            DisplayMessage(message, color);
+        }
+
         private void DisplayMessage(string message, Color color)
         {
-            state = CalibrationState.Message;
-            messageRemaining = messageDuration;
             Debug.Log(message);
             messageText.text = message;
             messageText.color = color;

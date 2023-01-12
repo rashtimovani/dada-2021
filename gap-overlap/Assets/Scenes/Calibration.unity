@@ -585,5 +585,10 @@ PrefabInstance:
       propertyPath: calibration
       value: 
       objectReference: {fileID: 551974808}
+    - target: {fileID: 6208284277709856428, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e,
+        type: 3}
+      propertyPath: warmUpDuration
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cec267ffb5eec54b8c8f42c7c0b1a4e, type: 3}
