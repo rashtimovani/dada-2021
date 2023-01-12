@@ -75,7 +75,7 @@ namespace RasHack.GapOverlap.Main
                             warmUpRemaining = warmUpDuration;
                             DisplayMessage("Waiting to connect to eye tracker", errorColor);
                         }
-                        
+
                         warmUpRemaining -= Time.deltaTime;
                         if (warmUpRemaining <= 0) DisplayMessageAndStop("No eye tracker detected!", errorColor);
                     }
@@ -101,11 +101,17 @@ namespace RasHack.GapOverlap.Main
                     SceneManager.LoadScene(0); // Main scene
                     break;
             }
+            DetectInterruptedCalibration();
         }
 
-        #endregion 
+        #endregion
 
         #region Helper methods
+
+        private void DetectInterruptedCalibration()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) DisplayMessageAndStop("Calibration aborted by user!", errorColor);
+        }
 
         private void HideMessage()
         {
