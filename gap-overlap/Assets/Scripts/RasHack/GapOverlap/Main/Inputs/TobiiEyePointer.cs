@@ -58,9 +58,12 @@ namespace RasHack.GapOverlap.Main.Inputs
 
             var eye = GetEye(eyeTracker.LatestGazeData);
             if (!eye.GazePointValid) lastDetectedPosition = NOT_DETECTED;
-            var x = eye.GazePointOnDisplayArea.x * Screen.width;
-            var y = (1 - eye.GazePointOnDisplayArea.y) * Screen.height;
-            lastDetectedPosition = new Vector2(x, y);
+            else
+            {
+                var x = eye.GazePointOnDisplayArea.x * Screen.width;
+                var y = (1 - eye.GazePointOnDisplayArea.y) * Screen.height;
+                lastDetectedPosition = new Vector2(x, y);
+            }
         }
 
         protected override void OnDestroy()

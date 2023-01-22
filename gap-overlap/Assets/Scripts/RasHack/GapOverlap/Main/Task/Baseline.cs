@@ -70,7 +70,7 @@ namespace RasHack.GapOverlap.Main.Task
             Debug.Log($"{peripheralStimulus} has finished");
             Destroy(peripheralStimulus.gameObject);
             peripheralStimulus = null;
-            owner.ReportTaskFinished(this);
+            owner.ReportTaskFinished(this, responses);
             Destroy(gameObject);
         }
 

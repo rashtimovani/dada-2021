@@ -123,7 +123,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnPeripheralPointerDetection(Pointer pointer)
         {
-            owner.ReportFocusedOnPeripheral(this, pointer.Eye, spentLifetime.GetValueOrDefault(lifetime));
+            owner.ReportFocusedOnPeripheral(this, pointer, spentLifetime.GetValueOrDefault(lifetime));
         }
 
         private void OnPeripheralPointerGettingCloser(Pointer pointer)

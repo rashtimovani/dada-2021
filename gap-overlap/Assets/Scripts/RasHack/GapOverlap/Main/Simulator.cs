@@ -31,6 +31,7 @@ namespace RasHack.GapOverlap.Main
         private Scaler scaler;
         private Scaler debugScaler;
         private Camera mainCamera;
+        private TestResults results;
         private Background background;
 
         private TaskOrder tasks;
@@ -99,7 +100,7 @@ namespace RasHack.GapOverlap.Main
 
         private bool ShowPointer => settings.ShowPointer;
 
-        public void ReportTaskFinished(Task.Task task)
+        public void ReportTaskFinished(Task.Task task, AllResponseTimes responses)
         {
             if (task != currentTask)
             {
@@ -108,6 +109,7 @@ namespace RasHack.GapOverlap.Main
             }
 
 
+            results.AttachMeasurement(task.TaskType, task.StimulusType, task.Side, task.TaskOrder, responses);
             Debug.Log($"{currentTask} has finished");
             sampler.CompleteTask(currentTask);
             currentTask = null;
@@ -133,11 +135,18 @@ namespace RasHack.GapOverlap.Main
             settings.LastUsedName = usingName;
             settings.Store();
 
+            FlushToDisk();
             AudioListener.volume = settings.SoundVolume;
 
             var testId = Guid.NewGuid().ToString();
+            results.StartTest(runName, testId);
             sampler.StartTest(runName, testId, settings.SamplesPerSecond);
             waitingTime = settings.PauseBeforeTasks;
+        }
+
+        public void FlushToDisk()
+        {
+            results.FlushToDisk();
         }
 
         #endregion
@@ -160,6 +169,7 @@ namespace RasHack.GapOverlap.Main
 
             scaler = new Scaler(mainCamera, -1, settings);
             debugScaler = new Scaler(mainCamera, -2, settings);
+            results = new TestResults();
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
@@ -172,6 +182,11 @@ namespace RasHack.GapOverlap.Main
             UpdatePause();
             DetectInterruptedTest();
             UpdatePointers();
+        }
+
+        private void OnApplicationQuit()
+        {
+            FlushToDisk();
         }
 
         #endregion
@@ -213,6 +228,7 @@ namespace RasHack.GapOverlap.Main
             currentTask = tasks.CreateNext(nextStimulus);
             if (currentTask == null)
             {
+                results.EndActiveTest();
                 sampler.CompleteTest(true);
                 Debug.Log("All tasks finished!");
                 IsActive = false;
@@ -236,6 +252,7 @@ namespace RasHack.GapOverlap.Main
                     currentTask = null;
                 }
 
+                results.AbortActiveTest();
                 sampler.CompleteTest(false);
                 IsActive = false;
                 waitingTime = 0.01f;

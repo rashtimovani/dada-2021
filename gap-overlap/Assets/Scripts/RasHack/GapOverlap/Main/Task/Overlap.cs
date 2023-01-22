@@ -16,9 +16,8 @@ namespace RasHack.GapOverlap.Main.Task
     {
         #region Serialized fields
 
-        [SerializeField]
-        private OverlapTimes times = new()
-        { CentralTime = 5.0f, BothStimuli = 5.0f, ShortenOnFocusTime = 0.2f };
+        [SerializeField] private OverlapTimes times = new()
+            { CentralTime = 5.0f, BothStimuli = 5.0f, ShortenOnFocusTime = 0.2f };
 
         #endregion
 
@@ -69,7 +68,7 @@ namespace RasHack.GapOverlap.Main.Task
             Destroy(peripheralStimulus.gameObject);
             Destroy(centralStimulus.gameObject);
             peripheralStimulus = null;
-            owner.ReportTaskFinished(this);
+            owner.ReportTaskFinished(this, responses);
             Destroy(gameObject);
         }
 
