@@ -39,7 +39,14 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void StartTest(string name, string testId, float sampleRate)
         {
-            sampled = new SampledTest { Name = name, TestId = testId };
+            sampled = new SampledTest
+            {
+                Name = name,
+                TestId = testId,
+                ScreenDiagonalInInches = simulator.Settings.ReferencePoint.ScreenDiagonalInInches,
+                ScreenPixelsX = Screen.width,
+                ScreenPixelsY = Screen.height
+            };
             doCollecting = true;
             referenceTime = 0;
 

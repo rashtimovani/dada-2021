@@ -15,6 +15,12 @@ namespace RasHack.GapOverlap.Main.Result
 
         public string TestId;
 
+        public double ScreenDiagonalInInches;
+
+        public double ScreenPixelsX;
+
+        public double ScreenPixelsY;
+
         public bool TestCompleted;
 
         public Samples Samples = new Samples();
