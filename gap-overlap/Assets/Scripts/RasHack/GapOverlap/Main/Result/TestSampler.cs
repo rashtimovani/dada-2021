@@ -17,6 +17,27 @@ namespace RasHack.GapOverlap.Main.Result
 
         [SerializeField] private EyeTracker eyeTracker;
 
+        private static readonly RawPosition NO_STIMULUS = new RawPosition
+        {
+            Visible = false,
+            Center = new RawPoint
+            {
+                X = float.NaN,
+                Y = float.NaN
+            }
+        };
+
+        private static readonly SampledTask NO_TASK = new SampledTask
+        {
+            TaskOrder = -1,
+            TaskType = "Empty",
+            Side = "Unknown",
+            StimulusType = "None",
+            CenterStimulus = NO_STIMULUS,
+            PeripheralStimulus = NO_STIMULUS
+
+        };
+
         private float sampleTime;
 
         private float sampleTimePassed;
@@ -156,11 +177,11 @@ namespace RasHack.GapOverlap.Main.Result
                     TaskType = currentTask.TaskType.ToString(),
                     Side = currentTask.Side.ToString(),
                     StimulusType = currentTask.StimulusType.ToString(),
-                    CenterStimulus = currentCentral?.RawPosition,
-                    PeripheralStimulus = currentPeripheral?.RawPosition
-
+                    CenterStimulus = currentCentral?.RawPosition ?? NO_STIMULUS,
+                    PeripheralStimulus = currentPeripheral?.RawPosition ?? NO_STIMULUS
                 };
             }
+            else sample.Task = NO_TASK;
 
             if (eyeTracker != null && eyeTracker.GazeDataCount > 0)
                 sample.Tracker = new SampledTracker { LeftEye = new SampledGaze(eyeTracker.LatestGazeData.Left), RightEye = new SampledGaze(eyeTracker.LatestGazeData.Right) };

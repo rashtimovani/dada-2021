@@ -47,7 +47,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
                 // var rawTopRight = AsRaw(topRight.position);
                 return new RawPosition
                 {
-                    Center = rawCenter,
+                    Visible = true,
+                    Center = rawCenter
                     // BottomLeft = rawBottomLeft,
                     // BottomRight = rawBottomRight,
                     // TopLeft = rawTopLeft,

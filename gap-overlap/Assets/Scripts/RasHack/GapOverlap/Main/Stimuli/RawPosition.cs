@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -12,6 +13,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
     [System.Serializable]
     public class RawPosition
     {
+        public bool Visible;
         public RawPoint Center;
         // public Vector2 TopLeft;
         // public Vector2 TopRight;
