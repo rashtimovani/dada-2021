@@ -31,7 +31,7 @@ namespace RasHack.GapOverlap.Main
         private ReplayController replayController;
         private Scaler scaler;
         private Scaler debugScaler;
-        private Camera mainCamera; 
+        private Camera mainCamera;
         private TestResults results;
         private Background background;
 
@@ -186,6 +186,7 @@ namespace RasHack.GapOverlap.Main
             UpdatePause();
             DetectInterruptedTest();
             UpdatePointers();
+            UpdateReplayController();
         }
 
         private void OnApplicationQuit()
@@ -270,6 +271,12 @@ namespace RasHack.GapOverlap.Main
             {
                 pointer.PointerEnabled = !tobiiWorking;
             }
+        }
+        
+        private void UpdateReplayController()
+        {
+            var deltaTime = Time.deltaTime;
+            replayController.Tick(deltaTime);
         }
 
         #endregion
