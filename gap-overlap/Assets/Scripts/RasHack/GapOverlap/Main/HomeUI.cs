@@ -81,6 +81,14 @@ namespace RasHack.GapOverlap.Main
             p.Start();
         }
 
+        public void OnReplayResults()
+        {
+            simulator.ReplayController.StartReplay();
+            mainSettings.Hide(true);
+            hidden = true;
+            panel.SetActive(false); 
+        }
+
         public void OnStartCalibration()
         {
             SceneManager.LoadScene(1); // Calibration scene;

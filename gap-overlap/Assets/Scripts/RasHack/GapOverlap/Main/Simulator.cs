@@ -28,9 +28,10 @@ namespace RasHack.GapOverlap.Main
 
         private MainSettings settings = new MainSettings();
 
+        private ReplayController replayController;
         private Scaler scaler;
         private Scaler debugScaler;
-        private Camera mainCamera;
+        private Camera mainCamera; 
         private TestResults results;
         private Background background;
 
@@ -99,6 +100,8 @@ namespace RasHack.GapOverlap.Main
         public TestSampler Sampler => sampler;
 
         private bool ShowPointer => settings.ShowPointer;
+
+        public ReplayController ReplayController => replayController;
 
         public void ReportTaskFinished(Task.Task task, AllResponseTimes responses)
         {
@@ -170,6 +173,7 @@ namespace RasHack.GapOverlap.Main
             scaler = new Scaler(mainCamera, -1, settings);
             debugScaler = new Scaler(mainCamera, -2, settings);
             results = new TestResults();
+            replayController = new ReplayController();
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
