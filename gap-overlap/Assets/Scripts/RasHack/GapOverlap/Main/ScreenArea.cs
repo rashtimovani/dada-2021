@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -40,6 +41,36 @@ namespace RasHack.GapOverlap.Main
         public int Height => y2 - y1;
 
         public float Ratio => (float)Height / Width;
+
+        public ScreenArea Overlay(float diagonal, float overlayDiagonal, ScreenArea overlayScreen)
+        {
+            var myWidth = WidthFromDiagonal(diagonal);
+            var myWidthDPI = Width /myWidth;
+            var overlayWidth = overlayScreen.WidthFromDiagonal(overlayDiagonal);
+            var pixelWidth = overlayWidth * myWidthDPI;
+
+            var myHeight = HeightFromDiagonal(diagonal);
+            var myHeightDPI = Height / myHeight;
+            var overlayHeight = overlayScreen.HeightFromDiagonal(overlayDiagonal);
+            var pixelHeight = overlayHeight * myHeightDPI;
+
+            var center = Center;
+            var x1 = (int) Math.Round(center.x - pixelWidth / 2);
+            var x2 = (int) Math.Round(center.x + pixelWidth / 2);
+            var y1 = (int) Math.Round(center.y - pixelHeight / 2);
+            var y2 = (int) Math.Round(center.y + pixelHeight / 2);
+            return new ScreenArea(x1, x2, y1, y2);
+        }
+
+        public float HeightFromDiagonal(float diagonal)
+        {
+            return diagonal * Height / Mathf.Sqrt(Width * Width + Height * Height);
+        }
+
+        public float WidthFromDiagonal(float diagonal)
+        {
+            return diagonal * Width / Mathf.Sqrt(Width * Width + Height * Height);
+        }
 
         #endregion
     }
