@@ -29,16 +29,17 @@ namespace RasHack.GapOverlap.Main
 
         #region Methods
 
-        public void Tick(float deltaTime)
+        public void Tick(float deltaTime, Action<Sample> onNextSample)
         {
             var toTime = spentTime + deltaTime;
             while (currentSampleIndex < toReplay.Samples.AllSamples.Count)
             {
                 var sample = toReplay.Samples.AllSamples[currentSampleIndex];
                 if (toTime < sample.Time) break;
-                Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
 
                 currentSampleIndex++;
+                spentTime = sample.Time;
+                onNextSample.Invoke(sample);
             }
 
             spentTime = toTime;
@@ -78,7 +79,12 @@ namespace RasHack.GapOverlap.Main
         {
             if (toReplay == null) return;
 
-            toReplay.Tick(deltaTime);
+            toReplay.Tick(deltaTime, OnNextSample);
+        }
+
+        private void OnNextSample(Sample sample)
+        {
+            Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
         }
 
         #endregion
