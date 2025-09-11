@@ -23,8 +23,9 @@ namespace RasHack.GapOverlap.Main.Settings
         public float PauseBetweenTasks = 2.7f;
         public float PauseAfterTasks = 1f;
 
-        [Header("Screen")] public ReferencePoint ReferencePoint = new()
-            { DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f };
+        [Header("Screen")]
+        public ReferencePoint ReferencePoint = new()
+        { DistanceFromEyesInCM = 60f, ScreenDiagonalInInches = 15.6f };
 
         public BackgroundColor Background = BackgroundColor.Black;
 
@@ -34,16 +35,18 @@ namespace RasHack.GapOverlap.Main.Settings
         public float CentralStimulusSizeInDegrees = 3.5f;
         public float PeripheralStimulusSizeInDegrees = 3f;
 
-        [Header("Task specification")] public TaskCount TaskCount = new()
-            { Gaps = 18, LeftGaps = 9, Overlaps = 18, LeftOverlaps = 9, Baselines = 18, LeftBaselines = 9 };
+        [Header("Task specification")]
+        public TaskCount TaskCount = new()
+        { Gaps = 18, LeftGaps = 9, Overlaps = 18, LeftOverlaps = 9, Baselines = 18, LeftBaselines = 9 };
 
-        [Header("Task times")] public GapTimes GapTimes = new()
-            { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
+        [Header("Task times")]
+        public GapTimes GapTimes = new()
+        { CentralTime = 5.0f, PauseTime = 0.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         public OverlapTimes OverlapTimes = new() { CentralTime = 5.0f, BothStimuli = 5.0f, ShortenOnFocusTime = 0.2f };
 
         public BaselineTimes BaselineTimes = new()
-            { CentralTime = 5.0f, CentralOutStimulusIn = 5.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
+        { CentralTime = 5.0f, CentralOutStimulusIn = 5.0f, StimulusTime = 5.0f, ShortenOnFocusTime = 0.2f };
 
         [Header("Sound")]
         public bool SoundEnabled;
@@ -72,6 +75,14 @@ namespace RasHack.GapOverlap.Main.Settings
             var json = JsonUtility.ToJson(this, true);
             Directory.CreateDirectory(DIRECTORY);
             File.WriteAllText(FILENAME, json, Encoding.UTF8);
+        }
+
+        public MainSettings WithScreenDiagonal(float screenDiagonalInInches)
+        {
+            var json = JsonUtility.ToJson(this, true);
+            var copy = JsonUtility.FromJson<MainSettings>(json);
+            copy.ReferencePoint.ScreenDiagonalInInches = screenDiagonalInInches;
+            return copy;
         }
 
         #endregion

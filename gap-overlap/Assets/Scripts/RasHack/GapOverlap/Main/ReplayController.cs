@@ -90,7 +90,7 @@ namespace RasHack.GapOverlap.Main
             var screen = ScreenArea.WholeScreen;
             var overlayScreen = new ScreenArea((int)toReplay.test.ScreenPixelsX, (int)toReplay.test.ScreenPixelsY);
             screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.test.ScreenDiagonalInInches, overlayScreen);
-            debugScaler = new Scaler(mainCamera, -2, settings, screen);
+            debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.test.ScreenDiagonalInInches), screen);
         }
 
         #endregion
@@ -107,6 +107,11 @@ namespace RasHack.GapOverlap.Main
         private void OnNextSample(Sample sample)
         {
             Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
+
+            if (sample.Task.CenterStimulus.Visible)
+            {
+
+            }
         }
 
         private void UpdateDebugVisibility()
