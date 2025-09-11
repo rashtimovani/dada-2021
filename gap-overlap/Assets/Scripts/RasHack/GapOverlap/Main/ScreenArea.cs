@@ -78,6 +78,13 @@ namespace RasHack.GapOverlap.Main
             return diagonal * Width / Mathf.Sqrt(Width * Width + Height * Height);
         }
 
+        public Vector3 FromRaw(float rawX, float rawY)
+        {
+            var x = Mathf.Lerp(x1, x2, rawX);
+            var y = Mathf.Lerp(y1, y2, rawY);
+            return new Vector3(x, y, 0);
+        }
+
         #endregion
     }
 }

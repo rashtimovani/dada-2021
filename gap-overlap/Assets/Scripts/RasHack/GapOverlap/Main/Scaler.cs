@@ -138,6 +138,11 @@ namespace RasHack.GapOverlap.Main
             return new Vector3(width, height, 1);
         }
 
+        public Vector3 FromRaw(float rawX, float rawY)
+        {
+            return Point(screen.FromRaw(rawX, rawY));
+        }
+
         #endregion
     }
 }

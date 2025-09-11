@@ -118,11 +118,11 @@ namespace RasHack.GapOverlap.Main
 
             if (sample.Task.CenterStimulus.Visible)
             {
-                if (centralStimulus == null) centralStimulus = NewCentralStimulus(sample.Task.TaskType);
+                if (centralStimulus == null) centralStimulus = NewCentralStimulus(sample.Task.TaskType, sample.Task.CenterStimulus.Center.X, sample.Task.CenterStimulus.Center.Y);
                 else if (centralStimulus.name != Name(sample.Task.TaskType, Enum.Parse<StimulusSide>(sample.Task.Side)))
                 {
                     Destroy(centralStimulus.gameObject);
-                    centralStimulus = NewCentralStimulus(sample.Task.TaskType);
+                    centralStimulus = NewCentralStimulus(sample.Task.TaskType, sample.Task.CenterStimulus.Center.X, sample.Task.CenterStimulus.Center.Y);
                 }
             }
             else if (centralStimulus != null)
@@ -162,9 +162,9 @@ namespace RasHack.GapOverlap.Main
             topRight.transform.position = debugScaler.TopRight;
         }
 
-        protected CentralStimulus NewCentralStimulus(string taskType)
+        protected CentralStimulus NewCentralStimulus(string taskType, float rawX, float rawY)
         {
-            var area = NextArea.CenterInWorld(debugScaler.Center);
+            var area = NextArea.CenterInWorld(debugScaler.FromRaw(rawX, rawY));
 
             var localWhere = transform.InverseTransformPoint(area.Position);
             var newOne = Instantiate(centralStimulusPrefab, localWhere, Quaternion.identity, transform);
