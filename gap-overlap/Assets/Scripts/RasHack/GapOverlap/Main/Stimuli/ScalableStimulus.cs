@@ -166,6 +166,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return new RawPoint { X = rawX, Y = rawY };
         }
 
+        public void DontUseDetectableArea()
+        {
+            Destroy(detectable.gameObject);
+            detectable = null;
+        }
         #endregion
     }
 }

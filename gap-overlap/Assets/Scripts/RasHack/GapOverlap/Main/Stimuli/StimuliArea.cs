@@ -7,6 +7,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
 {
     public struct NextArea
     {
+        public static NextArea CenterInWorld(Vector3 center) =>
+            new() { Position = center, OffsetInDegrees = 0f, Side = StimulusSide.Center };
+
         public Vector3 Position;
         public float OffsetInDegrees;
         public StimulusSide Side;
@@ -60,8 +63,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             baselineSides = new ManagedRandom<Side>();
         }
 
-        public NextArea CenterInWorld =>
-            new() { Position = Scaler.Center, OffsetInDegrees = 0f, Side = StimulusSide.Center };
+        public NextArea CenterInWorld => NextArea.CenterInWorld(Scaler.Center);
 
         public NextArea NextInWorld(TaskType taskType)
         {

@@ -67,6 +67,8 @@ namespace RasHack.GapOverlap.Main
 
         public Vector3 ScreenCenter => screen.Center;
 
+        public MainSettings Settings => settings;
+
         public Vector3 Point(Vector3 inputPosition)
         {
             return InDepth(mainCamera.ScreenToWorldPoint(inputPosition));

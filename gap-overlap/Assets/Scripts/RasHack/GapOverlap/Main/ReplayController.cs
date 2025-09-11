@@ -3,6 +3,8 @@ using System.IO;
 using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
+using RasHack.GapOverlap.Main.Stimuli;
+using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -58,11 +60,17 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private SpriteRenderer topLeft;
         [SerializeField] private SpriteRenderer topRight;
 
+        [SerializeField] private GameObject centralStimulusPrefab;
+
+        [SerializeField] private GameObject stimulusPrefab;
+
         private MainSettings settings = new MainSettings();
 
         private Scaler debugScaler;
 
         private ReplayedTest toReplay;
+
+        private CentralStimulus centralStimulus;
 
         #endregion
 
@@ -110,7 +118,22 @@ namespace RasHack.GapOverlap.Main
 
             if (sample.Task.CenterStimulus.Visible)
             {
-
+                if (centralStimulus == null) centralStimulus = NewCentralStimulus(sample.Task.TaskType);
+                else if (centralStimulus.name != Name(sample.Task.TaskType, Enum.Parse<StimulusSide>(sample.Task.Side)))
+                {
+                    Destroy(centralStimulus.gameObject);
+                    centralStimulus = NewCentralStimulus(sample.Task.TaskType);
+                }
+                else if (centralStimulus != null)
+                {
+                    Destroy(centralStimulus.gameObject);
+                    centralStimulus = null;
+                }
+            }
+            else if (centralStimulus != null)
+            {
+                Destroy(centralStimulus.gameObject);
+                centralStimulus = null;
             }
         }
 
@@ -143,6 +166,25 @@ namespace RasHack.GapOverlap.Main
             bottomRight.transform.position = debugScaler.BottomRight;
             topRight.transform.position = debugScaler.TopRight;
         }
+
+        protected CentralStimulus NewCentralStimulus(string taskType)
+        {
+            var area = NextArea.CenterInWorld(debugScaler.Center);
+
+            var localWhere = transform.InverseTransformPoint(area.Position);
+            var newOne = Instantiate(centralStimulusPrefab, localWhere, Quaternion.identity, transform);
+            newOne.name = Name(taskType, area.Side);
+
+            var stimulus = newOne.GetComponent<CentralStimulus>();
+            var sizeInDegrees = debugScaler.Settings.CentralStimulusSizeInDegrees;
+            var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
+            stimulus.Scale(desiredSize);
+            stimulus.DontUseDetectableArea();
+
+            return stimulus;
+        }
+
+        private string Name(string taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
 
         #endregion
 

@@ -65,6 +65,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void Start()
         {
+            if (owner == null) return;
             if (owner.Owner.Settings.SoundEnabled) GetComponent<AudioSource>().Play();
             owner.Owner.Sampler.StartCentral(this);
         }

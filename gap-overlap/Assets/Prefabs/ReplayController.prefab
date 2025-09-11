@@ -220,6 +220,10 @@ MonoBehaviour:
   bottomRight: {fileID: 5230554403686800800}
   topLeft: {fileID: 2163059345743460288}
   topRight: {fileID: 4147746231073308669}
+  centralStimulusPrefab: {fileID: 8411830356387070457, guid: 0b7804ee59226584aa2a8aa49eb8c2be,
+    type: 3}
+  stimulusPrefab: {fileID: 2794739829063479718, guid: 6af6b7a6ead1a724c9bd3a6681aa21f0,
+    type: 3}
 --- !u!1 &9091873146412685516
 GameObject:
   m_ObjectHideFlags: 0
