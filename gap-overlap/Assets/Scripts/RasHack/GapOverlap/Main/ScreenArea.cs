@@ -16,6 +16,10 @@ namespace RasHack.GapOverlap.Main
 
         #region Constructors
 
+        public ScreenArea(int width, int height) : this(0, width, 0, height)
+        {
+        }
+
         public ScreenArea(int x1, int x2, int y1, int y2)
         {
             this.x1 = x1;
@@ -28,7 +32,7 @@ namespace RasHack.GapOverlap.Main
 
         #region API
 
-        public static ScreenArea WholeScreen => new ScreenArea(0, Screen.width, 0, Screen.height);
+        public static ScreenArea WholeScreen => new ScreenArea(Screen.width, Screen.height);
 
         public Vector3 BottomLeft => new Vector3(x1, y1);
         public Vector3 BottomRight => new Vector3(x2, y1);
@@ -42,10 +46,12 @@ namespace RasHack.GapOverlap.Main
 
         public float Ratio => (float)Height / Width;
 
+
+
         public ScreenArea Overlay(float diagonal, float overlayDiagonal, ScreenArea overlayScreen)
         {
             var myWidth = WidthFromDiagonal(diagonal);
-            var myWidthDPI = Width /myWidth;
+            var myWidthDPI = Width / myWidth;
             var overlayWidth = overlayScreen.WidthFromDiagonal(overlayDiagonal);
             var pixelWidth = overlayWidth * myWidthDPI;
 
@@ -55,10 +61,10 @@ namespace RasHack.GapOverlap.Main
             var pixelHeight = overlayHeight * myHeightDPI;
 
             var center = Center;
-            var x1 = (int) Math.Round(center.x - pixelWidth / 2);
-            var x2 = (int) Math.Round(center.x + pixelWidth / 2);
-            var y1 = (int) Math.Round(center.y - pixelHeight / 2);
-            var y2 = (int) Math.Round(center.y + pixelHeight / 2);
+            var x1 = (int)Math.Round(center.x - pixelWidth / 2);
+            var x2 = (int)Math.Round(center.x + pixelWidth / 2);
+            var y1 = (int)Math.Round(center.y - pixelHeight / 2);
+            var y2 = (int)Math.Round(center.y + pixelHeight / 2);
             return new ScreenArea(x1, x2, y1, y2);
         }
 

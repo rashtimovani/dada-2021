@@ -11,7 +11,7 @@ namespace RasHack.GapOverlap.Main
     {
         #region Fields
 
-        private readonly SampledTest toReplay;
+        public readonly SampledTest test;
         private float spentTime;
         private int currentSampleIndex;
 
@@ -21,9 +21,9 @@ namespace RasHack.GapOverlap.Main
 
         public ReplayedTest(SampledTest test)
         {
-            toReplay = test;
+            this.test = test;
             currentSampleIndex = 0;
-            spentTime = toReplay.Samples.AllSamples[currentSampleIndex].Time;
+            spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
         }
 
         #endregion
@@ -33,9 +33,9 @@ namespace RasHack.GapOverlap.Main
         public void Tick(float deltaTime, Action<Sample> onNextSample)
         {
             var toTime = spentTime + deltaTime;
-            while (currentSampleIndex < toReplay.Samples.AllSamples.Count)
+            while (currentSampleIndex < test.Samples.AllSamples.Count)
             {
-                var sample = toReplay.Samples.AllSamples[currentSampleIndex];
+                var sample = test.Samples.AllSamples[currentSampleIndex];
                 if (toTime < sample.Time) break;
 
                 currentSampleIndex++;
@@ -60,6 +60,8 @@ namespace RasHack.GapOverlap.Main
 
         private MainSettings settings = new MainSettings();
 
+        private Scaler debugScaler;
+
         private ReplayedTest toReplay;
 
         #endregion
@@ -83,6 +85,12 @@ namespace RasHack.GapOverlap.Main
             {
                 toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader));
             }
+
+            var mainCamera = Camera.main;
+            var screen = ScreenArea.WholeScreen;
+            var overlayScreen = new ScreenArea((int)toReplay.test.ScreenPixelsX, (int)toReplay.test.ScreenPixelsY);
+            screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.test.ScreenDiagonalInInches, overlayScreen);
+            debugScaler = new Scaler(mainCamera, -2, settings, screen);
         }
 
         #endregion
@@ -119,7 +127,16 @@ namespace RasHack.GapOverlap.Main
         {
             var deltaTime = Time.deltaTime;
             Tick(deltaTime);
+            if (debugScaler != null) UpdateBounds();
             UpdateDebugVisibility();
+        }
+
+        private void UpdateBounds()
+        {
+            topLeft.transform.position = debugScaler.TopLeft;
+            bottomLeft.transform.position = debugScaler.BottomLeft;
+            bottomRight.transform.position = debugScaler.BottomRight;
+            topRight.transform.position = debugScaler.TopRight;
         }
 
         #endregion
