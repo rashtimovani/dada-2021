@@ -124,11 +124,6 @@ namespace RasHack.GapOverlap.Main
                     Destroy(centralStimulus.gameObject);
                     centralStimulus = NewCentralStimulus(sample.Task.TaskType);
                 }
-                else if (centralStimulus != null)
-                {
-                    Destroy(centralStimulus.gameObject);
-                    centralStimulus = null;
-                }
             }
             else if (centralStimulus != null)
             {
