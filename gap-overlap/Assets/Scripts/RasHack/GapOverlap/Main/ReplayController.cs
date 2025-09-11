@@ -72,6 +72,8 @@ namespace RasHack.GapOverlap.Main
 
         private CentralStimulus centralStimulus;
 
+        private PeripheralStimulus peripheralStimulus;
+
         #endregion
 
         #region Properties
@@ -81,6 +83,8 @@ namespace RasHack.GapOverlap.Main
         #endregion
 
         #region API
+
+        private float Degrees => settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
         public void StartReplay()
         {
@@ -116,20 +120,8 @@ namespace RasHack.GapOverlap.Main
         {
             Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
 
-            if (sample.Task.CenterStimulus.Visible)
-            {
-                if (centralStimulus == null) centralStimulus = NewCentralStimulus(sample.Task.TaskType, sample.Task.CenterStimulus.Center.X, sample.Task.CenterStimulus.Center.Y);
-                else if (centralStimulus.name != Name(sample.Task.TaskType, Enum.Parse<StimulusSide>(sample.Task.Side)))
-                {
-                    Destroy(centralStimulus.gameObject);
-                    centralStimulus = NewCentralStimulus(sample.Task.TaskType, sample.Task.CenterStimulus.Center.X, sample.Task.CenterStimulus.Center.Y);
-                }
-            }
-            else if (centralStimulus != null)
-            {
-                Destroy(centralStimulus.gameObject);
-                centralStimulus = null;
-            }
+            UpdateCentralStimulus(sample.Task);
+            UpdatePeripheralStimulus(sample.Task);
         }
 
         private void UpdateDebugVisibility()
@@ -179,7 +171,61 @@ namespace RasHack.GapOverlap.Main
             return stimulus;
         }
 
+        private PeripheralStimulus NewPeripheralStimulus(string taskType, StimulusSide side, float x, float y)
+        {
+            var localWhere = transform.InverseTransformPoint(debugScaler.FromRaw(x, y));
+            var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
+            newOne.name = Name(taskType, side);
+
+            var offsetInDegrees = side == StimulusSide.Right ? Vector3.right.x * Degrees : Vector3.left.x * Degrees;
+
+            var stimulus = newOne.GetComponent<PeripheralStimulus>();
+            var sizeInDegrees = debugScaler.Settings.PeripheralStimulusSizeInDegrees;
+            var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, offsetInDegrees);
+            stimulus.Scale(desiredSize);
+            stimulus.DontUseDetectableArea();
+
+            return stimulus;
+        }
+
         private string Name(string taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
+
+        private void UpdateCentralStimulus(SampledTask task)
+        {
+            if (task.CenterStimulus.Visible)
+            {
+                if (centralStimulus == null) centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                else if (centralStimulus.name != Name(task.TaskType, Enum.Parse<StimulusSide>(task.Side)))
+                {
+                    Destroy(centralStimulus.gameObject);
+                    centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                }
+            }
+            else if (centralStimulus != null)
+            {
+                Destroy(centralStimulus.gameObject);
+                centralStimulus = null;
+            }
+        }
+
+        private void UpdatePeripheralStimulus(SampledTask task)
+        {
+            if (task.PeripheralStimulus.Visible)
+            {
+                var side = Enum.Parse<StimulusSide>(task.Side);
+                if (peripheralStimulus == null) peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                else if (peripheralStimulus.name != Name(task.TaskType, side))
+                {
+                    Destroy(peripheralStimulus.gameObject);
+                    peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                }
+            }
+            else if (peripheralStimulus != null)
+            {
+                Destroy(peripheralStimulus.gameObject);
+                peripheralStimulus = null;
+            }
+        }
 
         #endregion
 
