@@ -28,7 +28,6 @@ namespace RasHack.GapOverlap.Main
 
         private MainSettings settings = new MainSettings();
 
-        private ReplayController replayController;
         private Scaler scaler;
         private Scaler debugScaler;
         private Camera mainCamera;
@@ -101,8 +100,6 @@ namespace RasHack.GapOverlap.Main
 
         private bool ShowPointer => settings.ShowPointer;
 
-        public ReplayController ReplayController => replayController;
-
         public void ReportTaskFinished(Task.Task task, AllResponseTimes responses)
         {
             if (task != currentTask)
@@ -170,10 +167,9 @@ namespace RasHack.GapOverlap.Main
             background = FindObjectOfType<Background>();
             UpdateBackground();
 
-            scaler = new Scaler(mainCamera, -1, settings);
-            debugScaler = new Scaler(mainCamera, -2, settings);
+            scaler = new Scaler(mainCamera, -1, settings, ScreenArea.WholeScreen);
+            debugScaler = new Scaler(mainCamera, -2, settings, ScreenArea.WholeScreen);
             results = new TestResults();
-            replayController = new ReplayController();
 
             tasks = GetComponent<TaskOrder>();
             area = GetComponent<StimuliArea>();
@@ -186,7 +182,6 @@ namespace RasHack.GapOverlap.Main
             UpdatePause();
             DetectInterruptedTest();
             UpdatePointers();
-            UpdateReplayController();
         }
 
         private void OnApplicationQuit()
@@ -271,12 +266,6 @@ namespace RasHack.GapOverlap.Main
             {
                 pointer.PointerEnabled = !tobiiWorking;
             }
-        }
-        
-        private void UpdateReplayController()
-        {
-            var deltaTime = Time.deltaTime;
-            replayController.Tick(deltaTime);
         }
 
         #endregion

@@ -19,17 +19,18 @@ namespace RasHack.GapOverlap.Main
         private readonly float depth;
         private readonly MainSettings settings;
 
-        private readonly ScreenArea screen = ScreenArea.WholeScreen;
+        private readonly ScreenArea screen;
 
         #endregion
 
         #region API
 
-        public Scaler(Camera mainCamera, float depth, MainSettings settings)
+        public Scaler(Camera mainCamera, float depth, MainSettings settings, ScreenArea screen)
         {
             this.mainCamera = mainCamera;
             this.depth = depth;
             this.settings = settings;
+            this.screen = screen;
         }
 
         public Vector3 ScreenInCM

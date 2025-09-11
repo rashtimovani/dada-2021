@@ -87,7 +87,7 @@ MonoBehaviour:
   simulator: {fileID: 6232430714456115892}
   spriteRenderer: {fileID: 388354803533973988}
   gazeEye: 1
-  acceptableLastValidReadingTimeout: 25
+  eyeTracker: {fileID: 0}
 --- !u!1 &1214063865978585052
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,7 +431,7 @@ MonoBehaviour:
   simulator: {fileID: 6232430714456115892}
   spriteRenderer: {fileID: 7347319994291106727}
   gazeEye: 0
-  acceptableLastValidReadingTimeout: 25
+  eyeTracker: {fileID: 0}
 --- !u!1 &5437879310479564058
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulator: {fileID: 6232430714456115892}
+  eyeTracker: {fileID: 0}
 --- !u!1 &6412608594267240008
 GameObject:
   m_ObjectHideFlags: 0

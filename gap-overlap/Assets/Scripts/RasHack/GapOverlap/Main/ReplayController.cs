@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Result;
+using RasHack.GapOverlap.Main.Settings;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -48,11 +49,24 @@ namespace RasHack.GapOverlap.Main
         #endregion
     }
 
-    public class ReplayController
+    public class ReplayController : MonoBehaviour
     {
         #region Fields
 
+        [SerializeField] private SpriteRenderer bottomLeft;
+        [SerializeField] private SpriteRenderer bottomRight;
+        [SerializeField] private SpriteRenderer topLeft;
+        [SerializeField] private SpriteRenderer topRight;
+
+        private MainSettings settings = new MainSettings();
+
         private ReplayedTest toReplay;
+
+        #endregion
+
+        #region Properties
+
+        private bool ShowPointer => settings.ShowPointer;
 
         #endregion
 
@@ -85,6 +99,27 @@ namespace RasHack.GapOverlap.Main
         private void OnNextSample(Sample sample)
         {
             Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
+        }
+
+        private void UpdateDebugVisibility()
+        {
+            bottomLeft.enabled = ShowPointer;
+            bottomRight.enabled = ShowPointer;
+            topLeft.enabled = ShowPointer;
+            topRight.enabled = ShowPointer;
+        }
+
+        private void Awake()
+        {
+            var loadedSettings = MainSettings.Load();
+            if (loadedSettings != null) settings = loadedSettings;
+        }
+
+        private void Update()
+        {
+            var deltaTime = Time.deltaTime;
+            Tick(deltaTime);
+            UpdateDebugVisibility();
         }
 
         #endregion
