@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Security.AccessControl;
 using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
@@ -83,6 +84,8 @@ namespace RasHack.GapOverlap.Main
 
         private PeripheralStimulus peripheralStimulus;
 
+        private FileChooser fileChooser;
+
         #endregion
 
         #region Properties
@@ -117,6 +120,11 @@ namespace RasHack.GapOverlap.Main
         #endregion
 
         #region Methods
+
+        public void Start()
+        {
+            fileChooser = FindObjectOfType<FileChooser>();
+        }
 
         public void Tick(float deltaTime)
         {
@@ -154,6 +162,7 @@ namespace RasHack.GapOverlap.Main
             Tick(deltaTime);
             if (debugScaler != null) UpdateBounds();
             UpdateDebugVisibility();
+            DetectInterruptedReplay();
         }
 
         private void UpdateBounds()
@@ -250,6 +259,31 @@ namespace RasHack.GapOverlap.Main
         {
             UpdateEye(tracker.LeftEye, leftEye);
             UpdateEye(tracker.RightEye, rightEye);
+        }
+
+        private void DetectInterruptedReplay()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Debug.LogWarning("Replay aborted by user!");
+                FinishReplay();
+                fileChooser.Show();
+            }
+        }
+
+        private void FinishReplay()
+        {
+            toReplay = null;
+            if (centralStimulus != null)
+            {
+                Destroy(centralStimulus.gameObject);
+                centralStimulus = null;
+            }
+            if (peripheralStimulus != null)
+                {
+                    Destroy(peripheralStimulus.gameObject);
+                    peripheralStimulus = null;
+                }
         }
 
         #endregion
