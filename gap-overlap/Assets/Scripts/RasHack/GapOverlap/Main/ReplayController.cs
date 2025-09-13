@@ -5,6 +5,7 @@ using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
+using Tobii.Research;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main
@@ -53,7 +54,7 @@ namespace RasHack.GapOverlap.Main
 
     public class ReplayController : MonoBehaviour
     {
-        #region Fields
+        #region Unity fields
 
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -63,6 +64,14 @@ namespace RasHack.GapOverlap.Main
         [SerializeField] private GameObject centralStimulusPrefab;
 
         [SerializeField] private GameObject stimulusPrefab;
+
+        [SerializeField] private GameObject leftEye;
+
+        [SerializeField] private GameObject rightEye;
+
+        #endregion
+
+        #region Fields
 
         private MainSettings settings = new MainSettings();
 
@@ -122,6 +131,7 @@ namespace RasHack.GapOverlap.Main
 
             UpdateCentralStimulus(sample.Task);
             UpdatePeripheralStimulus(sample.Task);
+            UpdateEyes(sample.Tracker);
         }
 
         private void UpdateDebugVisibility()
@@ -225,6 +235,21 @@ namespace RasHack.GapOverlap.Main
                 Destroy(peripheralStimulus.gameObject);
                 peripheralStimulus = null;
             }
+        }
+
+        private void UpdateEye(SampledGaze eye, GameObject eyeObject)
+        {
+            eyeObject.SetActive(eye.Validity == Validity.Valid.ToString());
+            if (eyeObject.activeSelf)
+            {
+                eyeObject.transform.position = transform.InverseTransformPoint(debugScaler.FromRaw(eye.PositionOnDisplayArea.X, eye.PositionOnDisplayArea.Y));
+            }
+        }
+
+        private void UpdateEyes(SampledTracker tracker)
+        {
+            UpdateEye(tracker.LeftEye, leftEye);
+            UpdateEye(tracker.RightEye, rightEye);
         }
 
         #endregion
