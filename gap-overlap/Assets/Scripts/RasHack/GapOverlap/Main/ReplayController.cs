@@ -34,7 +34,7 @@ namespace RasHack.GapOverlap.Main
 
         #region Methods
 
-        public void Tick(float deltaTime, Action<Sample> onNextSample)
+        public bool Tick(float deltaTime, Action<Sample> onNextSample)
         {
             var toTime = spentTime + deltaTime;
             while (currentSampleIndex < test.Samples.AllSamples.Count)
@@ -48,6 +48,8 @@ namespace RasHack.GapOverlap.Main
             }
 
             spentTime = toTime;
+
+            return currentSampleIndex < test.Samples.AllSamples.Count;
         }
 
         #endregion
@@ -130,7 +132,12 @@ namespace RasHack.GapOverlap.Main
         {
             if (toReplay == null) return;
 
-            toReplay.Tick(deltaTime, OnNextSample);
+            var stillRunning = toReplay.Tick(deltaTime, OnNextSample);
+            if (!stillRunning)
+            {
+                FinishReplay();
+                fileChooser.Show();
+            }
         }
 
         private void OnNextSample(Sample sample)
@@ -280,10 +287,10 @@ namespace RasHack.GapOverlap.Main
                 centralStimulus = null;
             }
             if (peripheralStimulus != null)
-                {
-                    Destroy(peripheralStimulus.gameObject);
-                    peripheralStimulus = null;
-                }
+            {
+                Destroy(peripheralStimulus.gameObject);
+                peripheralStimulus = null;
+            }
         }
 
         #endregion

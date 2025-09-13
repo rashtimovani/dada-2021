@@ -105,8 +105,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
                     break;
             }
 
-            if (owner.Owner.Settings.SoundEnabled) audioSource.Play();
-            owner.Owner.Sampler.StartPeripheral(this);
+            if (owner != null)
+            {
+                if (owner.Owner.Settings.SoundEnabled) audioSource.Play();
+                owner.Owner.Sampler.StartPeripheral(this);
+            }
         }
 
         private void Update()
