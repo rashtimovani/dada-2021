@@ -16,6 +16,8 @@ namespace RasHack.GapOverlap.Main
 
         private HomeUI home;
 
+        private ReplayController replayController;
+
         #endregion
 
         #region Fields
@@ -29,12 +31,19 @@ namespace RasHack.GapOverlap.Main
         private void Start()
         {
             home = FindObjectOfType<HomeUI>();
+            replayController = FindObjectOfType<ReplayController>();
         }
 
         public void OnBack()
         {
             Hide();
             home.Show();
+        }
+
+        public void OnChoose()
+        {
+            Hide();
+            replayController.StartReplay(dropdown.options[dropdown.value].text);
         }
 
         public void Show()
@@ -45,6 +54,7 @@ namespace RasHack.GapOverlap.Main
 
         public void Hide()
         {
+            selectedItem = dropdown.value;
             panel.SetActive(false);
         }
 
@@ -56,7 +66,6 @@ namespace RasHack.GapOverlap.Main
             selectedItem = dropdown.value;
 
             dropdown.ClearOptions();
-            // Example: print file paths to console
             foreach (string file in jsonFiles)
             {
                 dropdown.options.Add(new TMP_Dropdown.OptionData() { text = file });

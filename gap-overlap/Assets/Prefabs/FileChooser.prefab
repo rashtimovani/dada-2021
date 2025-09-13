@@ -1643,11 +1643,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7688860512268993065}
     - target: {fileID: 4058866838025343343, guid: bba04f539b83af244a56adcbe085492a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnExit
+      value: OnChoose
+      objectReference: {fileID: 0}
+    - target: {fileID: 4058866838025343343, guid: bba04f539b83af244a56adcbe085492a,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RasHack.GapOverlap.Main.FileChooser, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bba04f539b83af244a56adcbe085492a, type: 3}

@@ -95,10 +95,10 @@ namespace RasHack.GapOverlap.Main
 
         private float Degrees => settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
-        public void StartReplay()
+        public void StartReplay(string testToLoad)
         {
             toReplay = null;
-            var bytes = File.ReadAllBytes("../gap-overlap-results/ANIKA IZDA/ANIKAIZDA_57946701-fd62-444c-b4af-43570d1c0b56.json");
+            var bytes = File.ReadAllBytes(testToLoad);
 
             var deserializer = JsonSerializer.CreateDefault();
 
