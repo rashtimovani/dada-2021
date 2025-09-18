@@ -94,6 +94,8 @@ namespace RasHack.GapOverlap.Main
 
         private bool ShowPointer => settings.ShowPointer;
 
+        public MainSettings Settings => settings;
+
         #endregion
 
         #region API
@@ -192,7 +194,9 @@ namespace RasHack.GapOverlap.Main
             var sizeInDegrees = debugScaler.Settings.CentralStimulusSizeInDegrees;
             var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
             stimulus.Scale(desiredSize);
-            stimulus.DontUseDetectableArea();
+
+            var circle = stimulus.UseDetectableCircleAndDisableArea();
+            circle.RegisterOnDetect(this, pointer => Debug.Log($"Central stimulus detected by {pointer.name}"));
 
             return stimulus;
         }
@@ -209,7 +213,9 @@ namespace RasHack.GapOverlap.Main
             var sizeInDegrees = debugScaler.Settings.PeripheralStimulusSizeInDegrees;
             var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, offsetInDegrees);
             stimulus.Scale(desiredSize);
-            stimulus.DontUseDetectableArea();
+
+            var circle = stimulus.UseDetectableCircleAndDisableArea();
+            circle.RegisterOnDetect(this, pointer => Debug.Log($"Peripheral stimulus detected by {pointer.name}"));
 
             return stimulus;
         }
@@ -270,7 +276,7 @@ namespace RasHack.GapOverlap.Main
 
         private void DetectInterruptedReplay()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (toReplay != null && Input.GetKeyDown(KeyCode.Escape))
             {
                 Debug.LogWarning("Replay aborted by user!");
                 FinishReplay();

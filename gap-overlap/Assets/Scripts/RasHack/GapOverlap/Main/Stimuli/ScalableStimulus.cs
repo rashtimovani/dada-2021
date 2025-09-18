@@ -12,6 +12,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] protected DetectableArea detectable;
         [SerializeField] protected GameObject imageToRotate;
 
+        [SerializeField] protected DetectableCircle circle;
+
         #endregion
 
         #region Fields
@@ -166,11 +168,15 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return new RawPoint { X = rawX, Y = rawY };
         }
 
-        public void DontUseDetectableArea()
+        public DetectableCircle UseDetectableCircleAndDisableArea()
         {
             Destroy(detectable.gameObject);
             detectable = null;
+                circle.gameObject.SetActive(true);
+            return circle;  
         }
+
+
         #endregion
     }
 }
