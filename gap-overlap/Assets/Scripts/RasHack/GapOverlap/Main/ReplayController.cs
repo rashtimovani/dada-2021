@@ -15,9 +15,10 @@ namespace RasHack.GapOverlap.Main
     {
         #region Fields
 
-        public readonly SampledTest test;
+        public readonly SampledTest Test;
         private float spentTime;
         private int currentSampleIndex;
+        public readonly Timers Timers;
 
         #endregion
 
@@ -25,21 +26,24 @@ namespace RasHack.GapOverlap.Main
 
         public ReplayedTest(SampledTest test)
         {
-            this.test = test;
+            Test = test;
             currentSampleIndex = 0;
             spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
+            Timers = new Timers();
         }
 
         #endregion
 
         #region Methods
 
+        public float SpentTime => spentTime;
+
         public bool Tick(float deltaTime, Action<Sample> onNextSample)
         {
             var toTime = spentTime + deltaTime;
-            while (currentSampleIndex < test.Samples.AllSamples.Count)
+            while (currentSampleIndex < Test.Samples.AllSamples.Count)
             {
-                var sample = test.Samples.AllSamples[currentSampleIndex];
+                var sample = Test.Samples.AllSamples[currentSampleIndex];
                 if (toTime < sample.Time) break;
 
                 currentSampleIndex++;
@@ -49,7 +53,7 @@ namespace RasHack.GapOverlap.Main
 
             spentTime = toTime;
 
-            return currentSampleIndex < test.Samples.AllSamples.Count;
+            return currentSampleIndex < Test.Samples.AllSamples.Count;
         }
 
         #endregion
@@ -116,9 +120,9 @@ namespace RasHack.GapOverlap.Main
 
             var mainCamera = Camera.main;
             var screen = ScreenArea.WholeScreen;
-            var overlayScreen = new ScreenArea((int)toReplay.test.ScreenPixelsX, (int)toReplay.test.ScreenPixelsY);
-            screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.test.ScreenDiagonalInInches, overlayScreen);
-            debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.test.ScreenDiagonalInInches), screen);
+            var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
+            screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
+            debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
         }
 
         #endregion
@@ -144,8 +148,8 @@ namespace RasHack.GapOverlap.Main
 
         private void OnNextSample(Sample sample)
         {
-            UpdateCentralStimulus(sample.Task);
-            UpdatePeripheralStimulus(sample.Task);
+            UpdateCentralStimulus(sample.Task, sample.Time);
+            UpdatePeripheralStimulus(sample.Task, sample.Time);
             UpdateEyes(sample.Tracker);
         }
 
@@ -194,7 +198,11 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, eye => Debug.Log($"Central stimulus detected by {eye} eye"));
+            circle.RegisterOnDetect(this, eye =>
+            {
+                var after = toReplay.Timers.ObserveCentral(eye, toReplay.SpentTime);
+                Debug.Log($"Central stimulus detected by {eye} eye after {after} seconds");
+            });
 
             return stimulus;
         }
@@ -213,22 +221,31 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, eye => Debug.Log($"Peripheral stimulus detected by {eye} eye"));
+            circle.RegisterOnDetect(this, eye =>
+            {
+                var after = toReplay.Timers.ObservePeripheral(eye, toReplay.SpentTime);
+                Debug.Log($"Peripheral stimulus detected by {eye} eye after {after} seconds");
+            });
 
             return stimulus;
         }
 
         private string Name(string taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
 
-        private void UpdateCentralStimulus(SampledTask task)
+        private void UpdateCentralStimulus(SampledTask task, float time)
         {
             if (task.CenterStimulus.Visible)
             {
-                if (centralStimulus == null) centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                else if (centralStimulus.name != Name(task.TaskType, Enum.Parse<StimulusSide>(StimulusSide.Center.ToString())) )
+                if (centralStimulus == null)
+                {
+                    centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                    toReplay.Timers.StartNewCentral(time);
+                }
+                else if (centralStimulus.name != Name(task.TaskType, StimulusSide.Center))
                 {
                     Destroy(centralStimulus.gameObject);
                     centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                    toReplay.Timers.StartNewCentral(time);
                 }
             }
             else if (centralStimulus != null)
@@ -238,16 +255,21 @@ namespace RasHack.GapOverlap.Main
             }
         }
 
-        private void UpdatePeripheralStimulus(SampledTask task)
+        private void UpdatePeripheralStimulus(SampledTask task, float time)
         {
             if (task.PeripheralStimulus.Visible)
             {
                 var side = Enum.Parse<StimulusSide>(task.Side);
-                if (peripheralStimulus == null) peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                if (peripheralStimulus == null)
+                {
+                    peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                    toReplay.Timers.StartPeripheral(time);
+                }
                 else if (peripheralStimulus.name != Name(task.TaskType, side))
                 {
                     Destroy(peripheralStimulus.gameObject);
                     peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                    toReplay.Timers.StartPeripheral(time);
                 }
             }
             else if (peripheralStimulus != null)
