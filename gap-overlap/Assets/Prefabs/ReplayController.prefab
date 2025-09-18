@@ -406,7 +406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4003311962581372934}
   - component: {fileID: 223269171140069677}
-  - component: {fileID: 1201435209158771910}
+  - component: {fileID: 8488473641684663141}
   m_Layer: 8
   m_Name: TobiiLeftEyePointer
   m_TagString: focusable
@@ -446,27 +446,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!50 &1201435209158771910
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!114 &8488473641684663141
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6509075372530231041}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49ce674e206fa944b6c15c4bbbcec46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eye: 1
 --- !u!1 &6639484888582899583
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 580056278782991000}
   - component: {fileID: 4846853480618650023}
-  - component: {fileID: 8714994459814733909}
+  - component: {fileID: 7896171535498191873}
   m_Layer: 8
   m_Name: TobiiRightEyePointer
   m_TagString: focusable
@@ -517,27 +509,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!50 &8714994459814733909
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!114 &7896171535498191873
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6639484888582899583}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49ce674e206fa944b6c15c4bbbcec46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eye: 0
 --- !u!1 &9091873146412685516
 GameObject:
   m_ObjectHideFlags: 0

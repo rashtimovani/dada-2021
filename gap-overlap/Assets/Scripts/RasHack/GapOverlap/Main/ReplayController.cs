@@ -144,8 +144,6 @@ namespace RasHack.GapOverlap.Main
 
         private void OnNextSample(Sample sample)
         {
-            Debug.Log($"Replaying sample at {sample.Time}s: {sample.Task.TaskType}");
-
             UpdateCentralStimulus(sample.Task);
             UpdatePeripheralStimulus(sample.Task);
             UpdateEyes(sample.Tracker);
@@ -196,7 +194,7 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, pointer => Debug.Log($"Central stimulus detected by {pointer.name}"));
+            circle.RegisterOnDetect(this, eye => Debug.Log($"Central stimulus detected by {eye} eye"));
 
             return stimulus;
         }
@@ -215,7 +213,7 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, pointer => Debug.Log($"Peripheral stimulus detected by {pointer.name}"));
+            circle.RegisterOnDetect(this, eye => Debug.Log($"Peripheral stimulus detected by {eye} eye"));
 
             return stimulus;
         }
@@ -227,7 +225,7 @@ namespace RasHack.GapOverlap.Main
             if (task.CenterStimulus.Visible)
             {
                 if (centralStimulus == null) centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                else if (centralStimulus.name != Name(task.TaskType, Enum.Parse<StimulusSide>(task.Side)))
+                else if (centralStimulus.name != Name(task.TaskType, Enum.Parse<StimulusSide>(StimulusSide.Center.ToString())) )
                 {
                     Destroy(centralStimulus.gameObject);
                     centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);

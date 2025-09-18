@@ -14,21 +14,23 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region
 
-        private bool wasFocusedOn;
+        private bool wasFocusedOnByLeftEye;
+        private bool wasFocusedOnByRightEye;
 
         private ReplayController owner;
 
-        private Action<Pointer> onDetected;
+        private Action<Eye> onDetected;
 
         #endregion
 
         #region API
 
-        public void RegisterOnDetect(ReplayController whoDetects, Action<Pointer> onDetectedAction)
+        public void RegisterOnDetect(ReplayController whoDetects, Action<Eye> onDetectedAction)
         {
             owner = whoDetects;
             onDetected = onDetectedAction;
-            wasFocusedOn = false;
+            wasFocusedOnByLeftEye = false;
+            wasFocusedOnByRightEye = false;
         }
 
         #endregion
@@ -42,14 +44,31 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (wasFocusedOn) return;
-            var pointer = other.gameObject.GetComponent<Pointer>();
+            var pointer = other.gameObject.GetComponent<ReplayPointer>();
             if (pointer == null) return;
-            wasFocusedOn = true;
-            onDetected.Invoke(pointer);
+
+            if (pointer.Eye == Eye.Left)
+            {
+                if (wasFocusedOnByLeftEye) return;
+                wasFocusedOnByLeftEye = true;
+            }
+
+            if (pointer.Eye == Eye.Right)
+            {
+                if (wasFocusedOnByRightEye) return;
+                wasFocusedOnByRightEye = true;
+            }
+
+            onDetected.Invoke(pointer.Eye);
         }
 
         private void OnTriggerStay2D(Collider2D other)
+        {
+            OnTriggerEnter2D(other);
+        }
+
+
+        private void OnTriggerExit2D(Collider2D other)
         {
             OnTriggerEnter2D(other);
         }
