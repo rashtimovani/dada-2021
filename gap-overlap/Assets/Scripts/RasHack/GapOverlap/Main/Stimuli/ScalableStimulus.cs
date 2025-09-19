@@ -11,7 +11,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private Transform topRight;
         [SerializeField] protected DetectableArea detectable;
         [SerializeField] protected GameObject imageToRotate;
-
         [SerializeField] protected DetectableCircle circle;
 
         #endregion
