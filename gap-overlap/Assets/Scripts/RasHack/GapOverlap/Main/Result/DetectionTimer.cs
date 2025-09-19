@@ -1,6 +1,9 @@
 using UnityEngine;
 using RasHack.GapOverlap.Main.Inputs;
 using System.Collections.Generic;
+using System.Globalization;
+using RasHack.GapOverlap.Main.Task;
+using RasHack.GapOverlap.Main.Stimuli;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -23,9 +26,17 @@ namespace RasHack.GapOverlap.Main.Result
 
         public float ObservedAt(float time)
         {
-            ObservedAfter = time - StartTime;
-            Observed = true;
+            if (!Observed)
+            {
+                ObservedAfter = time - StartTime;
+                Observed = true;
+            }
             return ObservedAfter;
+        }
+
+        public string ToCSV()
+        {
+            return Observed ? ObservedAfter.ToString("0.00", CultureInfo.InvariantCulture) : "NaN";
         }
 
         #endregion
@@ -63,6 +74,16 @@ namespace RasHack.GapOverlap.Main.Result
             }
         }
 
+        public string ToCSV()
+        {
+            return $"{LeftEye.ToCSV()},{RightEye.ToCSV()}";
+        }
+
+        public static string ToCSVHeader(string modifier)
+        {
+            return $"\"{modifier} stimulus detection by left eye\",\"{modifier} stimulus detection by right eye\"";
+        }
+
         #endregion
     }
 
@@ -72,6 +93,19 @@ namespace RasHack.GapOverlap.Main.Result
 
         public StimulusTimer Central { get; private set; } = new StimulusTimer();
         public StimulusTimer Peripheral { get; private set; } = new StimulusTimer();
+        public int Order { get; private set; }
+        public TaskType Type { get; private set; }
+        public StimulusSide Side { get; private set; }
+
+        #endregion
+
+        #region Constructor
+        public DetectionTimer(int order, TaskType type, StimulusSide side)
+        {
+            Type = type;
+            Order = order;
+            Side = side;
+        }
 
         #endregion
 
@@ -85,6 +119,16 @@ namespace RasHack.GapOverlap.Main.Result
         public void StartPeripheral(float currentTime)
         {
             Peripheral.Start(currentTime);
+        }
+
+        public string ToCSV(string subject, string testId)
+        {
+            return $"\"{subject}\",\"{testId}\",\"{Order}\",\"{Type}\",\"{Side}\",{Central.ToCSV()},{Peripheral.ToCSV()}";
+        }
+
+        public static string ToCSVHeader()
+        {
+            return $"\"Subject\",\"Test ID\",\"Task Order\",\"Task Type\",\"Task Side\",{StimulusTimer.ToCSVHeader("Central")},{StimulusTimer.ToCSVHeader("Peripheral")}";
         }
 
         #endregion
@@ -101,11 +145,11 @@ namespace RasHack.GapOverlap.Main.Result
 
         #region API
 
-        public void StartNewCentral(float time)
+        public void StartNewCentral(float time, int order, TaskType type, StimulusSide side)
         {
             if (Current != null) All.Add(Current);
 
-            Current = new DetectionTimer();
+            Current = new DetectionTimer(order, type, side);
             Current.StartCentral(time);
         }
 
@@ -122,6 +166,27 @@ namespace RasHack.GapOverlap.Main.Result
         public float ObservePeripheral(Eye eye, float time)
         {
             return Current.Peripheral.ObservedAt(eye, time);
+        }
+
+        public void ToCSV(string subject, string testId)
+        {
+            if (Current != null)
+            {
+                All.Add(Current);
+                Current = null;
+            }
+
+            var lines = new List<string>
+            {
+                DetectionTimer.ToCSVHeader()
+            };
+            foreach (var timer in All)
+            {
+                lines.Add(timer.ToCSV(subject, testId));
+            }
+
+            var csv = string.Join("\n", lines) + "\n";
+            System.IO.File.WriteAllText($"{subject}_{testId}_detection.csv", csv);
         }
 
         #endregion

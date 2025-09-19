@@ -184,7 +184,7 @@ namespace RasHack.GapOverlap.Main
             topRight.transform.position = debugScaler.TopRight;
         }
 
-        protected CentralStimulus NewCentralStimulus(string taskType, float rawX, float rawY)
+        protected CentralStimulus NewCentralStimulus(TaskType taskType, float rawX, float rawY)
         {
             var area = NextArea.CenterInWorld(debugScaler.FromRaw(rawX, rawY));
 
@@ -207,7 +207,7 @@ namespace RasHack.GapOverlap.Main
             return stimulus;
         }
 
-        private PeripheralStimulus NewPeripheralStimulus(string taskType, StimulusSide side, float x, float y)
+        private PeripheralStimulus NewPeripheralStimulus(TaskType taskType, StimulusSide side, float x, float y)
         {
             var localWhere = transform.InverseTransformPoint(debugScaler.FromRaw(x, y));
             var newOne = Instantiate(stimulusPrefab, localWhere, Quaternion.identity, transform);
@@ -230,22 +230,24 @@ namespace RasHack.GapOverlap.Main
             return stimulus;
         }
 
-        private string Name(string taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
+        private string Name(TaskType taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
 
         private void UpdateCentralStimulus(SampledTask task, float time)
         {
             if (task.CenterStimulus.Visible)
             {
+                var taskType = Enum.Parse<TaskType>(task.TaskType);
+                var taskSide = Enum.Parse<StimulusSide>(task.Side);
                 if (centralStimulus == null)
                 {
-                    centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                    toReplay.Timers.StartNewCentral(time);
+                    centralStimulus = NewCentralStimulus(taskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                    toReplay.Timers.StartNewCentral(time, task.TaskOrder, taskType, taskSide);
                 }
-                else if (centralStimulus.name != Name(task.TaskType, StimulusSide.Center))
+                else if (centralStimulus.name != Name(taskType, StimulusSide.Center))
                 {
                     Destroy(centralStimulus.gameObject);
-                    centralStimulus = NewCentralStimulus(task.TaskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                    toReplay.Timers.StartNewCentral(time);
+                    centralStimulus = NewCentralStimulus(taskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
+                    toReplay.Timers.StartNewCentral(time, task.TaskOrder, taskType, taskSide);
                 }
             }
             else if (centralStimulus != null)
@@ -259,16 +261,17 @@ namespace RasHack.GapOverlap.Main
         {
             if (task.PeripheralStimulus.Visible)
             {
+                var taskType = Enum.Parse<TaskType>(task.TaskType);
                 var side = Enum.Parse<StimulusSide>(task.Side);
                 if (peripheralStimulus == null)
                 {
-                    peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                    peripheralStimulus = NewPeripheralStimulus(taskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
                     toReplay.Timers.StartPeripheral(time);
                 }
-                else if (peripheralStimulus.name != Name(task.TaskType, side))
+                else if (peripheralStimulus.name != Name(taskType, side))
                 {
                     Destroy(peripheralStimulus.gameObject);
-                    peripheralStimulus = NewPeripheralStimulus(task.TaskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
+                    peripheralStimulus = NewPeripheralStimulus(taskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
                     toReplay.Timers.StartPeripheral(time);
                 }
             }
@@ -306,6 +309,7 @@ namespace RasHack.GapOverlap.Main
 
         private void FinishReplay()
         {
+            toReplay.Timers.ToCSV(toReplay.Test.Name, toReplay.Test.TestId);
             toReplay = null;
             if (centralStimulus != null)
             {
