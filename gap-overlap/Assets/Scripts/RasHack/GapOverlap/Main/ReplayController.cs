@@ -92,6 +92,8 @@ namespace RasHack.GapOverlap.Main
 
         private FileChooser fileChooser;
 
+        private string resultsDirectory;
+
         #endregion
 
         #region Properties
@@ -106,7 +108,7 @@ namespace RasHack.GapOverlap.Main
 
         private float Degrees => settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
-        public void StartReplay(string testToLoad)
+        public void StartReplay(string testToLoad, string directoryForResults)
         {
             toReplay = null;
             var bytes = File.ReadAllBytes(testToLoad);
@@ -123,6 +125,12 @@ namespace RasHack.GapOverlap.Main
             var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
             screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
             debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
+
+            resultsDirectory = directoryForResults + "/detections";
+            if (!Directory.Exists(resultsDirectory))
+            {
+                Directory.CreateDirectory(resultsDirectory);
+            }
         }
 
         #endregion
@@ -309,7 +317,8 @@ namespace RasHack.GapOverlap.Main
 
         private void FinishReplay()
         {
-            toReplay.Timers.ToCSV(toReplay.Test.Name, toReplay.Test.TestId);
+            Debug.Log($"Replay of {toReplay.Test.Name} [{toReplay.Test.TestId}] finished!");
+            toReplay.Timers.ToCSV(resultsDirectory, toReplay.Test.Name, toReplay.Test.TestId);
             toReplay = null;
             if (centralStimulus != null)
             {

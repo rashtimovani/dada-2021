@@ -168,7 +168,7 @@ namespace RasHack.GapOverlap.Main.Result
             return Current.Peripheral.ObservedAt(eye, time);
         }
 
-        public void ToCSV(string subject, string testId)
+        public void ToCSV(string resultsDirectory, string subject, string testId)
         {
             if (Current != null)
             {
@@ -186,7 +186,7 @@ namespace RasHack.GapOverlap.Main.Result
             }
 
             var csv = string.Join("\n", lines) + "\n";
-            System.IO.File.WriteAllText($"{subject}_{testId}_detection.csv", csv);
+            System.IO.File.WriteAllText($"{resultsDirectory}/{subject}_{testId}_detection.csv", csv);
         }
 
         #endregion

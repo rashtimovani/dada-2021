@@ -43,7 +43,8 @@ namespace RasHack.GapOverlap.Main
         public void OnChoose()
         {
             Hide();
-            replayController.StartReplay(dropdown.options[dropdown.value].text);
+            string folderPath = folderInput.text;
+            replayController.StartReplay(dropdown.options[dropdown.value].text, folderPath);
         }
 
         public void Show()
