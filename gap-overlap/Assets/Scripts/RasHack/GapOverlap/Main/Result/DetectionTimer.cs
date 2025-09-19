@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using RasHack.GapOverlap.Main.Task;
 using RasHack.GapOverlap.Main.Stimuli;
+using System;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -34,9 +35,19 @@ namespace RasHack.GapOverlap.Main.Result
             return ObservedAfter;
         }
 
+        public float ObservedAfterTime(float observedAfter)
+        {
+            if (!Observed)
+            {
+                ObservedAfter = observedAfter;
+                Observed = true;
+            }
+            return ObservedAfter;
+        }
+
         public string ToCSV()
         {
-            return Observed ? ObservedAfter.ToString("0.00", CultureInfo.InvariantCulture) : "NaN";
+            return Observed ? ObservedAfter.ToString("0.000", CultureInfo.InvariantCulture) : "NaN";
         }
 
         #endregion
@@ -48,8 +59,6 @@ namespace RasHack.GapOverlap.Main.Result
 
         public EyeObservation LeftEye { get; private set; } = new EyeObservation();
         public EyeObservation RightEye { get; private set; } = new EyeObservation();
-
-        public bool Observed => LeftEye.Observed || RightEye.Observed;
 
         #endregion
 
@@ -70,7 +79,19 @@ namespace RasHack.GapOverlap.Main.Result
                 case Eye.Right:
                     return RightEye.ObservedAt(time);
                 default:
-                    throw new System.Exception($"Unknown eye: {eye}");
+                    throw new Exception($"Unknown eye: {eye}");
+            }
+        }
+
+        public EyeObservation Unified
+        {
+            get
+            {
+                var unified = new EyeObservation();
+                if (LeftEye.Observed && RightEye.Observed) unified.ObservedAfterTime(Math.Min(LeftEye.ObservedAfter, RightEye.ObservedAfter));
+                if (!LeftEye.Observed && RightEye.Observed) unified.ObservedAfterTime(RightEye.ObservedAfter);
+                if (LeftEye.Observed && !RightEye.Observed) unified.ObservedAfterTime(LeftEye.ObservedAfter);
+                return unified;
             }
         }
 
@@ -82,6 +103,76 @@ namespace RasHack.GapOverlap.Main.Result
         public static string ToCSVHeader(string modifier)
         {
             return $"\"{modifier} stimulus detection by left eye\",\"{modifier} stimulus detection by right eye\"";
+        }
+
+        #endregion
+    }
+
+    public class EyeAggregator
+    {
+        #region Properties
+        public int Total { get; private set; } = 0;
+        public int Valid { get; private set; } = 0;
+        public float TotalTime { get; private set; } = 0f;
+
+        #endregion
+
+        #region API
+
+        public void Add(EyeObservation timer)
+        {
+            Total++;
+            if (timer.Observed)
+            {
+                TotalTime += timer.ObservedAfter;
+                Valid++;
+            }
+        }
+
+        public string ToCSV()
+        {
+            var averageTime = TotalTime / Valid;
+            var successRate = (int) Math.Round((float)Valid / Total * 100f);
+            return $"{averageTime.ToString("0.000", CultureInfo.InvariantCulture)},{successRate}%";
+        }
+
+        public static string ToCSVHeader(string modifier)
+        {
+            return $"\"{modifier} average response time\",\"{modifier} success rate\"";
+        }
+
+        #endregion
+    }
+
+    public class Aggregator
+    {
+        #region Properties
+        public EyeAggregator Unified { get; private set; } = new EyeAggregator();
+        public EyeAggregator Left { get; private set; } = new EyeAggregator();
+        public EyeAggregator Right { get; private set; } = new EyeAggregator();
+
+        #endregion
+
+        #region API
+
+        public void Add(DetectionTimer timer)
+        {
+            if (timer.Central.Unified.Observed)
+            {
+                Unified.Add(timer.Peripheral.Unified);
+                Left.Add(timer.Peripheral.LeftEye);
+                Right.Add(timer.Peripheral.RightEye);
+            }
+        }
+
+        public string ToCSV()
+        {
+            return $"{Unified.ToCSV()},{Left.ToCSV()},{Right.ToCSV()}";
+        }
+
+        public static string ToCSVHeader(TaskType modifier)
+        {
+            return $"{EyeAggregator.ToCSVHeader("Both eyes " + modifier)},{EyeAggregator.ToCSVHeader("Left eye " + modifier)},{EyeAggregator.ToCSVHeader("Right eye " + modifier)}";
         }
 
         #endregion
@@ -180,13 +271,45 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 DetectionTimer.ToCSVHeader()
             };
+
+            var baseline = new Aggregator();
+            var gap = new Aggregator();
+            var overlap = new Aggregator();
             foreach (var timer in All)
             {
                 lines.Add(timer.ToCSV(subject, testId));
+
+                switch (timer.Type)
+                {
+                    case TaskType.Baseline:
+                        baseline.Add(timer);
+                        break;
+                    case TaskType.Gap:
+                        gap.Add(timer);
+                        break;
+                    case TaskType.Overlap:
+                        overlap.Add(timer);
+                        break;
+                }
             }
 
             var csv = string.Join("\n", lines) + "\n";
             System.IO.File.WriteAllText($"{resultsDirectory}/{subject}_{testId}_detection.csv", csv);
+
+            var entry = $"{subject},{testId},{baseline.ToCSV()},{gap.ToCSV()},{overlap.ToCSV()}\n";
+            var file = CreateAggregatedDetectionsCsv(resultsDirectory);
+            System.IO.File.AppendAllText(file, entry);
+        }
+
+        private string CreateAggregatedDetectionsCsv(string resultsDirectory)
+        {
+            var file = resultsDirectory + "/aggregated_detections.csv";
+            if (!System.IO.File.Exists(file))
+            {
+                var header = $"\"Subject\",\"Test ID\",{Aggregator.ToCSVHeader(TaskType.Baseline)},{Aggregator.ToCSVHeader(TaskType.Gap)},{Aggregator.ToCSVHeader(TaskType.Overlap)}\n";
+                System.IO.File.WriteAllText(file, header);
+            }
+            return file;
         }
 
         #endregion
