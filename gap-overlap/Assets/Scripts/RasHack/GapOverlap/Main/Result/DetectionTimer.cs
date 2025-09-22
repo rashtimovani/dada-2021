@@ -295,7 +295,7 @@ namespace RasHack.GapOverlap.Main.Result
             System.IO.File.AppendAllText(all, csv);
 
             var single = $"{resultsDirectory}/{subject}_{testId}_detection.csv";
-            System.IO.File.WriteAllText(single, DetectionTimer.ToCSVHeader());
+            System.IO.File.WriteAllText(single, DetectionTimer.ToCSVHeader() + "\n");
             System.IO.File.AppendAllText(single, csv);
 
             var entry = $"{subject},{testId},{baseline.ToCSV()},{gap.ToCSV()},{overlap.ToCSV()}\n";
@@ -319,7 +319,7 @@ namespace RasHack.GapOverlap.Main.Result
             var file = resultsDirectory + "/all_detections.csv";
             if (!System.IO.File.Exists(file))
             {
-                var header = DetectionTimer.ToCSVHeader();
+                var header = DetectionTimer.ToCSVHeader() + "\n";
                 System.IO.File.WriteAllText(file, header);
             }
             return file;
