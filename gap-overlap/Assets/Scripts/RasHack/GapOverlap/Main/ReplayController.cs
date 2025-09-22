@@ -144,10 +144,9 @@ namespace RasHack.GapOverlap.Main
             debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
         }
 
-        public void AnalyzeAllTests(string folderPath)
+        public void AnalyzeAllTests(string folderPath, string[] jsonFiles)
         {
             Time.timeScale = analyzeMultiplier;
-            string[] jsonFiles = Directory.GetFiles(folderPath, "*.json", SearchOption.AllDirectories);
             for (var i = 1; i < jsonFiles.Length; i++)
             {
                 allJsonsToProcess.Add(jsonFiles[i]);
@@ -156,7 +155,7 @@ namespace RasHack.GapOverlap.Main
             if (jsonFiles.Length > 0)
             {
                 var resultsDirectoryToClean = CreateResultsDirectory(folderPath);
-                if (Directory.Exists(resultsDirectory))
+                if (Directory.Exists(resultsDirectoryToClean))
                 {
                     foreach (var file in Directory.GetFiles(resultsDirectoryToClean))
                     {

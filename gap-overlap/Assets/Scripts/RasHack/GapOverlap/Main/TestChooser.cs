@@ -51,7 +51,7 @@ namespace RasHack.GapOverlap.Main
         {
             Hide();
             string folderPath = folderInput.text;
-            replayController.AnalyzeAllTests(folderPath);
+            replayController.AnalyzeAllTests(folderPath, CollectJsonFiles(folderPath));
         }
 
         public void Show()
@@ -68,9 +68,7 @@ namespace RasHack.GapOverlap.Main
 
         public void LoadFiles()
         {
-            string folderPath = folderInput.text;
-            string[] jsonFiles = System.IO.Directory.GetFiles(folderPath, "*.json", System.IO.SearchOption.AllDirectories);
-            System.Array.Sort(jsonFiles);
+            string[] jsonFiles = CollectJsonFiles(folderInput.text);
 
             selectedItem = dropdown.value;
 
@@ -83,6 +81,13 @@ namespace RasHack.GapOverlap.Main
             {
                 dropdown.value = selectedItem;
             }
+        }
+
+        private static string[] CollectJsonFiles(string folderPath)
+        {
+            string[] jsonFiles = System.IO.Directory.GetFiles(folderPath, "*.json", System.IO.SearchOption.AllDirectories);
+            System.Array.Sort(jsonFiles);
+            return jsonFiles;
         }
 
         #endregion
