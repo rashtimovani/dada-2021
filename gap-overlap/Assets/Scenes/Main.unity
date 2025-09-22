@@ -451,7 +451,7 @@ PrefabInstance:
     - target: {fileID: 9062094757883336849, guid: 3424b25ec61d1144b840a2b17448c175,
         type: 3}
       propertyPath: analyzeMultiplier
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3424b25ec61d1144b840a2b17448c175, type: 3}

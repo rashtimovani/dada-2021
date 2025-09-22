@@ -70,6 +70,7 @@ namespace RasHack.GapOverlap.Main
         {
             string folderPath = folderInput.text;
             string[] jsonFiles = System.IO.Directory.GetFiles(folderPath, "*.json", System.IO.SearchOption.AllDirectories);
+            System.Array.Sort(jsonFiles);
 
             selectedItem = dropdown.value;
 
