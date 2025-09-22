@@ -132,7 +132,7 @@ namespace RasHack.GapOverlap.Main.Result
         public string ToCSV()
         {
             var averageTime = Valid > 0 ? TotalTime / Valid : float.NaN;
-            var successRate = Total > 0 && Valid > 0 ? (int)Math.Round((float)Valid / Total * 100f) : 1.0f;
+            var successRate = Total > 0 && Valid > 0 ? (int)Math.Round((float)Valid / Total * 100f) : 0.0f;
             return $"{averageTime.ToString("0.000", CultureInfo.InvariantCulture)},{successRate}%";
         }
 
