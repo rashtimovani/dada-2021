@@ -47,6 +47,13 @@ namespace RasHack.GapOverlap.Main
             replayController.StartReplay(dropdown.options[dropdown.value].text, folderPath);
         }
 
+        public void OnAnalyzeAll()
+        {
+            Hide();
+            string folderPath = folderInput.text;
+            replayController.AnalyzeAllTests(folderPath);
+        }
+
         public void Show()
         {
             LoadFiles();

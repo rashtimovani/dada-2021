@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
 using Tobii.Research;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RasHack.GapOverlap.Main
 {
@@ -20,17 +22,19 @@ namespace RasHack.GapOverlap.Main
         private float spentTime;
         private int currentSampleIndex;
         public readonly Timers Timers;
+        private readonly string resultsDirectory;
 
         #endregion
 
         #region Constructors
 
-        public ReplayedTest(SampledTest test)
+        public ReplayedTest(SampledTest test, string resultsDirectory)
         {
             Test = test;
             currentSampleIndex = 0;
             spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
             Timers = new Timers();
+            this.resultsDirectory = resultsDirectory;
         }
 
         #endregion
@@ -54,7 +58,9 @@ namespace RasHack.GapOverlap.Main
 
             spentTime = toTime;
 
-            return currentSampleIndex < Test.Samples.AllSamples.Count;
+            var stillRunning = currentSampleIndex < Test.Samples.AllSamples.Count;
+            if (!stillRunning) Timers.ToCSV(resultsDirectory, Test.Name, Test.TestId);
+            return stillRunning;
         }
 
         #endregion
@@ -65,6 +71,7 @@ namespace RasHack.GapOverlap.Main
         #region Unity fields
 
         [SerializeField] private bool useRadius;
+        [Range(1.0f, 100.0f)][SerializeField] private float analyzeMultiplier = 30f;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
         [SerializeField] private SpriteRenderer topLeft;
@@ -95,6 +102,7 @@ namespace RasHack.GapOverlap.Main
         private TestChooser testChooser;
 
         private string resultsDirectory;
+        private List<string> allJsonsToProcess = new List<string>();
 
         #endregion
 
@@ -110,16 +118,23 @@ namespace RasHack.GapOverlap.Main
 
         private float Degrees => settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
-        public void StartReplay(string testToLoad, string directoryForResults)
+        public void StartReplay(string testToLoad, string directoryForResults = null)
         {
             toReplay = null;
             var bytes = File.ReadAllBytes(testToLoad);
 
             var deserializer = JsonSerializer.CreateDefault();
 
+            if (directoryForResults != null) resultsDirectory = CreateResultsDirectory(directoryForResults);
+            if (!Directory.Exists(resultsDirectory))
+            {
+                Directory.CreateDirectory(resultsDirectory);
+            }
+
             using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
             {
-                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader));
+                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory);
+                Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
             }
 
             var mainCamera = Camera.main;
@@ -127,17 +142,46 @@ namespace RasHack.GapOverlap.Main
             var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
             screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
             debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
+        }
 
-            resultsDirectory = directoryForResults + "/detections";
-            if (!Directory.Exists(resultsDirectory))
+        public void AnalyzeAllTests(string folderPath)
+        {
+            Time.timeScale = analyzeMultiplier;
+            string[] jsonFiles = Directory.GetFiles(folderPath, "*.json", SearchOption.AllDirectories);
+            for (var i = 1; i < jsonFiles.Length; i++)
             {
-                Directory.CreateDirectory(resultsDirectory);
+                allJsonsToProcess.Add(jsonFiles[i]);
             }
+
+            if (jsonFiles.Length > 0)
+            {
+                var resultsDirectoryToClean = CreateResultsDirectory(folderPath);
+                if (Directory.Exists(resultsDirectory))
+                {
+                    foreach (var file in Directory.GetFiles(resultsDirectoryToClean))
+                    {
+                        File.Delete(file);
+                    }
+                    foreach (var dir in Directory.GetDirectories(resultsDirectoryToClean))
+                    {
+                        Directory.Delete(dir, true);
+                    }
+                }
+
+                Debug.Log($"#### {allJsonsToProcess.Count + 1} tests remaining to process...");
+                StartReplay(jsonFiles[0], folderPath);
+            }
+            else FinishReplay();
         }
 
         #endregion
 
         #region Methods
+
+        private static string CreateResultsDirectory(string parent)
+        {
+            return parent + "/detections";
+        }
 
         public void Start()
         {
@@ -151,8 +195,18 @@ namespace RasHack.GapOverlap.Main
             var stillRunning = toReplay.Tick(deltaTime, OnNextSample);
             if (!stillRunning)
             {
-                FinishReplay();
-                testChooser.Show();
+                if (allJsonsToProcess.Count > 0)
+                {
+                    Debug.Log($"#### {allJsonsToProcess.Count} tests remaining to process...");
+                    var jsonToProcess = allJsonsToProcess[0];
+                    allJsonsToProcess.RemoveAt(0);
+                    StartReplay(jsonToProcess);
+                }
+                else
+                {
+                    FinishReplay();
+                    testChooser.Show();
+                }
             }
         }
 
@@ -322,7 +376,7 @@ namespace RasHack.GapOverlap.Main
         private void UpdateEyes(SampledTracker tracker)
         {
             UpdateEye(Eye.Left, tracker.LeftEye, leftEye);
-            UpdateEye(Eye.Right,tracker.RightEye, rightEye);
+            UpdateEye(Eye.Right, tracker.RightEye, rightEye);
         }
 
         private void DetectInterruptedReplay()
@@ -330,6 +384,7 @@ namespace RasHack.GapOverlap.Main
             if (toReplay != null && Input.GetKeyDown(KeyCode.Escape))
             {
                 Debug.LogWarning("Replay aborted by user!");
+                allJsonsToProcess.Clear();
                 FinishReplay();
                 testChooser.Show();
             }
@@ -337,9 +392,10 @@ namespace RasHack.GapOverlap.Main
 
         private void FinishReplay()
         {
-            Debug.Log($"Replay of {toReplay.Test.Name} [{toReplay.Test.TestId}] finished!");
-            toReplay.Timers.ToCSV(resultsDirectory, toReplay.Test.Name, toReplay.Test.TestId);
+            if (toReplay != null) Debug.Log($"===== Replay of {toReplay.Test.Name} [{toReplay.Test.TestId}] finished!");
+            else Debug.Log("Finishing without active test.");
             toReplay = null;
+            Time.timeScale = 1;
             if (centralStimulus != null)
             {
                 Destroy(centralStimulus.gameObject);
