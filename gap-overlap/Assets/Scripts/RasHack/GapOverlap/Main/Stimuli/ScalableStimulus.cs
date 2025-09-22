@@ -9,6 +9,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         [SerializeField] private Transform bottomLeft;
         [SerializeField] private Transform topRight;
+        [SerializeField] private Transform radiusMarker;
         [SerializeField] protected DetectableArea detectable;
         [SerializeField] protected GameObject imageToRotate;
         [SerializeField] protected DetectableCircle circle;
@@ -36,24 +37,17 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
+        public float Radius => Vector3.Distance(radiusMarker.position, transform.position);
 
         public RawPosition RawPosition
         {
             get
             {
                 var rawCenter = AsRaw(transform.position);
-                // var rawBottomLeft = AsRaw(bottomLeft.position);
-                // var rawBottomRight = AsRaw(new Vector2(topRight.position.x, bottomLeft.position.y));
-                // var rawTopLeft = AsRaw(new Vector2(bottomLeft.position.x, topRight.position.y));
-                // var rawTopRight = AsRaw(topRight.position);
                 return new RawPosition
                 {
                     Visible = true,
                     Center = rawCenter
-                    // BottomLeft = rawBottomLeft,
-                    // BottomRight = rawBottomRight,
-                    // TopLeft = rawTopLeft,
-                    // TopRight = rawTopRight
                 };
             }
         }
