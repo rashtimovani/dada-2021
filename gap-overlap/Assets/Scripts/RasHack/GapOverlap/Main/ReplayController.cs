@@ -92,7 +92,7 @@ namespace RasHack.GapOverlap.Main
 
         private PeripheralStimulus peripheralStimulus;
 
-        private FileChooser fileChooser;
+        private TestChooser testChooser;
 
         private string resultsDirectory;
 
@@ -141,7 +141,7 @@ namespace RasHack.GapOverlap.Main
 
         public void Start()
         {
-            fileChooser = FindObjectOfType<FileChooser>();
+            testChooser = FindObjectOfType<TestChooser>();
         }
 
         public void Tick(float deltaTime)
@@ -152,7 +152,7 @@ namespace RasHack.GapOverlap.Main
             if (!stillRunning)
             {
                 FinishReplay();
-                fileChooser.Show();
+                testChooser.Show();
             }
         }
 
@@ -331,7 +331,7 @@ namespace RasHack.GapOverlap.Main
             {
                 Debug.LogWarning("Replay aborted by user!");
                 FinishReplay();
-                fileChooser.Show();
+                testChooser.Show();
             }
         }
 

@@ -1155,7 +1155,7 @@ GameObject:
   - component: {fileID: 8290497143667360556}
   - component: {fileID: 7688860512268993065}
   m_Layer: 5
-  m_Name: FileChooser
+  m_Name: TestChooser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

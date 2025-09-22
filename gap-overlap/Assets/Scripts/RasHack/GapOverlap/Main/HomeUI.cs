@@ -21,10 +21,9 @@ namespace RasHack.GapOverlap.Main
         #region Fields
 
         private Simulator simulator;
-        private ReplayController replayController;
         private MainSettingsUI mainSettings;
 
-        private FileChooser fileChooser;
+        private TestChooser testChooser;
 
         private bool hidden;
 
@@ -45,11 +44,10 @@ namespace RasHack.GapOverlap.Main
         private void Start()
         {
             simulator = FindObjectOfType<Simulator>();
-            replayController = FindObjectOfType<ReplayController>();
             mainSettings = FindObjectOfType<MainSettingsUI>();
-            fileChooser = FindObjectOfType<FileChooser>();
+            testChooser = FindObjectOfType<TestChooser>();
             mainSettings.Hide(true);
-            fileChooser.Hide();
+            testChooser.Hide();
             nameInput.text = simulator.Settings.LastUsedName;
         }
 
@@ -89,7 +87,7 @@ namespace RasHack.GapOverlap.Main
 
         public void OnReplayResults()
         {
-            fileChooser.Show();
+            testChooser.Show();
             mainSettings.Hide(true);
             hidden = true;
             panel.SetActive(false); 

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace RasHack.GapOverlap.Main
 {
-    public class FileChooser : MonoBehaviour
+    public class TestChooser : MonoBehaviour
     {
         #region Unity fields
 
