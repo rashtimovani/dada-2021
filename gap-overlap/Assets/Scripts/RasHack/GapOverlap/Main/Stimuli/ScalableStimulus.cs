@@ -1,4 +1,6 @@
-﻿using RasHack.GapOverlap.Main.Stimuli.Animation;
+﻿using System;
+using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Stimuli.Animation;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
@@ -165,10 +167,19 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             Destroy(detectable.gameObject);
             detectable = null;
-                circle.gameObject.SetActive(true);
-            return circle;  
+            circle.gameObject.SetActive(true);
+            return circle;
         }
 
+        private bool IsInRadius(Transform other)
+        {
+            return Vector3.Distance(other.position, transform.position) < Radius;
+        }
+
+        public void TryFocusInRadius(Eye eye, Transform other, Action<Eye> onDetected)
+        {
+            if (IsInRadius(other)) circle.OnRadius(eye, onDetected);
+        }
 
         #endregion
     }

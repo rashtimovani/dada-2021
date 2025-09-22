@@ -16,6 +16,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         private bool wasFocusedOnByLeftEye;
         private bool wasFocusedOnByRightEye;
+        private bool wasLeftEyeInRadius;
+        private bool wasRightEyeInRadius;
 
         private ReplayController owner;
 
@@ -76,6 +78,23 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void OnDestroy()
         {
             onDetected = null;
+        }
+
+        public void OnRadius(Eye eye, Action<Eye> onDetected)
+        {
+            if (eye == Eye.Left)
+            {
+                if (wasLeftEyeInRadius) return;
+                wasLeftEyeInRadius = true;
+            }
+
+            if (eye == Eye.Right)
+            {
+                if (wasRightEyeInRadius) return;
+                wasRightEyeInRadius = true;
+            }
+
+            onDetected.Invoke(eye);
         }
 
         #endregion

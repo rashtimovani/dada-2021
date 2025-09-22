@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Security.AccessControl;
 using Newtonsoft.Json;
+using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Result;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
@@ -63,6 +64,7 @@ namespace RasHack.GapOverlap.Main
     {
         #region Unity fields
 
+        [SerializeField] private bool useRadius;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
         [SerializeField] private SpriteRenderer topLeft;
@@ -208,8 +210,11 @@ namespace RasHack.GapOverlap.Main
             var circle = stimulus.UseDetectableCircleAndDisableArea();
             circle.RegisterOnDetect(this, eye =>
             {
-                var after = toReplay.Timers.ObserveCentral(eye, toReplay.SpentTime);
-                Debug.Log($"Central stimulus detected by {eye} eye after {after} seconds");
+                if (!useRadius)
+                {
+                    var after = toReplay.Timers.ObserveCentral(eye, toReplay.SpentTime);
+                    Debug.Log($"Central stimulus detected by {eye} eye after {after} second by collision");
+                }
             });
 
             return stimulus;
@@ -231,8 +236,11 @@ namespace RasHack.GapOverlap.Main
             var circle = stimulus.UseDetectableCircleAndDisableArea();
             circle.RegisterOnDetect(this, eye =>
             {
-                var after = toReplay.Timers.ObservePeripheral(eye, toReplay.SpentTime);
-                Debug.Log($"Peripheral stimulus detected by {eye} eye after {after} seconds");
+                if (!useRadius)
+                {
+                    var after = toReplay.Timers.ObservePeripheral(eye, toReplay.SpentTime);
+                    Debug.Log($"Peripheral stimulus detected by {eye} eye after {after} seconds by collision");
+                }
             });
 
             return stimulus;
@@ -290,19 +298,31 @@ namespace RasHack.GapOverlap.Main
             }
         }
 
-        private void UpdateEye(SampledGaze eye, GameObject eyeObject)
+        private void UpdateEye(Eye eye, SampledGaze eyeSample, GameObject eyeObject)
         {
-            eyeObject.SetActive(eye.Validity == Validity.Valid.ToString());
+            eyeObject.SetActive(eyeSample.Validity == Validity.Valid.ToString());
             if (eyeObject.activeSelf)
             {
-                eyeObject.transform.position = transform.InverseTransformPoint(debugScaler.FromRaw(eye.PositionOnDisplayArea.X, eye.PositionOnDisplayArea.Y));
+                eyeObject.transform.position = transform.InverseTransformPoint(debugScaler.FromRaw(eyeSample.PositionOnDisplayArea.X, eyeSample.PositionOnDisplayArea.Y));
             }
+
+            if (useRadius && centralStimulus != null) centralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+            {
+                var after = toReplay.Timers.ObserveCentral(e, toReplay.SpentTime);
+                Debug.Log($"Central stimulus detected by {e} eye after {after} seconds by radius");
+            });
+
+            if (useRadius && peripheralStimulus != null) peripheralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+            {
+                var after = toReplay.Timers.ObservePeripheral(e, toReplay.SpentTime);
+                Debug.Log($"Peripheral stimulus detected by {e} eye after {after} seconds by radius");
+            });
         }
 
         private void UpdateEyes(SampledTracker tracker)
         {
-            UpdateEye(tracker.LeftEye, leftEye);
-            UpdateEye(tracker.RightEye, rightEye);
+            UpdateEye(Eye.Left, tracker.LeftEye, leftEye);
+            UpdateEye(Eye.Right,tracker.RightEye, rightEye);
         }
 
         private void DetectInterruptedReplay()
