@@ -267,10 +267,7 @@ namespace RasHack.GapOverlap.Main.Result
                 Current = null;
             }
 
-            var lines = new List<string>
-            {
-                DetectionTimer.ToCSVHeader()
-            };
+            var lines = new List<string>();
 
             var baseline = new Aggregator();
             var gap = new Aggregator();
@@ -293,12 +290,17 @@ namespace RasHack.GapOverlap.Main.Result
                 }
             }
 
+            var all = CreateAllDetectionsCsv(resultsDirectory);
             var csv = string.Join("\n", lines) + "\n";
-            System.IO.File.WriteAllText($"{resultsDirectory}/{subject}_{testId}_detection.csv", csv);
+            System.IO.File.AppendAllText(all, csv);
+
+            var single = $"{resultsDirectory}/{subject}_{testId}_detection.csv";
+            System.IO.File.WriteAllText(single, DetectionTimer.ToCSVHeader());
+            System.IO.File.AppendAllText(single, csv);
 
             var entry = $"{subject},{testId},{baseline.ToCSV()},{gap.ToCSV()},{overlap.ToCSV()}\n";
-            var file = CreateAggregatedDetectionsCsv(resultsDirectory);
-            System.IO.File.AppendAllText(file, entry);
+            var aggregated = CreateAggregatedDetectionsCsv(resultsDirectory);
+            System.IO.File.AppendAllText(aggregated, entry);
         }
 
         private string CreateAggregatedDetectionsCsv(string resultsDirectory)
@@ -307,6 +309,17 @@ namespace RasHack.GapOverlap.Main.Result
             if (!System.IO.File.Exists(file))
             {
                 var header = $"\"Subject\",\"Test ID\",{Aggregator.ToCSVHeader(TaskType.Baseline)},{Aggregator.ToCSVHeader(TaskType.Gap)},{Aggregator.ToCSVHeader(TaskType.Overlap)}\n";
+                System.IO.File.WriteAllText(file, header);
+            }
+            return file;
+        }
+
+        private string CreateAllDetectionsCsv(string resultsDirectory)
+        {
+            var file = resultsDirectory + "/all_detections.csv";
+            if (!System.IO.File.Exists(file))
+            {
+                var header = DetectionTimer.ToCSVHeader();
                 System.IO.File.WriteAllText(file, header);
             }
             return file;
