@@ -269,6 +269,7 @@ namespace RasHack.GapOverlap.Main
                     Debug.Log($"Central stimulus detected by {eye} eye after {after} second by collision");
                 }
             });
+            ScaleDetectableArea(stimulus, circle, sizeInDegrees);
 
             return stimulus;
         }
