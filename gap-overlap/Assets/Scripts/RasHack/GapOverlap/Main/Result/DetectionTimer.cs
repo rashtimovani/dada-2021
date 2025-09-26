@@ -15,6 +15,8 @@ namespace RasHack.GapOverlap.Main.Result
         public bool Observed { get; private set; } = false;
         public float ObservedAfter { get; private set; } = float.NaN;
 
+        public Fixation Fixation { get; private set; }
+
         #endregion
 
         #region API
@@ -31,6 +33,7 @@ namespace RasHack.GapOverlap.Main.Result
             {
                 ObservedAfter = time - StartTime;
                 Observed = true;
+                Fixation = new Fixation(time);
             }
             return ObservedAfter;
         }
@@ -47,7 +50,12 @@ namespace RasHack.GapOverlap.Main.Result
 
         public string ToCSV()
         {
-            return Observed ? ObservedAfter.ToString("0.000", CultureInfo.InvariantCulture) : "NaN";
+            return Observed ? ObservedAfter.ToString("0.000", CultureInfo.InvariantCulture) + "," + Fixation.ToCSV() : "NaN,NaN";
+        }
+
+        public static string ToCSVHeader(string modifier)
+        {
+            return $"\"{modifier} fixation after\",\"{modifier} fixation duration\"";
         }
 
         #endregion
@@ -102,7 +110,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         public static string ToCSVHeader(string modifier)
         {
-            return $"\"{modifier} stimulus detection by left eye\",\"{modifier} stimulus detection by right eye\"";
+            return $"{EyeObservation.ToCSVHeader($"{modifier} by left eye")},{EyeObservation.ToCSVHeader($"{modifier} by right eye")}";
         }
 
         #endregion
