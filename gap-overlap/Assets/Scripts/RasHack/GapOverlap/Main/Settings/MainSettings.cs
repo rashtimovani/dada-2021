@@ -33,7 +33,9 @@ namespace RasHack.GapOverlap.Main.Settings
         public float DistanceBetweenPeripheralStimuliInDegrees = 20f;
 
         public float CentralStimulusSizeInDegrees = 3.5f;
-        public float PeripheralStimulusSizeInDegrees = 3f;
+        public float PeripheralStimulusSizeInDegrees = 3.0f;
+
+        public float DetectionAreaInDegrees = 5.5f;
 
         [Header("Task specification")]
         public TaskCount TaskCount = new()

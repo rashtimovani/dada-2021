@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.ConstrainedExecution;
 using RasHack.GapOverlap.Main.Inputs;
 using RasHack.GapOverlap.Main.Stimuli.Animation;
 using UnityEngine;
@@ -63,6 +64,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var originalScale = transform.localScale;
             transform.localScale = new Vector3(originalScale.x * scaleChange.x, originalScale.y * scaleChange.y,
                 originalScale.z * scaleChange.z);
+        }
+
+        public void ScaleRadius(float factor)
+        {
+            var currentMarker = radiusMarker.transform.localPosition;
+            var radiusMarkerX = currentMarker.x * factor;
+            var radiusMarkerAdjusted = new Vector3(radiusMarkerX, currentMarker.y, currentMarker.z);
+            radiusMarker.transform.localPosition = radiusMarkerAdjusted;
         }
 
         public virtual float ShortenAnimation(float shorterLifetime, bool keepIdling)

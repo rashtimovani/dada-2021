@@ -295,8 +295,21 @@ namespace RasHack.GapOverlap.Main
                     Debug.Log($"Peripheral stimulus detected by {eye} eye after {after} seconds by collision");
                 }
             });
+            ScaleDetectableArea(stimulus, circle, sizeInDegrees);
 
             return stimulus;
+        }
+
+        private void ScaleDetectableArea(ScalableStimulus stimulus, DetectableCircle circle, float sizeInDegrees)
+        {
+            var desiredDetectionAreaSize = debugScaler.Settings.DetectionAreaInDegrees;
+            var detectionAreaIncrease = desiredDetectionAreaSize / sizeInDegrees;
+
+            var newLocalScaleX = circle.transform.localScale.x * detectionAreaIncrease;
+            var newLocalScaleY = circle.transform.localScale.y * detectionAreaIncrease;
+            circle.transform.localScale = new Vector3(newLocalScaleX, newLocalScaleY, 1);
+
+            stimulus.ScaleRadius(detectionAreaIncrease);
         }
 
         private string Name(TaskType taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
@@ -408,6 +421,5 @@ namespace RasHack.GapOverlap.Main
         }
 
         #endregion
-
     }
 }
