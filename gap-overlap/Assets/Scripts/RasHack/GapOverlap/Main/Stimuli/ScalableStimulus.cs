@@ -185,9 +185,10 @@ namespace RasHack.GapOverlap.Main.Stimuli
             return Vector3.Distance(other.position, transform.position) < Radius;
         }
 
-        public void TryFocusInRadius(Eye eye, Transform other, Action<Eye> onDetected)
+        public void TryFocusInRadius(Eye eye, Transform other, Action<Eye> onDetected, Action<Eye> onOutOfRadius)
         {
             if (IsInRadius(other)) circle.OnRadius(eye, onDetected);
+            else circle.OutOfRadius(eye, onOutOfRadius);
         }
 
         #endregion

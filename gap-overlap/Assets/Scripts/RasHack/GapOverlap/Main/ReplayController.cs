@@ -373,17 +373,30 @@ namespace RasHack.GapOverlap.Main
                 eyeObject.transform.position = transform.InverseTransformPoint(debugScaler.FromRaw(eyeSample.PositionOnDisplayArea.X, eyeSample.PositionOnDisplayArea.Y));
             }
 
-            if (useRadius && centralStimulus != null) centralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+            if (useRadius)
             {
-                var after = toReplay.Timers.ObserveCentral(e, toReplay.SpentTime);
-                Debug.Log($"Central stimulus detected by {e} eye after {after} seconds by radius");
-            });
+                if (centralStimulus != null) centralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+                {
+                    var after = toReplay.Timers.ObserveCentral(e, toReplay.SpentTime);
+                    Debug.Log($"Central stimulus detected by {e} eye after {after} seconds by radius");
+                }, e => Process(toReplay.Timers.StopObservingCentral(e, toReplay.SpentTime), e, "Central"));
+                else Process(toReplay.Timers.StopObservingCentral(eye, toReplay.SpentTime), eye, "Central");
+            }
 
-            if (useRadius && peripheralStimulus != null) peripheralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+            if (useRadius)
             {
-                var after = toReplay.Timers.ObservePeripheral(e, toReplay.SpentTime);
-                Debug.Log($"Peripheral stimulus detected by {e} eye after {after} seconds by radius");
-            });
+                if (peripheralStimulus != null) peripheralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
+                {
+                    var after = toReplay.Timers.ObservePeripheral(e, toReplay.SpentTime);
+                    Debug.Log($"Peripheral stimulus detected by {e} eye after {after} seconds by radius");
+                }, e => Process(toReplay.Timers.StopObservingPeripheral(e, toReplay.SpentTime), e, "Peripheral"));
+                else Process(toReplay.Timers.StopObservingPeripheral(eye, toReplay.SpentTime), eye, "Peripheral");
+            }
+        }
+
+        private void Process(FixationResult fixation, Eye eye, string modifier)
+        {
+            if (fixation.EndedNow) Debug.Log($"{modifier} stimulus fixation by {eye} eye ended after {fixation.Duration} seconds by radius");
         }
 
         private void UpdateEyes(SampledTracker tracker)

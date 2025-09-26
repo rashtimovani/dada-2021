@@ -38,6 +38,11 @@ namespace RasHack.GapOverlap.Main.Result
             return ObservedAfter;
         }
 
+        public FixationResult ObservationStopped(float time)
+        {
+            return Fixation?.FixationEnded(time) ?? Fixation.BadResult();
+        }
+
         public float ObservedAfterTime(float observedAfter)
         {
             if (!Observed)
@@ -91,6 +96,19 @@ namespace RasHack.GapOverlap.Main.Result
             }
         }
 
+        public FixationResult ObservationStopped(Eye eye, float time)
+        {
+            switch (eye)
+            {
+                case Eye.Left:
+                    return LeftEye.ObservationStopped(time);
+                case Eye.Right:
+                    return RightEye.ObservationStopped(time);
+                default:
+                    throw new Exception($"Unknown eye: {eye}");
+            }
+        }
+
         public EyeObservation Unified
         {
             get
@@ -111,6 +129,12 @@ namespace RasHack.GapOverlap.Main.Result
         public static string ToCSVHeader(string modifier)
         {
             return $"{EyeObservation.ToCSVHeader($"{modifier} by left eye")},{EyeObservation.ToCSVHeader($"{modifier} by right eye")}";
+        }
+
+        public void EndFixation(float currentTime)
+        {
+            ObservationStopped(Eye.Left, currentTime);
+            ObservationStopped(Eye.Right, currentTime);
         }
 
         #endregion
@@ -220,6 +244,13 @@ namespace RasHack.GapOverlap.Main.Result
             Peripheral.Start(currentTime);
         }
 
+        public DetectionTimer EndFixations(float currentTime)
+        {
+            Central.EndFixation(currentTime);
+            Peripheral.EndFixation(currentTime);
+            return this;
+        }
+
         public string ToCSV(string subject, string testId)
         {
             return $"\"{subject}\",\"{testId}\",\"{Order}\",\"{Type}\",\"{Side}\",{Central.ToCSV()},{Peripheral.ToCSV()}";
@@ -246,7 +277,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void StartNewCentral(float time, int order, TaskType type, StimulusSide side)
         {
-            if (Current != null) All.Add(Current);
+            if (Current != null) All.Add(Current.EndFixations(time));
 
             Current = new DetectionTimer(order, type, side);
             Current.StartCentral(time);
@@ -265,6 +296,16 @@ namespace RasHack.GapOverlap.Main.Result
         public float ObservePeripheral(Eye eye, float time)
         {
             return Current.Peripheral.ObservedAt(eye, time);
+        }
+
+        public FixationResult StopObservingCentral(Eye eye, float time)
+        {
+            return Current?.Central.ObservationStopped(eye, time) ?? Fixation.BadResult();
+        }
+
+        public FixationResult StopObservingPeripheral(Eye eye, float time)
+        {
+            return Current?.Peripheral.ObservationStopped(eye, time) ?? Fixation.BadResult();
         }
 
         public void ToCSV(string resultsDirectory, string subject, string testId)

@@ -97,6 +97,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             onDetected.Invoke(eye);
         }
 
+        public void OutOfRadius(Eye eye, Action<Eye> onOutOfRadius)
+        {
+            if (eye == Eye.Left && wasLeftEyeInRadius) onOutOfRadius.Invoke(eye);
+            if (eye == Eye.Right && wasRightEyeInRadius) onOutOfRadius.Invoke(eye);
+        }
+
         #endregion
     }
 }

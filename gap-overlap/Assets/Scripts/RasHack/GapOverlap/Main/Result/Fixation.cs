@@ -1,8 +1,20 @@
+using System;
 using System.Globalization;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
 {
+    public struct FixationResult
+    {
+        #region Fields
+
+        public float Duration;
+
+        public bool EndedNow;
+
+        #endregion
+    }
+
     public class Fixation
     {
         #region Fields
@@ -15,7 +27,7 @@ namespace RasHack.GapOverlap.Main.Result
 
         #region Properties
 
-        public float Duration => Mathf.Max((end ?? start) - start, 0f);
+        public float Duration => end != null ? Mathf.Max(end.Value - start, 0f) : float.NaN;
 
         #endregion
 
@@ -30,10 +42,20 @@ namespace RasHack.GapOverlap.Main.Result
 
         #region API
 
-        public float FixationEnded(float time)
+        public static FixationResult BadResult()
         {
-            end = time;
-            return Duration;
+            return new FixationResult { Duration = float.NaN, EndedNow = false };
+        }
+
+        public FixationResult FixationEnded(float time)
+        {
+            var endedNow = false;
+            if (end == null)
+            {
+                end = time;
+                endedNow = true;
+            }
+            return new FixationResult { Duration = Duration, EndedNow = endedNow };
         }
 
         public string ToCSV()
