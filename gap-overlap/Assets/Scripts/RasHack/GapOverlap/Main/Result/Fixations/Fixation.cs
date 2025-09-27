@@ -128,13 +128,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             return this;
         }
 
-        private Fixation OnEnded(float distance, float time, float cooldown)
+        private Fixation OnEnded(float distance, float time, float allowedCooldown)
         {
             tentativeDistances.Add(distance);
             if (!tentativeEndTime.HasValue) tentativeEndTime = time;
 
             var endCooldown = time - tentativeEndTime;
-            if (cooldown <= endCooldown)
+            if (allowedCooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
                 Debug.Log($"{Classifier} fixation lasted {FixationUtil.ToCSV(Duration)}s");
