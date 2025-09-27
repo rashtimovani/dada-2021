@@ -1,3 +1,4 @@
+using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Fields
 
-        private readonly Scaler scaler;
+        private readonly MainSettings settings;
 
         private FixationPerStimulus central;
         private FixationPerStimulus peripheral;
@@ -25,22 +26,22 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public FixationPerTask(int taskOrder, TaskType taskType, StimulusSide side, Scaler scaler)
+        public FixationPerTask(int taskOrder, TaskType taskType, StimulusSide side, MainSettings settings)
         {
             TaskOrder = taskOrder;
             Type = taskType;
             Side = side;
 
-            this.scaler = scaler;
+            this.settings = settings;
         }
 
         #endregion
 
         #region API
 
-        public void CentralCreated(Vector3 position, float time)
+        public void CentralCreated(ScalableStimulus stimulus, float time)
         {
-            central = new FixationPerStimulus(scaler, position, time);
+            central = new FixationPerStimulus(stimulus, settings, time);
         }
 
         public void CentralDestroyed(float time)
@@ -49,9 +50,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             central = null;
         }
 
-        public void PeripheralCreated(Vector3 position, float time)
+        public void PeripheralCreated(ScalableStimulus stimulus, float time)
         {
-            peripheral = new FixationPerStimulus(scaler, position, time);
+            peripheral = new FixationPerStimulus(stimulus, settings, time);
         }
 
         public void PeripheralDestroyed(float time)

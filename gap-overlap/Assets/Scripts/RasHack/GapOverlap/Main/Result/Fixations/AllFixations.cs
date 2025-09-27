@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
     {
         #region Fields
         private readonly List<FixationPerTask> tasks = new List<FixationPerTask>();
-        private readonly Scaler scaler;
+        private readonly MainSettings settings;
 
         private FixationPerTask current;
 
@@ -17,9 +18,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public AllFixations(Scaler scaler)
+        public AllFixations(MainSettings settings)
         {
-            this.scaler = scaler;
+            this.settings = settings;
         }
 
         #endregion
@@ -31,7 +32,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (current == null || current.TaskOrder != order)
             {
                 TaskDone(time);
-                current = new FixationPerTask(order, type, side, scaler);
+                current = new FixationPerTask(order, type, side, settings);
             }
         }
 
@@ -44,9 +45,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             current = null;
         }
 
-        public void CentralCreated(Vector3 position, float time)
+        public void CentralCreated(ScalableStimulus stimulus, float time)
         {
-            current?.CentralCreated(position, time);
+            current?.CentralCreated(stimulus, time);
         }
 
         public void CentralDestroyed(float time)
@@ -54,9 +55,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             current?.CentralDestroyed(time);
         }
 
-        public void PeripheralCreated(Vector3 position, float time)
+        public void PeripheralCreated(ScalableStimulus stimulus, float time)
         {
-            current?.PeripheralCreated(position, time);
+            current?.PeripheralCreated(stimulus, time);
         }
 
         public void PeripheralDestroyed(float time)

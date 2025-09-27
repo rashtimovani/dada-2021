@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Settings;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations
@@ -7,9 +9,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
     {
         #region Fields
 
-        private readonly Scaler scaler;
+        private readonly ScalableStimulus stimulus;
 
-        private readonly Vector3 anchor;
+        private readonly MainSettings settings;
 
         #endregion
 
@@ -34,10 +36,10 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public Fixation(Scaler scaler, Vector3 anchor)
+        public Fixation(ScalableStimulus stimulus, MainSettings settings)
         {
-            this.scaler = scaler;
-            this.anchor = anchor;
+            this.stimulus = stimulus;
+            this.settings = settings;
         }
 
         #endregion
@@ -57,7 +59,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
                 return OnContinued(distanceInDegrees);
             }
 
-            if (IsActive) return OnEnded(distanceInDegrees, time, scaler.Settings.FixationEndCooldown);
+            if (IsActive) return OnEnded(distanceInDegrees, time, settings.FixationEndCooldown);
 
             return this;
         }
@@ -68,7 +70,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             {
                 endTime = tentativeEndTime ?? time;
                 ClearTentative();
-                return new Fixation(scaler, anchor);
+                return new Fixation(stimulus, settings);
             }
 
             return this;
@@ -79,13 +81,12 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         #region Helper methods
         private float DistanceInDegrees(Vector3 position)
         {
-            // TODO: calcuate distance in degrees
-            return 0f;
+            return stimulus.DistanceBetweenInDegrees(position);
         }
 
         private bool IsInRadius(float distanceInDegrees)
         {
-            return scaler.Settings.FixationAreaInDegrees >= distanceInDegrees;
+            return settings.FixationAreaInDegrees >= distanceInDegrees;
         }
 
         private void ClearTentative()
@@ -128,7 +129,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             {
                 endTime = tentativeEndTime;
                 ClearTentative();
-                return new Fixation(scaler, anchor);
+                return new Fixation(stimulus, settings);
             }
 
             return this;

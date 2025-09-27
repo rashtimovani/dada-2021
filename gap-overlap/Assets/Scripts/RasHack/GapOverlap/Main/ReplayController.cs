@@ -84,7 +84,7 @@ namespace RasHack.GapOverlap.Main
 
             using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
             {
-                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory, debugScaler);
+                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory, settings);
                 Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
             }
         }
@@ -210,7 +210,7 @@ namespace RasHack.GapOverlap.Main
             circle.RegisterOnDetect(this);
             ScaleDetectableArea(stimulus, circle, sizeInDegrees);
 
-            toReplay.AllFixations.CentralCreated(stimulus.transform.position, toReplay.SpentTime);
+            toReplay.AllFixations.CentralCreated(stimulus, toReplay.SpentTime);
 
             return stimulus;
         }
@@ -232,7 +232,7 @@ namespace RasHack.GapOverlap.Main
             circle.RegisterOnDetect(this);
             ScaleDetectableArea(stimulus, circle, sizeInDegrees);
 
-            toReplay.AllFixations.PeripheralCreated(stimulus.transform.position, toReplay.SpentTime);
+            toReplay.AllFixations.PeripheralCreated(stimulus, toReplay.SpentTime);
 
             return stimulus;
         }

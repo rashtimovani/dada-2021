@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Settings;
+using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations
@@ -23,13 +25,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public FixationPerStimulus(Scaler scaler, Vector3 anchor, float time)
+        public FixationPerStimulus(ScalableStimulus stimulus, MainSettings settings, float time)
         {
             createdTime = time;
 
-            currentLeft = new Fixation(scaler, anchor);
-            currentRight = new Fixation(scaler, anchor);
-            currentBoth = new Fixation(scaler, anchor);
+            currentLeft = new Fixation(stimulus, settings);
+            currentRight = new Fixation(stimulus, settings);
+            currentBoth = new Fixation(stimulus, settings);
         }
 
         #endregion

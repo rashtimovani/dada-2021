@@ -1,5 +1,6 @@
 using System;
 using RasHack.GapOverlap.Main.Result.Fixations;
+using RasHack.GapOverlap.Main.Settings;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -17,12 +18,12 @@ namespace RasHack.GapOverlap.Main.Result
 
         #region Constructors
 
-        public ReplayedTest(SampledTest test, string resultsDirectory, Scaler scaler)
+        public ReplayedTest(SampledTest test, string resultsDirectory, MainSettings settings)
         {
             Test = test;
             currentSampleIndex = 0;
             spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
-            AllFixations = new AllFixations(scaler);
+            AllFixations = new AllFixations(settings);
             this.resultsDirectory = resultsDirectory;
         }
 

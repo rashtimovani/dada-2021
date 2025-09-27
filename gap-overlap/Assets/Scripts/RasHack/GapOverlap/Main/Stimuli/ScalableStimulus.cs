@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.ConstrainedExecution;
 using RasHack.GapOverlap.Main.Inputs;
+using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli.Animation;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        public float Radius => Vector3.Distance(radiusMarker.position, transform.position);
+        public float Radius => Vector3.Distance(transform.position, radiusMarker.position);
 
         public RawPosition RawPosition
         {
@@ -79,9 +80,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         public float DistanceBetweenInDegrees(Vector3 what)
         {
             var halfSize = sizeInDegrees / 2;
-            var wholeSize = Vector3.Distance(transform.position, radiusMarker.position);
             var distanceToWhat = Vector3.Distance(transform.position, what);
-            return distanceToWhat / wholeSize * halfSize;
+            return distanceToWhat / Radius * halfSize;
         }
 
         public virtual float ShortenAnimation(float shorterLifetime, bool keepIdling)
