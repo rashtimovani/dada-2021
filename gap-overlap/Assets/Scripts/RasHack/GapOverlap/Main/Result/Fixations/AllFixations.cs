@@ -26,11 +26,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region API
 
-        public void NewTask(int order, TaskType type, Side side, float time)
+        public void NewTask(int order, TaskType type, StimulusSide side, float time)
         {
-            TaskDone(time);
-
-            current = new FixationPerTask(order, type, side, scaler);
+            if (current == null || current.TaskOrder != order)
+            {
+                TaskDone(time);
+                current = new FixationPerTask(order, type, side, scaler);
+            }
         }
 
         public void TaskDone(float time)

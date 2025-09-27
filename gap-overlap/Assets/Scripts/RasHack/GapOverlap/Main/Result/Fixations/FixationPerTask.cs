@@ -10,7 +10,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public int TaskOrder { get; private set; }
         public TaskType Type { get; private set; }
-        public Side Side { get; private set; }
+        public StimulusSide Side { get; private set; }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public FixationPerTask(int taskOrder, TaskType taskType, Side side, Scaler scaler)
+        public FixationPerTask(int taskOrder, TaskType taskType, StimulusSide side, Scaler scaler)
         {
             TaskOrder = taskOrder;
             Type = taskType;

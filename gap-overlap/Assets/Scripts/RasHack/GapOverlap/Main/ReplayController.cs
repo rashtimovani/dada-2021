@@ -156,6 +156,7 @@ namespace RasHack.GapOverlap.Main
 
         private void OnNextSample(Sample sample)
         {
+            UpdateTask(sample.Task, sample.Time);
             UpdateCentralStimulus(sample.Task, sample.Time);
             UpdatePeripheralStimulus(sample.Task, sample.Time);
             UpdateEyes(sample.Tracker, sample.Time);
@@ -249,6 +250,13 @@ namespace RasHack.GapOverlap.Main
         }
 
         private string Name(TaskType taskType, StimulusSide side) => taskType + "_" + side + "_stimulus";
+
+        private void UpdateTask(SampledTask task, float time)
+        {
+            var taskType = Enum.Parse<TaskType>(task.TaskType);
+            var side = Enum.Parse<StimulusSide>(task.Side);
+            toReplay.AllFixations.NewTask(task.TaskOrder, taskType, side, time);
+        }
 
         private void UpdateCentralStimulus(SampledTask task, float time)
         {
