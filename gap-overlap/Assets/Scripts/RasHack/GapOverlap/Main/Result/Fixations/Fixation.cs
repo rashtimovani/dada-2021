@@ -46,7 +46,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public Fixation Update(Vector3 eyePosition, float time)
         {
-            if (IsDetected) throw new Exception("Fixation is already detected, use new one for the update");
+            if (IsDetected) return this;
 
             var distanceInDegrees = DistanceInDegrees(eyePosition);
             var inRadius = IsInRadius(distanceInDegrees);
@@ -57,8 +57,20 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
                 return OnContinued(distanceInDegrees, time);
             }
 
-            if (IsActive) return OnEnded(distanceInDegrees, time);
+            if (IsActive) return OnEnded(distanceInDegrees, time, scaler.Settings.FixationEndCooldown);
 
+            return this;
+        }
+
+        public Fixation ForceFinish(float time)
+        {
+            if (IsActive)
+            {
+                endTime = tentativeEndTime ?? time;
+                ClearTentative();
+                return new Fixation(scaler, anchor);
+            }
+            
             return this;
         }
 
@@ -100,13 +112,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             return this;
         }
 
-        private Fixation OnEnded(float distance, float time)
+        private Fixation OnEnded(float distance, float time, float cooldown)
         {
             tentativeDistances.Add(distance);
             if (!tentativeEndTime.HasValue) tentativeEndTime = time;
 
             var endCooldown = time - tentativeEndTime;
-            if (scaler.Settings.FixationEndCooldown <= endCooldown)
+            if (cooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
                 ClearTentative();
