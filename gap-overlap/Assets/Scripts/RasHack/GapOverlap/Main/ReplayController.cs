@@ -204,7 +204,7 @@ namespace RasHack.GapOverlap.Main
             var stimulus = newOne.GetComponent<CentralStimulus>();
             var sizeInDegrees = debugScaler.Settings.CentralStimulusSizeInDegrees;
             var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
-            stimulus.Scale(desiredSize);
+            stimulus.Scale(desiredSize, sizeInDegrees);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
             circle.RegisterOnDetect(this);
@@ -226,7 +226,7 @@ namespace RasHack.GapOverlap.Main
             var stimulus = newOne.GetComponent<PeripheralStimulus>();
             var sizeInDegrees = debugScaler.Settings.PeripheralStimulusSizeInDegrees;
             var desiredSize = debugScaler.RealWorldSizeFromDegrees(sizeInDegrees, offsetInDegrees);
-            stimulus.Scale(desiredSize);
+            stimulus.Scale(desiredSize, sizeInDegrees);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
             circle.RegisterOnDetect(this);

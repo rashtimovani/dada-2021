@@ -82,7 +82,7 @@ namespace RasHack.GapOverlap.Main.Task
             var stimulus = newOne.GetComponent<CentralStimulus>();
             var sizeInDegrees = owner.Settings.CentralStimulusSizeInDegrees;
             var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
-            stimulus.Scale(desiredSize);
+            stimulus.Scale(desiredSize, sizeInDegrees);
 
             return stimulus;
         }
@@ -96,7 +96,7 @@ namespace RasHack.GapOverlap.Main.Task
             var stimulus = newOne.GetComponent<PeripheralStimulus>();
             var sizeInDegrees = owner.Settings.PeripheralStimulusSizeInDegrees;
             var desiredSize = owner.Scaler.RealWorldSizeFromDegrees(sizeInDegrees, area.OffsetInDegrees);
-            stimulus.Scale(desiredSize);
+            stimulus.Scale(desiredSize, sizeInDegrees);
 
             return stimulus;
         }

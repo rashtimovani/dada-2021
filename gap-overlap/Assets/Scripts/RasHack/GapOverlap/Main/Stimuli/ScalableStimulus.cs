@@ -26,6 +26,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private float fadeOut;
         private float idleDuration;
 
+        private float sizeInDegrees;
+
         #endregion
 
         #region API
@@ -54,8 +56,9 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        public void Scale(Vector3 desiredSize)
+        public void Scale(Vector3 desiredSize, float sizeInDegrees)
         {
+            this.sizeInDegrees = sizeInDegrees;
             var size = Size;
             var desiredFixedZ = new Vector3(desiredSize.x, desiredSize.y, 1);
             var scaleChange = new Vector3(desiredFixedZ.x / size.x, desiredFixedZ.y / size.y, desiredFixedZ.z / size.z);
@@ -71,6 +74,14 @@ namespace RasHack.GapOverlap.Main.Stimuli
             var radiusMarkerX = currentMarker.x * factor;
             var radiusMarkerAdjusted = new Vector3(radiusMarkerX, currentMarker.y, currentMarker.z);
             radiusMarker.transform.localPosition = radiusMarkerAdjusted;
+        }
+
+        public float DistanceBetweenInDegrees(Vector3 what)
+        {
+            var halfSize = sizeInDegrees / 2;
+            var wholeSize = Vector3.Distance(transform.position, radiusMarker.position);
+            var distanceToWhat = Vector3.Distance(transform.position, what);
+            return distanceToWhat / wholeSize * halfSize;
         }
 
         public virtual float ShortenAnimation(float shorterLifetime, bool keepIdling)
