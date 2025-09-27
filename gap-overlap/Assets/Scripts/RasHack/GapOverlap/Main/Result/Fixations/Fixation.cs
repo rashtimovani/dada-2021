@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -27,7 +26,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Properties
 
-        public bool IsActive => startTime.HasValue && !endTime.HasValue;
+        private bool IsInactive => !startTime.HasValue;
+        private bool IsActive => startTime.HasValue && !endTime.HasValue;
         public bool IsDetected => startTime.HasValue && endTime.HasValue;
 
         #endregion
@@ -52,9 +52,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             var inRadius = IsInRadius(distanceInDegrees);
             if (inRadius)
             {
-                if (!IsActive) return OnStarted(distanceInDegrees, time);
+                if (IsInactive) return OnStarted(distanceInDegrees, time);
 
-                return OnContinued(distanceInDegrees, time);
+                return OnContinued(distanceInDegrees);
             }
 
             if (IsActive) return OnEnded(distanceInDegrees, time, scaler.Settings.FixationEndCooldown);
@@ -70,22 +70,27 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
                 ClearTentative();
                 return new Fixation(scaler, anchor);
             }
-            
+
             return this;
         }
 
         #endregion
 
         #region Helper methods
+        private float DistanceInDegrees(Vector3 position)
+        {
+            return 0f;
+        }
 
         private bool IsInRadius(float distanceInDegrees)
         {
             return scaler.Settings.FixationAreaInDegrees >= distanceInDegrees;
         }
 
-        private float DistanceInDegrees(Vector3 position)
+        private void ClearTentative()
         {
-            return 0f;
+            tentativeDistances.Clear();
+            tentativeEndTime = null;
         }
 
         private Fixation OnStarted(float distance, float time)
@@ -97,7 +102,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             return this;
         }
 
-        private Fixation OnContinued(float distance, float time)
+        private Fixation OnContinued(float distance)
         {
             if (tentativeEndTime.HasValue)
             {
@@ -126,12 +131,6 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             }
 
             return this;
-        }
-
-        private void ClearTentative()
-        {
-            tentativeDistances.Clear();
-            tentativeEndTime = null;
         }
 
         #endregion

@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace RasHack.GapOverlap.Main.Result.Fixations
+namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 {
     public class FixationCSV
     {
