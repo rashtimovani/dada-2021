@@ -45,10 +45,14 @@ namespace RasHack.GapOverlap.Main.Result
                 onNextSample.Invoke(sample);
             }
 
-            spentTime = toTime;
-
             var stillRunning = currentSampleIndex < Test.Samples.AllSamples.Count;
-            if (!stillRunning) AllFixations.ToCSV(resultsDirectory, Test.Name, Test.TestId);
+            if (!stillRunning)
+            {
+                AllFixations.TaskDone(spentTime);
+                AllFixations.ToCSV(resultsDirectory, Test.Name, Test.TestId);
+            }
+
+            spentTime = toTime;
             return stillRunning;
         }
 
