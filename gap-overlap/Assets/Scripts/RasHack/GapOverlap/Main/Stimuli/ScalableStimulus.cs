@@ -42,11 +42,12 @@ namespace RasHack.GapOverlap.Main.Stimuli
             }
         }
 
-        public float Radius => Vector3.Distance(transform.position, radiusMarker.position);
+        public float Radius => Vector2.Distance(transform.position, radiusMarker.position);
 
         public bool IsInRadius(Vector3 other)
         {
-            return Vector3.Distance(other, transform.position) < Radius;
+            var distance = Vector2.Distance(other, transform.position);
+            return distance <= Radius;
         }
 
         public RawPosition RawPosition

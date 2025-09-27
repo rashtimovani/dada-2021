@@ -37,7 +37,7 @@ namespace RasHack.GapOverlap.Main.Settings
 
         public float FixationAreaInDegrees = 5.5f;
 
-        public float FixationEndCooldown = 0.1f;
+        public float FixationEndCooldown = 0.05f;
 
         [Header("Task specification")]
         public TaskCount TaskCount = new()
