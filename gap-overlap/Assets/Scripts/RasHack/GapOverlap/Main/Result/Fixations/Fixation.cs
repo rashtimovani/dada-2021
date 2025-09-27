@@ -51,7 +51,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (IsDetected) return this;
 
             var distanceInDegrees = DistanceInDegrees(eyePosition);
-            var inRadius = IsInRadius(distanceInDegrees);
+            var inRadius = stimulus.IsInRadius(eyePosition);
             if (inRadius)
             {
                 if (IsInactive) return OnStarted(distanceInDegrees, time);
