@@ -303,7 +303,7 @@ namespace RasHack.GapOverlap.Main
 
         private void ScaleDetectableArea(ScalableStimulus stimulus, DetectableCircle circle, float sizeInDegrees)
         {
-            var desiredDetectionAreaSize = debugScaler.Settings.DetectionAreaInDegrees;
+            var desiredDetectionAreaSize = debugScaler.Settings.FixationAreaInDegrees;
             var detectionAreaIncrease = desiredDetectionAreaSize / sizeInDegrees;
 
             var newLocalScaleX = circle.transform.localScale.x * detectionAreaIncrease;

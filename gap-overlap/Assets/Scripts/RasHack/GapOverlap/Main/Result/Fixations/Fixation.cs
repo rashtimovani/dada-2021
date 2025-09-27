@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations
@@ -16,8 +17,11 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         #region Fields
 
         private float? startTime;
-
         private float? endTime;
+        private readonly List<float> distances = new List<float>();
+
+        private float? tentativeEndTime;
+        private readonly List<float> tentativeDistances = new List<float>();
 
         #endregion
 
@@ -44,15 +48,16 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         {
             if (IsDetected) throw new Exception("Fixation is already detected, use new one for the update");
 
-            var inRadius = IsInRadius(eyePosition);
+            var distanceInDegrees = DistanceInDegrees(eyePosition);
+            var inRadius = IsInRadius(distanceInDegrees);
             if (inRadius)
             {
-                if (!IsActive) return OnStarted(time);
+                if (!IsActive) return OnStarted(distanceInDegrees, time);
 
-                return OnContinued(time);
+                return OnContinued(distanceInDegrees, time);
             }
 
-            if (IsActive) return OnEnded(time);
+            if (IsActive) return OnEnded(distanceInDegrees, time);
 
             return this;
         }
@@ -61,25 +66,60 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Helper methods
 
-        private bool IsInRadius(Vector3 position)
+        private bool IsInRadius(float distanceInDegrees)
         {
-            return true;
+            return scaler.Settings.FixationAreaInDegrees >= distanceInDegrees;
         }
 
-        private Fixation OnStarted(float time)
+        private float DistanceInDegrees(Vector3 position)
         {
+            return 0f;
+        }
+
+        private Fixation OnStarted(float distance, float time)
+        {
+            ClearTentative();
+
+            distances.Add(distance);
             startTime = time;
             return this;
         }
 
-        private Fixation OnContinued(float time)
+        private Fixation OnContinued(float distance, float time)
         {
+            if (tentativeEndTime.HasValue)
+            {
+                foreach (var tentative in tentativeDistances)
+                {
+                    distances.Add(tentative);
+                }
+                ClearTentative();
+            }
+
+            distances.Add(distance);
             return this;
         }
 
-        private Fixation OnEnded(float time)
+        private Fixation OnEnded(float distance, float time)
         {
+            tentativeDistances.Add(distance);
+            if (!tentativeEndTime.HasValue) tentativeEndTime = time;
+
+            var endCooldown = time - tentativeEndTime;
+            if (scaler.Settings.FixationEndCooldown <= endCooldown)
+            {
+                endTime = tentativeEndTime;
+                ClearTentative();
+                return new Fixation(scaler, anchor);
+            }
+
             return this;
+        }
+
+        private void ClearTentative()
+        {
+            tentativeDistances.Clear();
+            tentativeEndTime = null;
         }
 
         #endregion
