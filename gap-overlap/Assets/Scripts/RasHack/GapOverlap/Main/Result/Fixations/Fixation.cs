@@ -79,6 +79,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         #region Helper methods
         private float DistanceInDegrees(Vector3 position)
         {
+            // TODO: calcuate distance in degrees
             return 0f;
         }
 

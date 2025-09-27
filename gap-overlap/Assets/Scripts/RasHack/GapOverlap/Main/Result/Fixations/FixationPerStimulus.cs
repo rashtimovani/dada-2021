@@ -8,6 +8,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         #region Fields
         
         private readonly float createdTime;
+        private float destroyedTime;
 
         private Fixation currentLeft;
         private readonly List<Fixation> allLeft = new List<Fixation>();
@@ -22,10 +23,10 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-
         public FixationPerStimulus(Scaler scaler, Vector3 anchor, float time)
         {
             createdTime = time;
+
             currentLeft = new Fixation(scaler, anchor);
             currentRight = new Fixation(scaler, anchor);
             currentBoth = new Fixation(scaler, anchor);
@@ -46,6 +47,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public void StimulusDestroyed(float time)
         {
+            destroyedTime = time;
+
             currentLeft = ForceFinish(currentLeft, time, allLeft);
             currentBoth = ForceFinish(currentBoth, time, allBoth);
 

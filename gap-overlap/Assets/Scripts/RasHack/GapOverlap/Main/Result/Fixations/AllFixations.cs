@@ -37,7 +37,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         {
             if (current == null) return;
 
-            current.StimuliDestroyed(time);
+            current.TaskDone(time);
             tasks.Add(current);
             current = null;
         }

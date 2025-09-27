@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -16,6 +15,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         #endregion
 
         #region Fields
+
         private readonly Scaler scaler;
 
         private FixationPerStimulus central;
@@ -30,6 +30,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             TaskOrder = taskOrder;
             Type = taskType;
             Side = side;
+
             this.scaler = scaler;
         }
 
@@ -59,7 +60,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             peripheral = null;
         }
 
-        public void StimuliDestroyed(float time)
+        public void TaskDone(float time)
         {
             CentralDestroyed(time);
             PeripheralDestroyed(time);
