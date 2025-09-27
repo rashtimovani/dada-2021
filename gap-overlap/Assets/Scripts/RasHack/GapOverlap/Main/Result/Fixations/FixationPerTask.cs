@@ -41,7 +41,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public void CentralCreated(ScalableStimulus stimulus, float time)
         {
-            central = new FixationPerStimulus(stimulus, settings, time);
+            central = new FixationPerStimulus($"{TaskOrder}. central", stimulus, settings, time);
         }
 
         public void CentralDestroyed(float time)
@@ -52,7 +52,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public void PeripheralCreated(ScalableStimulus stimulus, float time)
         {
-            peripheral = new FixationPerStimulus(stimulus, settings, time);
+            peripheral = new FixationPerStimulus($"{TaskOrder}. peripheral", stimulus, settings, time);
         }
 
         public void PeripheralDestroyed(float time)

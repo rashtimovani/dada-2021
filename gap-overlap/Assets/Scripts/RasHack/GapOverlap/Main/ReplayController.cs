@@ -76,17 +76,17 @@ namespace RasHack.GapOverlap.Main
                 Directory.CreateDirectory(resultsDirectory);
             }
 
-            var mainCamera = Camera.main;
-            var screen = ScreenArea.WholeScreen;
-            var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
-            screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
-            debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
-
             using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
             {
                 toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory, settings);
                 Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
             }
+
+            var mainCamera = Camera.main;
+            var screen = ScreenArea.WholeScreen;
+            var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
+            screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
+            debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
         }
 
         public void AnalyzeAllTests(string folderPath, string[] jsonFiles)
@@ -253,6 +253,7 @@ namespace RasHack.GapOverlap.Main
 
         private void UpdateTask(SampledTask task, float time)
         {
+            if (task.TaskType == "Empty") return;
             var taskType = Enum.Parse<TaskType>(task.TaskType);
             var side = Enum.Parse<StimulusSide>(task.Side);
             toReplay.AllFixations.NewTask(task.TaskOrder, taskType, side, time);

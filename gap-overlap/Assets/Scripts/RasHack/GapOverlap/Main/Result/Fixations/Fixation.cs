@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Result.Fixations.CSV;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private readonly ScalableStimulus stimulus;
 
         private readonly MainSettings settings;
+
+        public readonly string Classifier;
 
         #endregion
 
@@ -32,12 +35,16 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private bool IsActive => startTime.HasValue && !endTime.HasValue;
         public bool IsDetected => startTime.HasValue && endTime.HasValue;
 
+        public float Duration => endTime.Value - startTime.Value;
+
         #endregion
 
         #region Constructors
 
-        public Fixation(ScalableStimulus stimulus, MainSettings settings)
+        public Fixation(string classifier, ScalableStimulus stimulus, MainSettings settings)
         {
+            Classifier = classifier;
+
             this.stimulus = stimulus;
             this.settings = settings;
         }
@@ -70,7 +77,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             {
                 endTime = tentativeEndTime ?? time;
                 ClearTentative();
-                return new Fixation(stimulus, settings);
+                Debug.Log($"{Classifier} fixation lasted {FixationUtil.ToCSV(Duration)}s untill the end");
+                return new Fixation(Classifier, stimulus, settings);
             }
 
             return this;
@@ -101,6 +109,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
             distances.Add(distance);
             startTime = time;
+            Debug.Log($"{Classifier} fixation after {FixationUtil.ToCSV(time)}s");
             return this;
         }
 
@@ -128,8 +137,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (cooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
+                Debug.Log($"{Classifier} fixation lasted {FixationUtil.ToCSV(Duration)}s");
                 ClearTentative();
-                return new Fixation(stimulus, settings);
+                return new Fixation(Classifier, stimulus, settings);
             }
 
             return this;

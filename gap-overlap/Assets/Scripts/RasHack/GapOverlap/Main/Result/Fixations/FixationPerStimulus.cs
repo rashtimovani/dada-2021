@@ -25,21 +25,23 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Constructors
 
-        public FixationPerStimulus(ScalableStimulus stimulus, MainSettings settings, float time)
+        public FixationPerStimulus(string classifier, ScalableStimulus stimulus, MainSettings settings, float absoluteTime)
         {
-            createdTime = time;
+            createdTime = absoluteTime;
 
-            currentLeft = new Fixation(stimulus, settings);
-            currentRight = new Fixation(stimulus, settings);
-            currentBoth = new Fixation(stimulus, settings);
+            currentLeft = new Fixation($"{classifier} left eye", stimulus, settings);
+            currentRight = new Fixation($"{classifier} right eye", stimulus, settings);
+            currentBoth = new Fixation($"{classifier} both eyes", stimulus, settings);
         }
 
         #endregion
 
         #region API
 
-        public void Update(Vector3 leftEyePosition, Vector3 rightEyePosition, float time)
+        public void Update(Vector3 leftEyePosition, Vector3 rightEyePosition, float absoluteTime)
         {
+            var time = absoluteTime - createdTime;
+
             currentLeft = Update(currentLeft, leftEyePosition, time, allLeft);
             currentBoth = Update(currentBoth, leftEyePosition, time, allBoth);
 
@@ -47,9 +49,10 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             currentBoth = Update(currentBoth, rightEyePosition, time, allRight);
         }
 
-        public void StimulusDestroyed(float time)
+        public void StimulusDestroyed(float absoluteTime)
         {
-            destroyedTime = time;
+            destroyedTime = absoluteTime;
+            var time = absoluteTime - createdTime;
 
             currentLeft = ForceFinish(currentLeft, time, allLeft);
             currentBoth = ForceFinish(currentBoth, time, allBoth);
