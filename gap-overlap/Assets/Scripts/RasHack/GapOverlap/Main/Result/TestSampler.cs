@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -35,8 +36,10 @@ namespace RasHack.GapOverlap.Main.Result
             StimulusType = "None",
             CenterStimulus = NO_STIMULUS,
             PeripheralStimulus = NO_STIMULUS
-
         };
+
+        public static readonly string RESULTS_DIRECTORY =
+                    $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}{Path.DirectorySeparatorChar}GapOverlap{Path.DirectorySeparatorChar}Results";
 
         private float sampleTime;
 
@@ -123,8 +126,8 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void Store()
         {
-            Directory.CreateDirectory(TestResults.RESULTS_DIRECTORY);
-            var filename = $"{TestResults.RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
+            Directory.CreateDirectory(RESULTS_DIRECTORY);
+            var filename = $"{RESULTS_DIRECTORY}{Path.DirectorySeparatorChar}{sampled.Name}_{sampled.TestId}.json";
 
             var serializer = JsonSerializer.CreateDefault();
             serializer.NullValueHandling = NullValueHandling.Ignore;

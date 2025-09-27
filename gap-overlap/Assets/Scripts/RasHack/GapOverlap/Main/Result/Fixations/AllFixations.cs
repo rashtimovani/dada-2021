@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Numerics;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations
 {
@@ -65,6 +65,11 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public void Update(Vector3 leftEyePosition, Vector3 rightEyePosition, float time)
         {
             current?.Update(leftEyePosition, rightEyePosition, time);
+        }
+
+        public void ToCSV(string resultsDirectory, string name, string testId)
+        {
+            // TODO: sort this method out
         }
 
         #endregion

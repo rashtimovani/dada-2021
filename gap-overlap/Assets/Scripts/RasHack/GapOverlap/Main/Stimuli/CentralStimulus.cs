@@ -1,5 +1,4 @@
-﻿using RasHack.GapOverlap.Main.Inputs;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Stimuli
 {
@@ -24,23 +23,19 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public void StartSimulating(Task.Task owner, float lifetime)
         {
-            detectable.AreaScreenSide = StimulusSide.Center;
             this.owner = owner;
             this.lifetime = lifetime;
             spentLifetime = 0;
 
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection, OnCentralPointerGettingCloser);
             DoFadeIn(lifetime, owner.FadeInOut, owner.RotationFactor);
         }
 
         public void StartSimulating(Task.Task owner, float lifetime, float fadeOut)
         {
-            detectable.AreaScreenSide = StimulusSide.Center;
             this.owner = owner;
             this.lifetime = lifetime;
             spentLifetime = 0;
 
-            detectable.RegisterOnDetect(owner.Owner, OnCentralPointerDetection, OnCentralPointerGettingCloser);
             DoFadeIn(lifetime, owner.FadeInOut, fadeOut, owner.RotationFactor);
         }
 
@@ -69,17 +64,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             if (owner.Owner.Settings.SoundEnabled) GetComponent<AudioSource>().Play();
             owner.Owner.Sampler.StartCentral(this);
         }
-
-        private void OnCentralPointerDetection(Pointer pointer)
-        {
-            owner.ReportFocusedOnCentral(this, pointer, spentLifetime.GetValueOrDefault(lifetime));
-        }
-        
-        private void OnCentralPointerGettingCloser(Pointer pointer)
-        {
-            owner.ReportCentralGotCloser(this, pointer.Eye, pointer);
-        }
-
         private void Update()
         {
             if (!spentLifetime.HasValue) return;

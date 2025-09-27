@@ -16,7 +16,6 @@ namespace RasHack.GapOverlap.Main
     {
         #region Unity fields
 
-        [SerializeField] private bool useRadius;
         [Range(1.0f, 100.0f)][SerializeField] private float analyzeMultiplier = 30f;
         [SerializeField] private SpriteRenderer bottomLeft;
         [SerializeField] private SpriteRenderer bottomRight;
@@ -77,17 +76,17 @@ namespace RasHack.GapOverlap.Main
                 Directory.CreateDirectory(resultsDirectory);
             }
 
-            using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
-            {
-                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory);
-                Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
-            }
-
             var mainCamera = Camera.main;
             var screen = ScreenArea.WholeScreen;
             var overlayScreen = new ScreenArea((int)toReplay.Test.ScreenPixelsX, (int)toReplay.Test.ScreenPixelsY);
             screen = screen.Overlay(settings.ReferencePoint.ScreenDiagonalInInches, (float)toReplay.Test.ScreenDiagonalInInches, overlayScreen);
             debugScaler = new Scaler(mainCamera, -2, settings.WithScreenDiagonal((float)toReplay.Test.ScreenDiagonalInInches), screen);
+
+            using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
+            {
+                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory, debugScaler);
+                Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
+            }
         }
 
         public void AnalyzeAllTests(string folderPath, string[] jsonFiles)
@@ -159,7 +158,7 @@ namespace RasHack.GapOverlap.Main
         {
             UpdateCentralStimulus(sample.Task, sample.Time);
             UpdatePeripheralStimulus(sample.Task, sample.Time);
-            UpdateEyes(sample.Tracker);
+            UpdateEyes(sample.Tracker, sample.Time);
         }
 
         private void UpdateDebugVisibility()
@@ -207,15 +206,10 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, eye =>
-            {
-                if (!useRadius)
-                {
-                    var after = toReplay.Timers.ObserveCentral(eye, toReplay.SpentTime);
-                    Debug.Log($"Central stimulus detected by {eye} eye after {after} second by collision");
-                }
-            });
+            circle.RegisterOnDetect(this);
             ScaleDetectableArea(stimulus, circle, sizeInDegrees);
+
+            toReplay.AllFixations.CentralCreated(stimulus.transform.position, toReplay.SpentTime);
 
             return stimulus;
         }
@@ -234,15 +228,10 @@ namespace RasHack.GapOverlap.Main
             stimulus.Scale(desiredSize);
 
             var circle = stimulus.UseDetectableCircleAndDisableArea();
-            circle.RegisterOnDetect(this, eye =>
-            {
-                if (!useRadius)
-                {
-                    var after = toReplay.Timers.ObservePeripheral(eye, toReplay.SpentTime);
-                    Debug.Log($"Peripheral stimulus detected by {eye} eye after {after} seconds by collision");
-                }
-            });
+            circle.RegisterOnDetect(this);
             ScaleDetectableArea(stimulus, circle, sizeInDegrees);
+
+            toReplay.AllFixations.PeripheralCreated(stimulus.transform.position, toReplay.SpentTime);
 
             return stimulus;
         }
@@ -266,21 +255,20 @@ namespace RasHack.GapOverlap.Main
             if (task.CenterStimulus.Visible)
             {
                 var taskType = Enum.Parse<TaskType>(task.TaskType);
-                var taskSide = Enum.Parse<StimulusSide>(task.Side);
                 if (centralStimulus == null)
                 {
                     centralStimulus = NewCentralStimulus(taskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                    toReplay.Timers.StartNewCentral(time, task.TaskOrder, taskType, taskSide);
                 }
                 else if (centralStimulus.name != Name(taskType, StimulusSide.Center))
                 {
+                    toReplay.AllFixations.CentralDestroyed(time);
                     Destroy(centralStimulus.gameObject);
                     centralStimulus = NewCentralStimulus(taskType, task.CenterStimulus.Center.X, task.CenterStimulus.Center.Y);
-                    toReplay.Timers.StartNewCentral(time, task.TaskOrder, taskType, taskSide);
                 }
             }
             else if (centralStimulus != null)
             {
+                toReplay.AllFixations.CentralDestroyed(time);
                 Destroy(centralStimulus.gameObject);
                 centralStimulus = null;
             }
@@ -295,17 +283,17 @@ namespace RasHack.GapOverlap.Main
                 if (peripheralStimulus == null)
                 {
                     peripheralStimulus = NewPeripheralStimulus(taskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
-                    toReplay.Timers.StartPeripheral(time);
                 }
                 else if (peripheralStimulus.name != Name(taskType, side))
                 {
+                    toReplay.AllFixations.PeripheralDestroyed(time);
                     Destroy(peripheralStimulus.gameObject);
                     peripheralStimulus = NewPeripheralStimulus(taskType, side, task.PeripheralStimulus.Center.X, task.PeripheralStimulus.Center.Y);
-                    toReplay.Timers.StartPeripheral(time);
                 }
             }
             else if (peripheralStimulus != null)
             {
+                toReplay.AllFixations.PeripheralDestroyed(time);
                 Destroy(peripheralStimulus.gameObject);
                 peripheralStimulus = null;
             }
@@ -318,37 +306,13 @@ namespace RasHack.GapOverlap.Main
             {
                 eyeObject.transform.position = transform.InverseTransformPoint(debugScaler.FromRaw(eyeSample.PositionOnDisplayArea.X, eyeSample.PositionOnDisplayArea.Y));
             }
-
-            if (useRadius)
-            {
-                if (centralStimulus != null) centralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
-                {
-                    var after = toReplay.Timers.ObserveCentral(e, toReplay.SpentTime);
-                    Debug.Log($"Central stimulus detected by {e} eye after {after} seconds by radius");
-                }, e => Process(toReplay.Timers.StopObservingCentral(e, toReplay.SpentTime), e, "Central"));
-                else Process(toReplay.Timers.StopObservingCentral(eye, toReplay.SpentTime), eye, "Central");
-            }
-
-            if (useRadius)
-            {
-                if (peripheralStimulus != null) peripheralStimulus.TryFocusInRadius(eye, eyeObject.transform, e =>
-                {
-                    var after = toReplay.Timers.ObservePeripheral(e, toReplay.SpentTime);
-                    Debug.Log($"Peripheral stimulus detected by {e} eye after {after} seconds by radius");
-                }, e => Process(toReplay.Timers.StopObservingPeripheral(e, toReplay.SpentTime), e, "Peripheral"));
-                else Process(toReplay.Timers.StopObservingPeripheral(eye, toReplay.SpentTime), eye, "Peripheral");
-            }
         }
 
-        private void Process(FixationResult fixation, Eye eye, string modifier)
-        {
-            if (fixation.EndedNow) Debug.Log($"{modifier} stimulus fixation by {eye} eye ended after {fixation.Duration} seconds by radius");
-        }
-
-        private void UpdateEyes(SampledTracker tracker)
+        private void UpdateEyes(SampledTracker tracker, float time)
         {
             UpdateEye(Eye.Left, tracker.LeftEye, leftEye);
             UpdateEye(Eye.Right, tracker.RightEye, rightEye);
+            toReplay.AllFixations.Update(leftEye.transform.position, rightEye.transform.position, time);
         }
 
         private void DetectInterruptedReplay()

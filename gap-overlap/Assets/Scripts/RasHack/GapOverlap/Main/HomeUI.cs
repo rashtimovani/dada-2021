@@ -63,7 +63,6 @@ namespace RasHack.GapOverlap.Main
 
         public void OnExit()
         {
-            simulator.FlushToDisk();
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
 #else
@@ -81,7 +80,7 @@ namespace RasHack.GapOverlap.Main
         public void OnResults()
         {
             var p = new Process();
-            p.StartInfo = new ProcessStartInfo("explorer.exe", TestResults.RESULTS_DIRECTORY);
+            p.StartInfo = new ProcessStartInfo("explorer.exe", TestSampler.RESULTS_DIRECTORY);
             p.Start();
         }
 

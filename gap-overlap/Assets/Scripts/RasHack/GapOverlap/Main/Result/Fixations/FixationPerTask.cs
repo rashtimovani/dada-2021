@@ -1,6 +1,6 @@
-using System.Numerics;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations
 {

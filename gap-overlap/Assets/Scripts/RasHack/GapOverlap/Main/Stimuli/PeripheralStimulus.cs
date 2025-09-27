@@ -55,13 +55,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
         {
             this.type = type;
             this.owner = owner;
-            detectable.AreaScreenSide = side;
 
             spentLifetime = 0;
             this.lifetime = lifetime;
             if (sprite != null) SetUpSprite();
 
-            detectable.RegisterOnDetect(owner.Owner, OnPeripheralPointerDetection, OnPeripheralPointerGettingCloser);
             DoFadeIn(lifetime, fadeIn, owner.FadeInOut, owner.RotationFactor);
         }
 
@@ -122,16 +120,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
             owner.Owner.Sampler.CompletePeripheral();
             owner.ReportPeripheralStimulusDied(this);
             spentLifetime = null;
-        }
-
-        private void OnPeripheralPointerDetection(Pointer pointer)
-        {
-            owner.ReportFocusedOnPeripheral(this, pointer, spentLifetime.GetValueOrDefault(lifetime));
-        }
-
-        private void OnPeripheralPointerGettingCloser(Pointer pointer)
-        {
-            owner.ReportPeripheralGotCloser(this, pointer.Eye, pointer);
         }
 
         #endregion

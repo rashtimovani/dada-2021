@@ -1,4 +1,5 @@
 using System;
+using RasHack.GapOverlap.Main.Result.Fixations;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -9,19 +10,19 @@ namespace RasHack.GapOverlap.Main.Result
         public readonly SampledTest Test;
         private float spentTime;
         private int currentSampleIndex;
-        public readonly Timers Timers;
+        public readonly AllFixations AllFixations;
         private readonly string resultsDirectory;
 
         #endregion
 
         #region Constructors
 
-        public ReplayedTest(SampledTest test, string resultsDirectory)
+        public ReplayedTest(SampledTest test, string resultsDirectory, Scaler scaler)
         {
             Test = test;
             currentSampleIndex = 0;
             spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
-            Timers = new Timers();
+            AllFixations = new AllFixations(scaler);
             this.resultsDirectory = resultsDirectory;
         }
 
@@ -47,7 +48,7 @@ namespace RasHack.GapOverlap.Main.Result
             spentTime = toTime;
 
             var stillRunning = currentSampleIndex < Test.Samples.AllSamples.Count;
-            if (!stillRunning) Timers.ToCSV(resultsDirectory, Test.Name, Test.TestId);
+            if (!stillRunning) AllFixations.ToCSV(resultsDirectory, Test.Name, Test.TestId);
             return stillRunning;
         }
 

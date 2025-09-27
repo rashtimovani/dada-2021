@@ -13,7 +13,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
         [SerializeField] private Transform bottomLeft;
         [SerializeField] private Transform topRight;
         [SerializeField] private Transform radiusMarker;
-        [SerializeField] protected DetectableArea detectable;
         [SerializeField] protected GameObject imageToRotate;
         [SerializeField] protected DetectableCircle circle;
 
@@ -174,21 +173,8 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         public DetectableCircle UseDetectableCircleAndDisableArea()
         {
-            Destroy(detectable.gameObject);
-            detectable = null;
             circle.gameObject.SetActive(true);
             return circle;
-        }
-
-        private bool IsInRadius(Transform other)
-        {
-            return Vector3.Distance(other.position, transform.position) < Radius;
-        }
-
-        public void TryFocusInRadius(Eye eye, Transform other, Action<Eye> onDetected, Action<Eye> onOutOfRadius)
-        {
-            if (IsInRadius(other)) circle.OnRadius(eye, onDetected);
-            else circle.OutOfRadius(eye, onOutOfRadius);
         }
 
         #endregion

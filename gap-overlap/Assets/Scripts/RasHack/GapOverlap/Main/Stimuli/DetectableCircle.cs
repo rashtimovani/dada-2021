@@ -14,25 +14,16 @@ namespace RasHack.GapOverlap.Main.Stimuli
 
         #region
 
-        private bool wasFocusedOnByLeftEye;
-        private bool wasFocusedOnByRightEye;
-        private bool wasLeftEyeInRadius;
-        private bool wasRightEyeInRadius;
-
         private ReplayController owner;
 
-        private Action<Eye> onDetected;
 
         #endregion
 
         #region API
 
-        public void RegisterOnDetect(ReplayController whoDetects, Action<Eye> onDetectedAction)
+        public void RegisterOnDetect(ReplayController whoDetects)
         {
             owner = whoDetects;
-            onDetected = onDetectedAction;
-            wasFocusedOnByLeftEye = false;
-            wasFocusedOnByRightEye = false;
         }
 
         #endregion
@@ -42,65 +33,6 @@ namespace RasHack.GapOverlap.Main.Stimuli
         private void LateUpdate()
         {
             debugArea.enabled = owner.Settings.ShowPointer;
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            var pointer = other.gameObject.GetComponent<ReplayPointer>();
-            if (pointer == null) return;
-
-            if (pointer.Eye == Eye.Left)
-            {
-                if (wasFocusedOnByLeftEye) return;
-                wasFocusedOnByLeftEye = true;
-            }
-
-            if (pointer.Eye == Eye.Right)
-            {
-                if (wasFocusedOnByRightEye) return;
-                wasFocusedOnByRightEye = true;
-            }
-
-            onDetected.Invoke(pointer.Eye);
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            OnTriggerEnter2D(other);
-        }
-
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            OnTriggerEnter2D(other);
-        }
-
-        private void OnDestroy()
-        {
-            onDetected = null;
-        }
-
-        public void OnRadius(Eye eye, Action<Eye> onDetected)
-        {
-            if (eye == Eye.Left)
-            {
-                if (wasLeftEyeInRadius) return;
-                wasLeftEyeInRadius = true;
-            }
-
-            if (eye == Eye.Right)
-            {
-                if (wasRightEyeInRadius) return;
-                wasRightEyeInRadius = true;
-            }
-
-            onDetected.Invoke(eye);
-        }
-
-        public void OutOfRadius(Eye eye, Action<Eye> onOutOfRadius)
-        {
-            if (eye == Eye.Left && wasLeftEyeInRadius) onOutOfRadius.Invoke(eye);
-            if (eye == Eye.Right && wasRightEyeInRadius) onOutOfRadius.Invoke(eye);
         }
 
         #endregion
