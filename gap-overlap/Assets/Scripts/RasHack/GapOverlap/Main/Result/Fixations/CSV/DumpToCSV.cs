@@ -20,7 +20,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 
         public string Quote(float what)
         {
-            return Quote(ToCSV(what));
+            return Quote(what.ToCSV());
         }
 
         public string NaN(int times = 1)
@@ -37,10 +37,11 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
         }
 
         #endregion
+    }
+    public static class DumpToCSVUtils {
+        #region Utils
 
-        #region Common
-
-        public static string ToCSV(float value)
+        public static string ToCSV(this float value)
         {
             return value.ToString("0.000", CultureInfo.InvariantCulture);
         }
