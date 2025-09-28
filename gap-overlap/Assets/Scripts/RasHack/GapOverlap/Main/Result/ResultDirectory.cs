@@ -33,16 +33,16 @@ namespace RasHack.GapOverlap.Main.Result
 
         public void WriteRawResults(string subject, string testId, string header, string csv)
         {
-            File.AppendAllText(PrepareAllRawResults(header), csv);
+            File.AppendAllText(PrepareAllRawResults(header), $"{csv}\n");
 
             var single = $"{Results}/{subject}_{testId}_detection.csv";
-            File.WriteAllText(single, header + "\n");
+            File.WriteAllText(single, $"{header}\n");
             File.AppendAllText(single, csv);
         }
 
         public void WriteAveragedResults(string header, string csv)
         {
-            File.AppendAllText(PrepareAveragedResults(header), csv);
+            File.AppendAllText(PrepareAveragedResults(header), $"{csv}\n");
         }
 
         private string PrepareAllRawResults(string header)

@@ -29,7 +29,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
                 entries.Add($"{Quote(allFixations.Subject)},{Quote(allFixations.TestId)},{subCSV.ToCSV(task)}");
             }
 
-            return string.Join("\n", entries) + "\n";
+            return string.Join("\n", entries);
         }
 
         public string CSVHeaderAveraged()
