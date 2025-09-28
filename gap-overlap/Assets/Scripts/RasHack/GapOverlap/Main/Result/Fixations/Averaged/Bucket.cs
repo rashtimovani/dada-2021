@@ -29,13 +29,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public float Average => sum / values.Count;
 
-        public float Min => values[0];
-        public float P10 => values[p10Index];
-        public float P25 => values[p25Index];
-        public float P50 => values[p50Index];
-        public float P80 => values[p80Index];
-        public float P95 => values[p95Index];
-        public float Max => values[values.Count - 1];
+        public float Min => GetOrNaN(0);
+        public float P10 => GetOrNaN(p10Index);
+        public float P25 => GetOrNaN(p25Index);
+        public float P50 => GetOrNaN(p50Index);
+        public float P80 => GetOrNaN(p80Index);
+        public float P95 => GetOrNaN(p95Index);
+        public float Max => GetOrNaN(values.Count - 1);
 
         #endregion
 
@@ -50,6 +50,12 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public void AddRange(List<float> newValues)
         {
             values.AddRange(newValues);
+            Refresh();
+        }
+
+        public void AddRange(Bucket other)
+        {
+            values.AddRange(other.values);
             Refresh();
         }
 
@@ -72,6 +78,11 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private int ToIndex(float percentile)
         {
             return Math.Min(values.Count - 1, Mathf.FloorToInt(percentile * values.Count));
+        }
+
+        private float GetOrNaN(int index)
+        {
+            return index < values.Count ? values[index] : float.NaN;
         }
 
         #endregion

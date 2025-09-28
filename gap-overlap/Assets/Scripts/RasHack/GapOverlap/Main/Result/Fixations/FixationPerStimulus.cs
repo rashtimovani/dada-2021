@@ -12,23 +12,23 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private readonly float createdTime;
         private float destroyedTime;
 
-        private Fixation currentLeft;
-        private readonly List<Fixation> allLeft = new List<Fixation>();
+        private SingleGaze currentLeft;
+        private readonly List<SingleGaze> allLeft = new List<SingleGaze>();
 
-        private Fixation currentRight;
-        private readonly List<Fixation> allRight = new List<Fixation>();
+        private SingleGaze currentRight;
+        private readonly List<SingleGaze> allRight = new List<SingleGaze>();
 
-        private Fixation currentBoth;
-        private readonly List<Fixation> allBoth = new List<Fixation>();
+        private SingleGaze currentBoth;
+        private readonly List<SingleGaze> allBoth = new List<SingleGaze>();
 
         #endregion
 
         #region Properties
 
         public float Duration => destroyedTime - createdTime;
-        public Fixation Both => allBoth.Count > 0 ? allBoth[0] : currentBoth;
-        public Fixation Left => allLeft.Count > 0 ? allLeft[0] : currentLeft;
-        public Fixation Right => allRight.Count > 0 ? allRight[0] : currentRight;
+        public SingleGaze Both => allBoth.Count > 0 ? allBoth[0] : currentBoth;
+        public SingleGaze Left => allLeft.Count > 0 ? allLeft[0] : currentLeft;
+        public SingleGaze Right => allRight.Count > 0 ? allRight[0] : currentRight;
 
         #endregion
 
@@ -38,9 +38,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         {
             createdTime = absoluteTime;
 
-            currentLeft = new Fixation($"{classifier} left eye", stimulus, settings);
-            currentRight = new Fixation($"{classifier} right eye", stimulus, settings);
-            currentBoth = new Fixation($"{classifier} both eyes", stimulus, settings);
+            currentLeft = new SingleGaze($"{classifier} left eye", stimulus, settings);
+            currentRight = new SingleGaze($"{classifier} right eye", stimulus, settings);
+            currentBoth = new SingleGaze($"{classifier} both eyes", stimulus, settings);
         }
 
         #endregion
@@ -74,17 +74,17 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Helpers
 
-        private static Fixation Update(Fixation fixation, Vector3 eyePosition, float time, List<Fixation> all)
+        private static SingleGaze Update(SingleGaze fixation, Vector3 eyePosition, float time, List<SingleGaze> all)
         {
             return CollectDetected(fixation, fixation.Update(eyePosition, time), all);
         }
 
-        private static Fixation ForceFinish(Fixation fixation, float time, List<Fixation> all)
+        private static SingleGaze ForceFinish(SingleGaze fixation, float time, List<SingleGaze> all)
         {
             return CollectDetected(fixation, fixation.ForceFinish(time), all);
         }
 
-        private static Fixation CollectDetected(Fixation fixation, Fixation newFixation, List<Fixation> all)
+        private static SingleGaze CollectDetected(SingleGaze fixation, SingleGaze newFixation, List<SingleGaze> all)
         {
             if (newFixation != fixation && fixation.IsDetected) all.Add(fixation);
             return newFixation;

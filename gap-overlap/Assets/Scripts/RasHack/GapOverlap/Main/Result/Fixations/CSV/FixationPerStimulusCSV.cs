@@ -6,7 +6,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
     {
         #region Fields
 
-        private readonly FixationCSV subCSV = new FixationCSV();
+        private readonly SingleGazeCSV subCSV = new SingleGazeCSV();
 
         #endregion
 
