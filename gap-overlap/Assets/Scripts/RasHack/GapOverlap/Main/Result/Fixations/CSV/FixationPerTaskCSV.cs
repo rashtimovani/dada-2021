@@ -30,16 +30,15 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 
         public string CSVHeaderAveraged(TaskType type)
         {
-            return $"{Quote($"{type} total")},{Quote($"{type} succes rate")},{subCSV.CSVHeader($"{type} central")},{subCSV.CSVHeader($"{type} peripheral")}";
+            return $"{Quote($"{type} total")},{Quote($"{type} succes rate")},{subCSV.CSVHeaderAveraged($"{type}")}";
         }
 
         public string ToCSV(AveragedPerTask perTask)
         {
             var total = perTask.CountTotal.ToString();
             var successRate = perTask.SuccessRate.ToPercent();
-            var central = subCSV.ToCSV(perTask.Central);
             var peripheral = subCSV.ToCSV(perTask.Peripheral);
-            return $"{Quote(total)},{Quote(successRate)},{central},{peripheral}";
+            return $"{Quote(total)},{Quote(successRate)},{peripheral}";
         }
 
         #endregion
