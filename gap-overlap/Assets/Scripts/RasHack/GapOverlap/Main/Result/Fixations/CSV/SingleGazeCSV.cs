@@ -13,7 +13,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 
         public string ToCSV(SingleGaze gaze)
         {
-            if (!gaze.IsDetected) return NaN(2);
+            if (!gaze.IsDetected) return NaN(6);
 
             var after = gaze.After;
             var duration = gaze.Duration;
