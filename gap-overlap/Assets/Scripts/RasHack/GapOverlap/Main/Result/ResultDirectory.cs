@@ -43,7 +43,7 @@ namespace RasHack.GapOverlap.Main.Result
         private string PrepareAllRawResults(string header)
         {
             var allResults = Results + "/aggregated_detections.csv";
-            if (!File.Exists(allResults)) File.WriteAllText(allResults, header);
+            if (!File.Exists(allResults)) File.WriteAllText(allResults, $"{header}\n");
             return allResults;
         }
 
