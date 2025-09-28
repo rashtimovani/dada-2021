@@ -22,6 +22,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public string Subject { get; private set; }
         public string TestId { get; private set; }
 
+        public bool IsValid => Tasks.Count == settings.TaskCount.TotalTasks();
+
         #endregion
 
         #region Constructors

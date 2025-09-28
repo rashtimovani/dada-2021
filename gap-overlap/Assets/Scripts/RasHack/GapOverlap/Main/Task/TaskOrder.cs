@@ -21,6 +21,11 @@ namespace RasHack.GapOverlap.Main.Task
         public int LeftOverlaps;
         public int Baselines;
         public int LeftBaselines;
+
+        public int TotalTasks()
+        {
+            return Gaps + Overlaps + Baselines;
+        }
     }
 
     public class TaskOrder : MonoBehaviour
