@@ -39,7 +39,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 
         public string ToCSV(AllFixations allFixations, AveragedAllFixations averaged)
         {
-            return ($"{Quote(allFixations.Subject)},{Quote(allFixations.TestId)},{subCSV.ToCSV(averaged.AveragedBaseline)},{subCSV.ToCSV(averaged.AveragedGap)},{subCSV.ToCSV(averaged.AveragedOverlap)}");
+            return $"{Quote(allFixations.Subject)},{Quote(allFixations.TestId)},{subCSV.ToCSV(averaged.AveragedBaseline)},{subCSV.ToCSV(averaged.AveragedGap)},{subCSV.ToCSV(averaged.AveragedOverlap)}";
         }
 
         #endregion
