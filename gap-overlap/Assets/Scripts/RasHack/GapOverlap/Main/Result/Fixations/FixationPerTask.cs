@@ -16,6 +16,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public FixationPerStimulus Central { get; private set; }
         public FixationPerStimulus Peripheral { get; private set; }
 
+        public bool IsValid => Central.Both.IsDetected && Peripheral.Both.IsDetected && Central.Both.After < Peripheral.Both.After;
+
         #endregion
 
         #region Fields
