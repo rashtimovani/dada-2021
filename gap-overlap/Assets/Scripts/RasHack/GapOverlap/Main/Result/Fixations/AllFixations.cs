@@ -22,6 +22,18 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public string Subject { get; private set; }
         public string TestId { get; private set; }
 
+        public bool IsFinishedProperly
+        {
+            get
+            {
+                foreach (var task in Tasks)
+                {
+                    if (!task.IsFinishedProperly) return false;
+                }
+                return true;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -94,7 +106,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         {
             return toCSV.CSVHeaderAveraged();
         }
-        
+
         public string ToCSVAveraged()
         {
             var averaged = new AveragedAllFixations();

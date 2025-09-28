@@ -18,6 +18,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public bool IsValid => Central.Both.IsDetected && Peripheral.Both.IsDetected && Central.Both.After < Peripheral.Both.After;
 
+        public bool IsFinishedProperly => Central != null && Peripheral != null;
+
         #endregion
 
         #region Fields

@@ -1,6 +1,7 @@
 using System;
 using RasHack.GapOverlap.Main.Result.Fixations;
 using RasHack.GapOverlap.Main.Settings;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -52,7 +53,8 @@ namespace RasHack.GapOverlap.Main.Result
             if (!stillRunning)
             {
                 AllFixations.TaskDone(spentTime);
-                AllFixationsToCSV();
+                if (AllFixations.IsFinishedProperly) AllFixationsToCSV();
+                else Debug.LogWarning($"Test of {Test.Name} with id {Test.TestId} did not finish properly and results will be ignored!");
             }
 
             spentTime = toTime;
