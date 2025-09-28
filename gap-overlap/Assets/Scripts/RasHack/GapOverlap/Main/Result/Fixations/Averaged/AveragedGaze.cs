@@ -18,7 +18,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public float AverageDuration => duration.Average;
         public float AverageFixation => fixation.Average;
 
-        public float P25Distance => distance.P25;
+        public float P10Distance => distance.P10;
         public float P50Distance => distance.P50;
         public float P95Distance => distance.P95;
 
