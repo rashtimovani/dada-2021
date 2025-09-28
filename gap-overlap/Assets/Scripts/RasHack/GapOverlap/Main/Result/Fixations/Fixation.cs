@@ -56,7 +56,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public Fixation Update(Vector3 eyePosition, float time)
         {
-            if (IsDetected) return this;
+            if (stimulus == null || IsDetected) return this;
 
             var distanceInDegrees = DistanceInDegrees(eyePosition);
             var inRadius = stimulus.IsInRadius(eyePosition);
