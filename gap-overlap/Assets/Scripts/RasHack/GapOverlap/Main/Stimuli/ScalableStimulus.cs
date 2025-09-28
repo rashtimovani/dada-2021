@@ -83,10 +83,11 @@ namespace RasHack.GapOverlap.Main.Stimuli
             radiusMarker.transform.localPosition = radiusMarkerAdjusted;
         }
 
-        public float DistanceBetweenInDegrees(Vector3 what)
+        public float DistanceBetweenInDegrees(Vector3 what, Vector3? from = null)
         {
             var halfSize = sizeInDegrees / 2;
-            var distanceToWhat = Vector3.Distance(transform.position, what);
+            var fromActual = from.GetValueOrDefault(transform.position);
+            var distanceToWhat = Vector3.Distance(fromActual, what);
             return distanceToWhat / Radius * halfSize;
         }
 

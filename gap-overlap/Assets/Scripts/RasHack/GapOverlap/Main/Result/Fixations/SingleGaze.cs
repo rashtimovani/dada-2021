@@ -79,7 +79,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             {
                 endTime = tentativeEndTime ?? time;
                 ClearTentative();
-                Debug.Log($"{Classifier} fixation lasted {Duration.ToCSV()}s untill the end");
+                Debug.Log($"{Classifier} gaze lasted {Duration.ToCSV()}s untill the end");
                 return new SingleGaze(Classifier, stimulus, settings);
             }
 
@@ -106,7 +106,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
             distances.Add(distance);
             startTime = time;
-            Debug.Log($"{Classifier} fixation after {time.ToCSV()}s");
+            Debug.Log($"{Classifier} gaze after {time.ToCSV()}s");
             return this;
         }
 
@@ -134,7 +134,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (allowedCooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
-                Debug.Log($"{Classifier} fixation lasted {Duration.ToCSV()}s");
+                Debug.Log($"{Classifier} gaze lasted {Duration.ToCSV()}s");
                 ClearTentative();
                 return new SingleGaze(Classifier, stimulus, settings);
             }

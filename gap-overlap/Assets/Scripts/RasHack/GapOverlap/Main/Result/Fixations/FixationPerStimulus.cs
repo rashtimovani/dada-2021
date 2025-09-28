@@ -38,9 +38,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         {
             createdTime = absoluteTime;
 
-            currentLeft = new SingleGaze($"{classifier} left eye", stimulus, settings);
-            currentRight = new SingleGaze($"{classifier} right eye", stimulus, settings);
-            currentBoth = new SingleGaze($"{classifier} both eyes", stimulus, settings);
+            currentLeft = new SingleGaze($"{classifier} left eye gaze", stimulus, settings);
+            currentRight = new SingleGaze($"{classifier} right eye gaze", stimulus, settings);
+            currentBoth = new SingleGaze($"{classifier} both eyes gaze", stimulus, settings);
         }
 
         #endregion
