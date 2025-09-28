@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RasHack.GapOverlap.Main.Result.Fixations.CSV;
 using RasHack.GapOverlap.Main.Settings;
 using RasHack.GapOverlap.Main.Stimuli;
 using RasHack.GapOverlap.Main.Task;
@@ -9,17 +10,26 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
     public class AllFixations
     {
         #region Fields
-        private readonly List<FixationPerTask> tasks = new List<FixationPerTask>();
+        private readonly AllFixationsCSV toCSV = new AllFixationsCSV();
         private readonly MainSettings settings;
-
         private FixationPerTask current;
+
+        #endregion
+
+        #region Properties
+        public List<FixationPerTask> Tasks { get; private set; } = new List<FixationPerTask>();
+
+        public string Subject { get; private set; }
+        public string TestId { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public AllFixations(MainSettings settings)
+        public AllFixations(string subject, string testId, MainSettings settings)
         {
+            Subject = subject;
+            TestId = testId;
             this.settings = settings;
         }
 
@@ -41,7 +51,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (current == null) return;
 
             current.TaskDone(time);
-            tasks.Add(current);
+            Tasks.Add(current);
             current = null;
         }
 
@@ -70,9 +80,15 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             current?.Update(leftEyePosition, rightEyePosition, time);
         }
 
-        public void ToCSV(string resultsDirectory, string name, string testId)
+        public string ToCSVHeader()
         {
-            // TODO: sort this method out
+            return toCSV.CSVHeader();
+        }
+
+        public string ToCSV()
+        {
+            
+            return toCSV.ToCSV(this);
         }
 
         #endregion

@@ -46,7 +46,7 @@ namespace RasHack.GapOverlap.Main
 
         private TestChooser testChooser;
 
-        private string resultsDirectory;
+        private ResultDirectory results;
         private List<string> allJsonsToProcess = new List<string>();
 
         #endregion
@@ -63,22 +63,19 @@ namespace RasHack.GapOverlap.Main
 
         private float Degrees => settings.DistanceBetweenPeripheralStimuliInDegrees / 2;
 
-        public void StartReplay(string testToLoad, string directoryForResults = null)
+        public void StartReplay(string testToLoad, string parent = null)
         {
             toReplay = null;
             var bytes = File.ReadAllBytes(testToLoad);
 
             var deserializer = JsonSerializer.CreateDefault();
 
-            if (directoryForResults != null) resultsDirectory = CreateResultsDirectory(directoryForResults);
-            if (!Directory.Exists(resultsDirectory))
-            {
-                Directory.CreateDirectory(resultsDirectory);
-            }
-
+            if (parent != null) results = new ResultDirectory(parent);
+            results.Prepare();
+            
             using var reader = new JsonTextReader(new StreamReader(new MemoryStream(bytes)));
             {
-                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), resultsDirectory, settings);
+                toReplay = new ReplayedTest(deserializer.Deserialize<SampledTest>(reader), results, settings);
                 Debug.Log($"##### Starting replay of {toReplay.Test.Name} [{toReplay.Test.TestId}]...");
             }
 
@@ -99,19 +96,8 @@ namespace RasHack.GapOverlap.Main
 
             if (jsonFiles.Length > 0)
             {
-                var resultsDirectoryToClean = CreateResultsDirectory(folderPath);
-                if (Directory.Exists(resultsDirectoryToClean))
-                {
-                    foreach (var file in Directory.GetFiles(resultsDirectoryToClean))
-                    {
-                        File.Delete(file);
-                    }
-                    foreach (var dir in Directory.GetDirectories(resultsDirectoryToClean))
-                    {
-                        Directory.Delete(dir, true);
-                    }
-                }
-
+                results = new ResultDirectory(folderPath);
+                results.DeleteAll();
                 Debug.Log($"#### {allJsonsToProcess.Count + 1} tests remaining to process...");
                 StartReplay(jsonFiles[0], folderPath);
             }
@@ -121,11 +107,6 @@ namespace RasHack.GapOverlap.Main
         #endregion
 
         #region Methods
-
-        private static string CreateResultsDirectory(string parent)
-        {
-            return parent + "/detections";
-        }
 
         public void Start()
         {

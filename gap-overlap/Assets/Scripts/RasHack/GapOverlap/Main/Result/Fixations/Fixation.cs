@@ -35,6 +35,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private bool IsActive => startTime.HasValue && !endTime.HasValue;
         public bool IsDetected => startTime.HasValue && endTime.HasValue;
 
+        public float After => startTime.Value;
         public float Duration => endTime.Value - startTime.Value;
 
         #endregion
@@ -77,7 +78,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             {
                 endTime = tentativeEndTime ?? time;
                 ClearTentative();
-                Debug.Log($"{Classifier} fixation lasted {FixationUtil.ToCSV(Duration)}s untill the end");
+                Debug.Log($"{Classifier} fixation lasted {DumpToCSV.ToCSV(Duration)}s untill the end");
                 return new Fixation(Classifier, stimulus, settings);
             }
 
@@ -109,7 +110,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
             distances.Add(distance);
             startTime = time;
-            Debug.Log($"{Classifier} fixation after {FixationUtil.ToCSV(time)}s");
+            Debug.Log($"{Classifier} fixation after {DumpToCSV.ToCSV(time)}s");
             return this;
         }
 
@@ -137,7 +138,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (allowedCooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
-                Debug.Log($"{Classifier} fixation lasted {FixationUtil.ToCSV(Duration)}s");
+                Debug.Log($"{Classifier} fixation lasted {DumpToCSV.ToCSV(Duration)}s");
                 ClearTentative();
                 return new Fixation(Classifier, stimulus, settings);
             }

@@ -13,14 +13,14 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public TaskType Type { get; private set; }
         public StimulusSide Side { get; private set; }
 
+        public FixationPerStimulus Central { get; private set; }
+        public FixationPerStimulus Peripheral { get; private set; }
+
         #endregion
 
         #region Fields
 
         private readonly MainSettings settings;
-
-        private FixationPerStimulus central;
-        private FixationPerStimulus peripheral;
 
         #endregion
 
@@ -41,24 +41,22 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public void CentralCreated(ScalableStimulus stimulus, float time)
         {
-            central = new FixationPerStimulus($"{TaskOrder}. central", stimulus, settings, time);
+            Central = new FixationPerStimulus($"{TaskOrder}. central", stimulus, settings, time);
         }
 
         public void CentralDestroyed(float time)
         {
-            central?.StimulusDestroyed(time);
-            central = null;
+            Central?.StimulusDestroyed(time);
         }
 
         public void PeripheralCreated(ScalableStimulus stimulus, float time)
         {
-            peripheral = new FixationPerStimulus($"{TaskOrder}. peripheral", stimulus, settings, time);
+            Peripheral = new FixationPerStimulus($"{TaskOrder}. peripheral", stimulus, settings, time);
         }
 
         public void PeripheralDestroyed(float time)
         {
-            peripheral?.StimulusDestroyed(time);
-            peripheral = null;
+            Peripheral?.StimulusDestroyed(time);
         }
 
         public void TaskDone(float time)
@@ -69,8 +67,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public void Update(Vector3 leftEyePosition, Vector3 rightEyePosition, float time)
         {
-            central?.Update(leftEyePosition, rightEyePosition, time);
-            peripheral?.Update(leftEyePosition, rightEyePosition, time);
+            Central?.Update(leftEyePosition, rightEyePosition, time);
+            Peripheral?.Update(leftEyePosition, rightEyePosition, time);
         }
 
         #endregion

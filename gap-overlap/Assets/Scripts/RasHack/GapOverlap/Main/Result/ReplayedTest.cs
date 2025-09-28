@@ -12,19 +12,21 @@ namespace RasHack.GapOverlap.Main.Result
         private float spentTime;
         private int currentSampleIndex;
         public readonly AllFixations AllFixations;
-        private readonly string resultsDirectory;
+        private readonly ResultDirectory results;
 
         #endregion
 
         #region Constructors
 
-        public ReplayedTest(SampledTest test, string resultsDirectory, MainSettings settings)
+        public ReplayedTest(SampledTest test, ResultDirectory results, MainSettings settings)
         {
             Test = test;
             currentSampleIndex = 0;
             spentTime = test.Samples.AllSamples[currentSampleIndex].Time;
-            AllFixations = new AllFixations(settings);
-            this.resultsDirectory = resultsDirectory;
+
+            this.results = results;
+
+            AllFixations = new AllFixations(test.Name, test.TestId, settings);
         }
 
         #endregion
@@ -50,11 +52,18 @@ namespace RasHack.GapOverlap.Main.Result
             if (!stillRunning)
             {
                 AllFixations.TaskDone(spentTime);
-                AllFixations.ToCSV(resultsDirectory, Test.Name, Test.TestId);
+                AllFixationsToCSV();
             }
 
             spentTime = toTime;
             return stillRunning;
+        }
+
+        private void AllFixationsToCSV()
+        {
+            var header = AllFixations.ToCSVHeader();
+            var csv = AllFixations.ToCSV();
+            results.WriteRawResults(AllFixations.Subject, AllFixations.TestId, header, csv);
         }
 
         #endregion

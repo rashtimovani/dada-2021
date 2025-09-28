@@ -23,6 +23,15 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #endregion
 
+        #region Properties
+
+        public float Duration => destroyedTime - createdTime;
+        public Fixation Both => allBoth.Count > 0 ? allBoth[0] : currentBoth;
+        public Fixation Left => allLeft.Count > 0 ? allLeft[0] : currentLeft;
+        public Fixation Right => allRight.Count > 0 ? allRight[0] : currentRight;
+
+        #endregion
+
         #region Constructors
 
         public FixationPerStimulus(string classifier, ScalableStimulus stimulus, MainSettings settings, float absoluteTime)
