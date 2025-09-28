@@ -1,7 +1,6 @@
 using System;
 using RasHack.GapOverlap.Main.Result.Fixations;
 using RasHack.GapOverlap.Main.Settings;
-using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result
 {
@@ -36,8 +35,6 @@ namespace RasHack.GapOverlap.Main.Result
 
         public float SpentTime => spentTime;
 
-        public bool IsValid => AllFixations.IsValid;
-
         public bool Tick(float deltaTime, Action<Sample> onNextSample)
         {
             var toTime = spentTime + deltaTime;
@@ -54,12 +51,8 @@ namespace RasHack.GapOverlap.Main.Result
             var stillRunning = currentSampleIndex < Test.Samples.AllSamples.Count;
             if (!stillRunning)
             {
-                if (IsValid)
-                {
-                    AllFixations.TaskDone(spentTime);
-                    AllFixationsToCSV();
-                }
-                else Debug.LogWarning($"Test of {Test.Name} with id {Test.TestId} is not valid and results will be ignored!");
+                AllFixations.TaskDone(spentTime);
+                AllFixationsToCSV();
             }
 
             spentTime = toTime;
