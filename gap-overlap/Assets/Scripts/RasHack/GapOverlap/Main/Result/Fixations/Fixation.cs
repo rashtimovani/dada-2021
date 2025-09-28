@@ -22,7 +22,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private float? startTime;
         private float? endTime;
 
-        private Vector3 anchor;
+        private Vector3? anchor;
 
         #endregion
 
@@ -85,7 +85,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (IsActive)
             {
                 endTime = time;
-                Debug.Log($"{Classifier} fixation lasted {Duration.ToCSV()}s untill the end");
+                Debug.Log($"{Classifier} lasted {Duration.ToCSV()}s untill the end");
                 return new Fixation(Classifier, stimulus, settings);
             }
 
@@ -103,7 +103,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private Fixation OnStarted(float time)
         {
             startTime = time;
-            Debug.Log($"{Classifier} fixation after {time.ToCSV()}s");
+            Debug.Log($"{Classifier} after {time.ToCSV()}s");
             return this;
         }
 
@@ -111,7 +111,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private Fixation OnEnded(Vector3 eyePosition, float time)
         {
             endTime = time;
-            Debug.Log($"{Classifier} fixation lasted {Duration.ToCSV()}s");
+            Debug.Log($"{Classifier} lasted {Duration.ToCSV()}s");
             return new Fixation(Classifier, stimulus, settings).Update(eyePosition, time);
         }
 

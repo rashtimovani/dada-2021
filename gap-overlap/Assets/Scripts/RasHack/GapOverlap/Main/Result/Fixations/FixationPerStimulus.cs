@@ -74,20 +74,20 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Helpers
 
-        private static SingleGaze Update(SingleGaze fixation, Vector3 eyePosition, float time, List<SingleGaze> all)
+        private static SingleGaze Update(SingleGaze gaze, Vector3 eyePosition, float time, List<SingleGaze> all)
         {
-            return CollectDetected(fixation, fixation.Update(eyePosition, time), all);
+            return CollectDetected(gaze, gaze.Update(eyePosition, time), all);
         }
 
-        private static SingleGaze ForceFinish(SingleGaze fixation, float time, List<SingleGaze> all)
+        private static SingleGaze ForceFinish(SingleGaze gaze, float time, List<SingleGaze> all)
         {
-            return CollectDetected(fixation, fixation.ForceFinish(time), all);
+            return CollectDetected(gaze, gaze.ForceFinish(time), all);
         }
 
-        private static SingleGaze CollectDetected(SingleGaze fixation, SingleGaze newFixation, List<SingleGaze> all)
+        private static SingleGaze CollectDetected(SingleGaze gaze, SingleGaze newGaze, List<SingleGaze> all)
         {
-            if (newFixation != fixation && fixation.IsDetected) all.Add(fixation);
-            return newFixation;
+            if (newGaze != gaze && gaze.IsDetected) all.Add(gaze);
+            return newGaze;
         }
 
         #endregion

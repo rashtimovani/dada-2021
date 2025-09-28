@@ -27,6 +27,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         private float? tentativeEndTime;
         private readonly List<float> tentativeDistances = new List<float>();
 
+        private Fixation fixation;
+        private readonly List<Fixation> allFixations = new List<Fixation>();
+
         #endregion
 
         #region Properties
@@ -39,6 +42,19 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public float Duration => endTime.Value - startTime.Value;
         public Bucket Distances => distances;
 
+        public float BestFixation
+        {
+            get
+            {
+                var bestFixation = 0f;
+                foreach (var fixation in allFixations)
+                {
+                    if (fixation.IsDetected && fixation.Duration > bestFixation) bestFixation = fixation.Duration;
+                }
+                return bestFixation;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -49,6 +65,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
             this.stimulus = stimulus;
             this.settings = settings;
+
+            fixation = new Fixation(classifier.Replace("gaze", "fixation"), stimulus, settings);
         }
 
         #endregion
@@ -57,6 +75,8 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public SingleGaze Update(Vector3 eyePosition, float time)
         {
+            fixation = Update(fixation, eyePosition, time, allFixations);
+
             if (stimulus == null || IsDetected) return this;
 
             var distanceInDegrees = DistanceInDegrees(eyePosition);
@@ -75,11 +95,12 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public SingleGaze ForceFinish(float time)
         {
+            fixation = ForceFinish(fixation, time, allFixations);
             if (IsActive)
             {
                 endTime = tentativeEndTime ?? time;
                 ClearTentative();
-                Debug.Log($"{Classifier} gaze lasted {Duration.ToCSV()}s untill the end");
+                Debug.Log($"{Classifier} lasted {Duration.ToCSV()}s untill the end");
                 return new SingleGaze(Classifier, stimulus, settings);
             }
 
@@ -106,7 +127,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
             distances.Add(distance);
             startTime = time;
-            Debug.Log($"{Classifier} gaze after {time.ToCSV()}s");
+            Debug.Log($"{Classifier} after {time.ToCSV()}s");
             return this;
         }
 
@@ -134,12 +155,32 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
             if (allowedCooldown <= endCooldown)
             {
                 endTime = tentativeEndTime;
-                Debug.Log($"{Classifier} gaze lasted {Duration.ToCSV()}s");
+                Debug.Log($"{Classifier} lasted {Duration.ToCSV()}s");
                 ClearTentative();
                 return new SingleGaze(Classifier, stimulus, settings);
             }
 
             return this;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private static Fixation Update(Fixation fixation, Vector3 eyePosition, float time, List<Fixation> all)
+        {
+            return CollectDetected(fixation, fixation.Update(eyePosition, time), all);
+        }
+
+        private static Fixation ForceFinish(Fixation fixation, float time, List<Fixation> all)
+        {
+            return CollectDetected(fixation, fixation.ForceFinish(time), all);
+        }
+
+        private static Fixation CollectDetected(Fixation fixation, Fixation newFixation, List<Fixation> all)
+        {
+            if (newFixation != fixation && fixation.IsDetected) all.Add(fixation);
+            return newFixation;
         }
 
         #endregion
