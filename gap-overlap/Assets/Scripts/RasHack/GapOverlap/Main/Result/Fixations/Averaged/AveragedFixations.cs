@@ -1,6 +1,6 @@
 namespace RasHack.GapOverlap.Main.Result.Fixations
 {
-    public class AveragedFixations
+    public class AveragedGazes
     {
         #region Fields
 
@@ -24,13 +24,13 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region API
 
-        public void Add(SingleGaze fixation)
+        public void Add(SingleGaze gaze)
         {
-            if (!fixation.IsDetected) return;
+            if (!gaze.IsDetected) return;
 
-            after.Add(fixation.After);
-            duration.Add(fixation.Duration);
-            distance.AddRange(fixation.Distances);
+            after.Add(gaze.After);
+            duration.Add(gaze.Duration);
+            distance.AddRange(gaze.Distances);
         }
 
         #endregion

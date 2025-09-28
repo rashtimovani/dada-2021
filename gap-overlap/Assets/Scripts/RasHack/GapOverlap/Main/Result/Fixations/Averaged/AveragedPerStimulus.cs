@@ -12,9 +12,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         #region Properties
 
-        public AveragedFixations Both { get; private set; } = new AveragedFixations();
-        public AveragedFixations Left { get; private set; } = new AveragedFixations();
-        public AveragedFixations Right { get; private set; } = new AveragedFixations();
+        public AveragedGazes Both { get; private set; } = new AveragedGazes();
+        public AveragedGazes Left { get; private set; } = new AveragedGazes();
+        public AveragedGazes Right { get; private set; } = new AveragedGazes();
 
         public float Duration => duration.Average;
 
