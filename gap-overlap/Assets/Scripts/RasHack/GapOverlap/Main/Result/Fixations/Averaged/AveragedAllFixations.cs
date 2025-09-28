@@ -7,9 +7,9 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
     {
         #region Properties
 
-        public AveragedPerTask AveragedGap { get; private set; } = new AveragedPerTask();
-        public AveragedPerTask AveragedOverlap { get; private set; } = new AveragedPerTask();
-        public AveragedPerTask AveragedBaseline { get; private set; } = new AveragedPerTask();
+        public AveragedPerTask AveragedGap { get; private set; } = new AveragedPerTask(TaskType.Gap);
+        public AveragedPerTask AveragedOverlap { get; private set; } = new AveragedPerTask(TaskType.Overlap);
+        public AveragedPerTask AveragedBaseline { get; private set; } = new AveragedPerTask(TaskType.Baseline);
 
         #endregion
 
