@@ -16,7 +16,7 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
         public AveragedPerStimulus Central { get; private set; } = new AveragedPerStimulus();
         public AveragedPerStimulus Peripheral { get; private set; } = new AveragedPerStimulus();
 
-        public float SuccessRate => (float)countSuccess / (float)countTotal;
+        public float SuccessRate => countSuccess / (float)countTotal;
 
         #endregion
 
