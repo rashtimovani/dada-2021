@@ -87,8 +87,19 @@ namespace RasHack.GapOverlap.Main.Result.Fixations
 
         public string ToCSV()
         {
-            
             return toCSV.ToCSV(this);
+        }
+
+        public string ToCSVHeaderAveraged()
+        {
+            return toCSV.CSVHeaderAveraged();
+        }
+        
+        public string ToCSVAveraged()
+        {
+            var averaged = new AveragedAllFixations();
+            averaged.Process(this);
+            return toCSV.ToCSV(this, averaged);
         }
 
         #endregion

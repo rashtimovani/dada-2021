@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
+using UnityEngine;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 {
@@ -38,12 +39,18 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
 
         #endregion
     }
-    public static class DumpToCSVUtils {
+    public static class DumpToCSVUtils
+    {
         #region Utils
 
         public static string ToCSV(this float value)
         {
             return value.ToString("0.000", CultureInfo.InvariantCulture);
+        }
+
+        public static string ToPercent(this float value)
+        {
+            return $"{(Mathf.Clamp01(value) * 100f).ToString("00.0", CultureInfo.InvariantCulture)}%";
         }
 
         #endregion

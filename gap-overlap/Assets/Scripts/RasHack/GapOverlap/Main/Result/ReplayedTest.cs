@@ -64,6 +64,10 @@ namespace RasHack.GapOverlap.Main.Result
             var header = AllFixations.ToCSVHeader();
             var csv = AllFixations.ToCSV();
             results.WriteRawResults(AllFixations.Subject, AllFixations.TestId, header, csv);
+
+            var averagedHeader = AllFixations.ToCSVHeaderAveraged();
+            var averagedCsv = AllFixations.ToCSVAveraged();
+            results.WriteAveragedResults(averagedHeader, averagedCsv);
         }
 
         #endregion

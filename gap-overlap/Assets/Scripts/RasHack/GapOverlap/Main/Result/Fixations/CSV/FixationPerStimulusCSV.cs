@@ -26,6 +26,20 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
             return $"{subCSV.ToCSV(both)},{subCSV.ToCSV(left)},{subCSV.ToCSV(right)},{Quote(duration)}";
         }
 
+        public string CSVHeaderAveraged(string classifier)
+        {
+            return $"{subCSV.CSVHeaderAveraged($"{classifier} both eyes")},{subCSV.CSVHeaderAveraged($"{classifier} left eye")},{subCSV.CSVHeaderAveraged($"{classifier} right eye")},{Quote($"{classifier} average duration s")}";
+        }
+
+        public string ToCSV(AveragedPerStimulus perStimulus)
+        {
+            var both = perStimulus.Both;
+            var left = perStimulus.Left;
+            var right = perStimulus.Right;
+            var duration = perStimulus.Duration;
+            return $"{subCSV.ToCSV(both)},{subCSV.ToCSV(left)},{subCSV.ToCSV(right)},{Quote(duration)}";
+        }
+
         #endregion
     }
 }

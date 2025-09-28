@@ -20,6 +20,18 @@ namespace RasHack.GapOverlap.Main.Result.Fixations.CSV
             return $"{Quote(after)},{Quote(duration)}";
         }
 
+        public string CSVHeaderAveraged(string classifier)
+        {
+            return $"{Quote($"{classifier} fixated after s on average")},{Quote($"{classifier} average fixation duration s")}";
+        }
+
+        public string ToCSV(AveragedFixations fixation)
+        {
+            var after = fixation.AverageAfter;
+            var duration = fixation.AverageDuration;
+            return $"{Quote(after)},{Quote(duration)}";
+        }
+
         #endregion
     }
 }
