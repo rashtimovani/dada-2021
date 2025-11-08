@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Serialization;
 using RasHack.GapOverlap.Main.Task;
 
 namespace RasHack.GapOverlap.Main.Result.Fixations

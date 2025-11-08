@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
 using RasHack.GapOverlap.Main.Stimuli;
 using Tobii.Research;
